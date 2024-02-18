@@ -16,5 +16,5 @@ from __future__ import absolute_import, division, print_function
 from .__version__ import __version__
 
 # allow lazy loading
-from .filters.console_log import ConsoleLog
-from .filters.data_generator import DataGenerator
+from .sink_nodes.console_log import ConsoleLog
+from .source_nodes.data_generator import DataGenerator

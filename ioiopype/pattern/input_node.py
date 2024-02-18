@@ -26,7 +26,7 @@ class InputNode(ABC):
     def __start(self):
         if not self.__updateThreadRunning:
             self.__updateThreadRunning = True
-            self.__updateThread = threading.Thread(target=self.__updateThread_DoWork)
+            self.__updateThread = threading.Thread(target=self.__updateThread_DoWork, daemon=True)
             self.__updateThread.start()
            
     def __stop(self):

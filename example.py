@@ -26,8 +26,3 @@ dg.disconnect(1, cl3.InputStreams[0]) #disconnect output 1 of data generator fro
 
 #stop data generation
 dg.stop()
-
-#call destructor
-cl1.__del__()
-cl2.__del__()
-cl3.__del__()
