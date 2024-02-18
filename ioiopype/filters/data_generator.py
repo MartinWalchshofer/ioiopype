@@ -21,6 +21,9 @@ class DataGenerator(OutputNode):
         self.__acquisitionThread = None
         self.__cnt = 0
 
+    def __del__(self):
+        super().__del__()
+
     def start(self):
         if not self.__acquisitionRunning:
             self.__acquisitionRunning = True

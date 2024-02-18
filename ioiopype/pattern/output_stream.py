@@ -4,25 +4,27 @@ from .input_stream import InputStream
 
 class OutputStream:
     def __init__(self, id : int, name : str):
-        self.__inputStream : InputStream = None
+        self.__inputStreams : list [InputStream] = []
         self.Id : int = id
         self.Name  : str = name
         self.IsConnected = False
     
     def connect(self, inputStream : InputStream):
         if isinstance(inputStream, InputStream):
-            self.__inputStream = inputStream
-            self.IsConnected = True
             inputStream.IsConnected = True
+            self.__inputStreams.append(inputStream)
+            self.IsConnected = True
         else:
             raise TypeError("'inputStream' must be type of 'InputStream'")
         
-    def disconnect(self):
-        if self.__inputStream is not None:
-            self.IsConnected = True
-            self.__inputStream .IsConnected = True
+    def disconnect(self, inputStream : InputStream):
+        if len(self.__inputStreams) > 0:
+            inputStream.IsConnected = False
+            self.__inputStreams.remove(inputStream)
+            self.IsConnected = False
             self.__inputStream = None
 
     def write(self, data):
-        if self.__inputStream is not None:
-             self.__inputStream.write(data)
+        if len(self.__inputStreams) > 0:
+            for inputstream in self.__inputStreams:
+                inputstream.write(data)

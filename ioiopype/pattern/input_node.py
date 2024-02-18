@@ -13,7 +13,7 @@ class InputNode(ABC):
 
     def __init__(self):
         self.InputStreams : list[InputStream] = []
-        self.UpdateMode = self.UpdateMode.Synchronized
+        self.NodeUpdateMode = self.UpdateMode.Synchronized
 
         self.__event : threading.Event = threading.Event()
         self.__updateThreadRunning = False
@@ -32,10 +32,12 @@ class InputNode(ABC):
     def __stop(self):
         if self.__updateThreadRunning:
             self.__updateThreadRunning = False
-            self.__updateThread.join(500)
+            self.__event.set()
+            self.__updateThread.join()
+            self.__updateThread = None
 
     def __on_data_available(self):
-        if self.__updateMode is self.UpdateMode.Asynchron:
+        if self.NodeUpdateMode is self.UpdateMode.Asynchron:
             self.__event.set()
         else:
             allStreamsAcquired = True
@@ -47,8 +49,14 @@ class InputNode(ABC):
                 self.__event.set()
         
     def __updateThread_DoWork(self):
-        self.__event.wait()
-        self.update()
+        try:
+            while self.__updateThreadRunning:
+                self.__event.wait()
+                self.__event.clear()
+                if self.__updateThreadRunning:
+                    self.update()
+        except Exception as e:
+            self.__stop()
         
     def add_stream(self, inputStream : InputStream):
         #TODO CHECK IF ID IS UNIQE

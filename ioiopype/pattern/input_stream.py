@@ -18,7 +18,13 @@ class InputStream:
             handler() 
 
     def read(self):
-        return self.__queue.get()
+        if self.__queue.qsize() > 0:
+            try:
+                return self.__queue.get()
+            except:
+                return None
+        else:
+            return None 
 
     def add_data_available_eventhandler(self, handler):
         self.__eventHandlers.append(handler)

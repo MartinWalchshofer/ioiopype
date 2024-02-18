@@ -6,5 +6,12 @@ class ConsoleLog(InputNode):
         super().__init__()
         self.add_stream(InputStream(0, 'in'))
 
+    def __del__(self):
+        super().__del__()
+
     def update(self):
-        self.InputStreams
+        data = None
+        if self.InputStreams[0].DataCount > 0:
+            data = self.InputStreams[0].read()
+        if data is not None:
+             print(data)
