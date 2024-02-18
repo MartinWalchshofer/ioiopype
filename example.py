@@ -7,9 +7,9 @@ cl2 = ConsoleLog()
 cl3 = ConsoleLog()
 
 #connect nodes
-dg.OutputStreams[0].connect(cl1.InputStreams[0])
-dg.OutputStreams[1].connect(cl2.InputStreams[0])
-dg.OutputStreams[1].connect(cl3.InputStreams[0])
+dg.connect(0, cl1.InputStreams[0]) #connect output 0 of data generator to input 0 of console log 1
+dg.connect(1, cl2.InputStreams[0]) #connect output 1 of data generator to input 0 of console log 2
+dg.connect(1, cl3.InputStreams[0]) #connect output 1 of data generator to input 0 of console log 3
 
 #start data generation
 dg.start()
@@ -18,9 +18,9 @@ print('Press ENTER to terminate the script')
 input()
 
 #disconnect nodes
-dg.OutputStreams[0].disconnect(cl1.InputStreams[0])
-dg.OutputStreams[1].disconnect(cl2.InputStreams[0])
-dg.OutputStreams[1].disconnect(cl3.InputStreams[0])
+dg.disconnect(0, cl1.InputStreams[0]) #disconnect output 0 of data generator from input 0 of console log 1
+dg.disconnect(1, cl2.InputStreams[0]) #disconnect output 1 of data generator from input 0 of console log 2
+dg.disconnect(1, cl3.InputStreams[0]) #disconnect output 1 of data generator from input 0 of console log 3
 
 #stop data generation
 dg.stop()

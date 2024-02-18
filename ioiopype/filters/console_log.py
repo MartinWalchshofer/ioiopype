@@ -14,4 +14,4 @@ class ConsoleLog(InputNode):
         if self.InputStreams[0].DataCount > 0:
             data = self.InputStreams[0].read()
         if data is not None:
-             print(data)
+             print("{0}\n".format(data))

@@ -9,7 +9,7 @@ A toolbox for realtime signalprocessing
 
 """
 
-# compat
+# compatibility
 from __future__ import absolute_import, division, print_function
 
 # get version
