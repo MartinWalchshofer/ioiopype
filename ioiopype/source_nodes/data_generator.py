@@ -7,7 +7,6 @@ import time
 import random
 import numpy as np
 
-#todo change data and counter to numpy arrays
 class DataGenerator(OutputNode):
     def __init__(self, sampling_rate, channel_count):
         super().__init__()
@@ -36,7 +35,7 @@ class DataGenerator(OutputNode):
 
     def __acquisitionThread_dowork(self):
         while self.__acquisitionRunning:
-            time.sleep(1/self.sampling_rate)
+            time.sleep(1/self.sampling_rate) #TODO NOT VERY PRECISE
             data = [0]*self.channel_count
             self.__cnt += 1
             for i in range(self.channel_count):
