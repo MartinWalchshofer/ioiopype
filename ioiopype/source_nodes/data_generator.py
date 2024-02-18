@@ -1,12 +1,11 @@
 #Copyright © 2024 Martin Walchshofer
 
-from ..pattern.input_stream import InputStream
 from ..pattern.output_stream import OutputStream
-from ..pattern.input_node import InputNode
 from ..pattern.output_node import OutputNode
 import threading
 import time
 import random
+import numpy as np
 
 #todo change data and counter to numpy arrays
 class DataGenerator(OutputNode):
@@ -43,5 +42,5 @@ class DataGenerator(OutputNode):
             for i in range(self.channel_count):
                 data[i] = random.uniform(-10, 10)
 
-            self.write(0, data)
-            self.write(1, self.__cnt)
+            self.write(0, np.array([data]))
+            self.write(1, np.array([self.__cnt]))
