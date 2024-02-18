@@ -1,7 +1,9 @@
 from ioiopype import DataGenerator, ConsoleLog
 
 #initialize nodes
-dg = DataGenerator(1, 8)
+samplingRate = 1
+numberOfChannels = 8
+dg = DataGenerator(samplingRate, numberOfChannels)
 cl1 = ConsoleLog()
 cl2 = ConsoleLog()
 cl3 = ConsoleLog()
