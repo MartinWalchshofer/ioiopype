@@ -2,7 +2,7 @@
  IOIOpype is processing framework for realtime applications written in python. Data is propergated from one processing node to the other. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'.
 
 ## Developer Documentation
-## Input Nodes
+## Input Nodes 'INode'
 'INodes' can recevice data from 'ONodes' if they are connected. Data is delivered via a streams 'IStream'. They can process data but do not propagate data to any other nodes.
 
 ### Implementing a new 'INode'
@@ -32,6 +32,14 @@ class IClass(INode):
         if data is not None:
              #DO SOMETHING
 
+```
+
+## Output Nodes 'ONode'
+'ONodes' can create and forward data to 'INodes' if they are connected.
+
+### Implementing a new 'ONode'
+```
+TBD
 ```
 
 ## Create 'requirements.txt'
