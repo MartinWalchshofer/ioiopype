@@ -24,3 +24,4 @@ from .source_nodes.data_generator import DataGenerator
 
 #filter nodes
 from .filter_nodes.buffer import Buffer
+from .filter_nodes.framer import Framer
