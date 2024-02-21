@@ -5,13 +5,13 @@ from .input_stream import InputStream
 class OutputNode:
     def __init__(self):
         self.OutputStreams : list[OutputStream] = []
-
+        
     def __del__(self):
         for outputstream in self.OutputStreams:
             if(outputstream.IsConnected):
                 outputstream.disconnect()
 
-    def add_stream(self, outputStream : OutputStream):
+    def add_output_stream(self, outputStream : OutputStream):
         #TODO CHECK IF ID IS UNIQE
         if isinstance(outputStream, OutputStream):
             self.OutputStreams.append(outputStream)

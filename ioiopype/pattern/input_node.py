@@ -58,7 +58,7 @@ class InputNode(ABC):
         except Exception as e:
             self.__stop()
         
-    def add_stream(self, inputStream : InputStream):
+    def add_input_stream(self, inputStream : InputStream):
         #TODO CHECK IF ID IS UNIQE
         if isinstance(inputStream, InputStream):
             self.InputStreams.append(inputStream)

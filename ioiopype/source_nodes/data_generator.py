@@ -10,8 +10,8 @@ import numpy as np
 class DataGenerator(OutputNode):
     def __init__(self, sampling_rate, channel_count):
         super().__init__()
-        self.add_stream(OutputStream(0,'data')) #todo extend type, range, etc.
-        self.add_stream(OutputStream(1,'cnt'))
+        self.add_output_stream(OutputStream(0,'data')) #todo extend type, range, etc.
+        self.add_output_stream(OutputStream(1,'cnt'))
 
         self.sampling_rate = sampling_rate
         self.channel_count = channel_count
