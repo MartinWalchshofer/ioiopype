@@ -2,7 +2,7 @@
 
 import queue
 
-class InputStream:
+class IStream:
     def __init__(self, id : int, name : str):
         self.__queue : queue.Queue = queue.Queue()
         self.DataCount : int = 0

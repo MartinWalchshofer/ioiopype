@@ -1,30 +1,30 @@
 #Copyright © 2024 Martin Walchshofer
 
-from .output_stream import OutputStream
-from .input_stream import InputStream
-class OutputNode:
+from .o_stream import OStream
+from .i_stream import IStream
+class ONode:
     def __init__(self):
-        self.OutputStreams : list[OutputStream] = []
+        self.OutputStreams : list[OStream] = []
         
     def __del__(self):
         for outputstream in self.OutputStreams:
             if(outputstream.IsConnected):
                 outputstream.disconnect()
 
-    def add_output_stream(self, outputStream : OutputStream):
+    def add_o_stream(self, outputStream : OStream):
         #TODO CHECK IF ID IS UNIQE
-        if isinstance(outputStream, OutputStream):
+        if isinstance(outputStream, OStream):
             self.OutputStreams.append(outputStream)
         else:
             raise TypeError("'outputStream' must be type of 'OutputStream'")
         
-    def connect(self, id : int, inputStream : InputStream):
+    def connect(self, id : int, inputStream : IStream):
         if id < len(self.OutputStreams):
             self.OutputStreams[id].connect(inputStream)
         else:
             raise IndexError("Index out of range")
         
-    def disconnect(self, id : int, inputStream : InputStream):
+    def disconnect(self, id : int, inputStream : IStream):
         if id < len(self.OutputStreams):
             self.OutputStreams[id].disconnect(inputStream)
         else:

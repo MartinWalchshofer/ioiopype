@@ -1,10 +1,10 @@
-from ..pattern.input_node import InputNode
-from ..pattern.input_stream import InputStream
+from ..pattern.i_node import INode
+from ..pattern.i_stream import IStream
 
-class ConsoleLog(InputNode):
+class ConsoleLog(INode):
     def __init__(self):
         super().__init__()
-        self.add_input_stream(InputStream(0, 'in'))
+        self.add_i_stream(IStream(0, 'in'))
 
     def __del__(self):
         super().__del__()

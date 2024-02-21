@@ -17,11 +17,11 @@ from .__version__ import __version__
 
 # allow lazy loading
 #sink nodes
-from .sink_nodes.console_log import ConsoleLog
+from .i_nodes.console_log import ConsoleLog
 
 #source nodes
-from .source_nodes.data_generator import DataGenerator
+from .o_nodes.data_generator import DataGenerator
 
 #filter nodes
-from .filter_nodes.buffer import Buffer
-from .filter_nodes.framer import Framer
+from .io_nodes.buffer import Buffer
+from .io_nodes.framer import Framer

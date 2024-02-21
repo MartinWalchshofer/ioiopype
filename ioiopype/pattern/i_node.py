@@ -1,18 +1,18 @@
 #Copyright © 2024 Martin Walchshofer
 
-from .input_stream import InputStream
+from .i_stream import IStream
 import threading
 from abc import ABC, abstractmethod
 from enum import Enum
 
-class InputNode(ABC):
+class INode(ABC):
 
     class UpdateMode(Enum):
         Synchronized = 1 #update when all input streams delivered data
         Asynchron = 2    #update when any input stream delivered data
 
     def __init__(self):
-        self.InputStreams : list[InputStream] = []
+        self.InputStreams : list[IStream] = []
         self.NodeUpdateMode = self.UpdateMode.Synchronized
 
         self.__event : threading.Event = threading.Event()
@@ -58,9 +58,9 @@ class InputNode(ABC):
         except Exception as e:
             self.__stop()
         
-    def add_input_stream(self, inputStream : InputStream):
+    def add_i_stream(self, inputStream : IStream):
         #TODO CHECK IF ID IS UNIQE
-        if isinstance(inputStream, InputStream):
+        if isinstance(inputStream, IStream):
             self.InputStreams.append(inputStream)
             inputStream.add_data_available_eventhandler(self.__on_data_available)
         else:

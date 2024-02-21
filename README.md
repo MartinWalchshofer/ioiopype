@@ -4,21 +4,21 @@
 ## 'InputNode'
 Input nodes can get data from 'OutputNodes'. Data is delivered via 'InputStream'. They can process data but do not propagate data to any other nodes.
 
-### Implementing a new 'InputNode'
-Add a new class to the 'input_nodes' folder
+### Implementing a new 'INode'
+Add a new class to the 'i_nodes' folder
 
 ```
-from ..pattern.input_node import InputNode
-from ..pattern.input_stream import InputStream
+from ..pattern.i_node import INode
+from ..pattern.i_stream import IStream
 
-class InputClass(InputNode):
+class IClass(INode):
     def __init__(self):
-        super().__init__() #call InputNode constructor
-        self.add_input_stream(InputStream(0, 'in')) #define input streams 
+        super().__init__() #call INode constructor
+        self.add_i_stream(IStream(0, 'in')) #define istreams 
         self.NodeUpdateMode = self.UpdateMode.Synchronized #define update mode"
 
     def __del__(self):
-        super().__del__() #call InputNode destructor
+        super().__del__() #call INode destructor
 
     #update is called according to the 'NodeUpdateMode'
     #if 'UpdateMode.Synchronized' is defined update is called whenever all attached streams delivered data
@@ -26,8 +26,8 @@ class InputClass(InputNode):
     def update(self):
         #read data from stream buffer
         data = None
-        if self.InputStreams[0].DataCount > 0:
-            data = self.InputStreams[0].read()
+        if self.IStreams[0].DataCount > 0:
+            data = self.IStreams[0].read()
         if data is not None:
              #DO SOMETHING
 

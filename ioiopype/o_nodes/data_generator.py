@@ -1,17 +1,17 @@
 #Copyright © 2024 Martin Walchshofer
 
-from ..pattern.output_stream import OutputStream
-from ..pattern.output_node import OutputNode
+from ..pattern.o_stream import OStream
+from ..pattern.o_node import ONode
 import threading
 import time
 import random
 import numpy as np
 
-class DataGenerator(OutputNode):
+class DataGenerator(ONode):
     def __init__(self, sampling_rate, channel_count):
         super().__init__()
-        self.add_output_stream(OutputStream(0,'data')) #todo extend type, range, etc.
-        self.add_output_stream(OutputStream(1,'cnt'))
+        self.add_o_stream(OStream(0,'data')) #todo extend type, range, etc.
+        self.add_o_stream(OStream(1,'cnt'))
 
         self.sampling_rate = sampling_rate
         self.channel_count = channel_count
