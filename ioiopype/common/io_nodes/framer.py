@@ -1,7 +1,7 @@
-from ..pattern.io_node import IONode
-from ..pattern.o_stream import OStream
-from ..pattern.i_stream import IStream
-from ..utilities.overriding_buffer import OverridingBuffer
+from ...pattern.io_node import IONode
+from ...pattern.o_stream import OStream
+from ...pattern.i_stream import IStream
+from ...utilities.overriding_buffer import OverridingBuffer
 
 class Framer(IONode):
     def __init__(self):

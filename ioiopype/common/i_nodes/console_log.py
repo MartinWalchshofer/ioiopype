@@ -1,5 +1,5 @@
-from ..pattern.i_node import INode
-from ..pattern.i_stream import IStream
+from ...pattern.i_node import INode
+from ...pattern.i_stream import IStream
 
 class ConsoleLog(INode):
     def __init__(self):

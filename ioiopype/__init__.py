@@ -16,12 +16,15 @@ from __future__ import absolute_import, division, print_function
 from .__version__ import __version__
 
 # allow lazy loading
-#sink nodes
-from .i_nodes.console_log import ConsoleLog
+#TODO LOAD PLATFORM SPECIFIC NODES ACCORDING TO PLATFORM
 
-#source nodes
-from .o_nodes.data_generator import DataGenerator
+#common nodes
+#inodes
+from .common.i_nodes.console_log import ConsoleLog
 
-#filter nodes
-from .io_nodes.buffer import Buffer
-from .io_nodes.framer import Framer
+#onodes
+from .common.o_nodes.data_generator import DataGenerator
+
+#ionodes
+from .common.io_nodes.buffer import Buffer
+from .common.io_nodes.framer import Framer

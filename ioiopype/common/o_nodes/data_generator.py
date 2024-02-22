@@ -1,7 +1,7 @@
 #Copyright © 2024 Martin Walchshofer
 
-from ..pattern.o_stream import OStream
-from ..pattern.o_node import ONode
+from ...pattern.o_stream import OStream
+from ...pattern.o_node import ONode
 import threading
 import time
 import random
