@@ -17,6 +17,7 @@ class SamplePlot(INode):
         self.buffer = OverridingBuffer(self.displayedTimeRangeSamples , self.numberOfChannels)
         
         self.plotWidget = pg.plot(title="sample plot")
+        self.plotWidget.getPlotItem().hideAxis('left')
         self.items = []
         for i in range(0, self.numberOfChannels):
             self.items.append(pg.PlotCurveItem())
