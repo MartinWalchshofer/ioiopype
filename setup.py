@@ -18,5 +18,5 @@ setup(
     author_email='mwalchshofer@gmx.net',
     description='A short description of your package',
     license='GPLV3',
-    url='https://github.com/yourusername/my_package',
+    url='https://github.com/MartinWalchshofer/ioiopype',
 )
