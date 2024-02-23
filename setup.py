@@ -16,7 +16,7 @@ setup(
 
     author='Martin Walchshofer',
     author_email='mwalchshofer@gmx.net',
-    description='A short description of your package',
+    description='A realtime processing framework for python',
     license='GPLV3',
     url='https://github.com/MartinWalchshofer/ioiopype',
 )
