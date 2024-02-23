@@ -33,4 +33,4 @@ system = get_system()
 ismobile = is_mobile()
 if ismobile is False:
     from .desktop.i_nodes.frame_plot import FramePlot
-    #from .desktop.i_nodes.sample_plot import SamplePlot
+    from .desktop.i_nodes.sample_plot import SamplePlot
