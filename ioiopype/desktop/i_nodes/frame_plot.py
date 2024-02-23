@@ -4,24 +4,22 @@ import pyqtgraph as pg
 import numpy as np
 
 class FramePlot(INode):
-    def __init__(self, samplingRate=1):
+    def __init__(self, samplingRate=1, displayedAmplitude=[-10,10]):
         super().__init__()
         self.add_i_stream(IStream(0, 'in'))
         self.samplingRate = samplingRate
         self.plotWidget = pg.plot(title="frame plot")
-
+        self.plotWidget.setYRange(displayedAmplitude[0], displayedAmplitude[1], 0)
         self.x = None
         self.y = None
         self.numberOfChannels = 0
         self.items = []
-        
         self.timer = pg.QtCore.QTimer()
         self.timer.timeout.connect(self.update_plot)
-        self.timer.start(round(1/50))
+        self.timer.start(round(1/25))
 
     def __del__(self):
         super().__del__()
-
         self.timer.stop()
 
     def update_plot(self):
@@ -31,7 +29,7 @@ class FramePlot(INode):
                 self.items.append(pg.PlotCurveItem())
                 self.plotWidget.addItem(self.items[i])
         for i in range(0, self.numberOfChannels):
-                self.items[i].setData(x=self.x, y= self.y[:,i]+i*20)#tbd
+                self.items[i].setData(x=self.x, y= self.y[:,i])
 
     def update(self):
         data = None
