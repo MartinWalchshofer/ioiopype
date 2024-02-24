@@ -6,12 +6,13 @@ numberOfChannels = 8
 bufferSizeInSamples = 250
 bufferOverlapInSamples = 249
 displayedTimeRangeS = 6
+displayedAmplitude = 100
 
 dg = DataGenerator(samplingRate, numberOfChannels)
 buf = Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples)
 fp1 = FramePlot(samplingRate=samplingRate)
 fp2 = FramePlot(samplingRate=samplingRate)
-sp = SamplePlot(numberOfChannels, samplingRate, displayedTimeRangeS)
+sp = SamplePlot(numberOfChannels, samplingRate, displayedTimeRangeS, displayedAmplitude)
 cl1 = ConsoleLog()
 cl2 = ConsoleLog()
 cl3 = ConsoleLog()
