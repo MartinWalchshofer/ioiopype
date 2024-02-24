@@ -3,8 +3,8 @@ from ioiopype import DataGenerator, ConsoleLog, Buffer, FramePlot, SamplePlot
 #initialize nodes
 samplingRate = 250
 numberOfChannels = 8
-bufferSizeInSamples = 250
-bufferOverlapInSamples = 249
+bufferSizeInSamples = 250 * 4
+bufferOverlapInSamples = 250 * 4 - 250
 displayedTimeRangeS = 6
 displayedAmplitude = 100
 

@@ -3,9 +3,14 @@ from ...pattern.i_stream import IStream
 from ...common.utilities.overriding_buffer import OverridingBuffer
 import pyqtgraph as pg
 import numpy as np
+from enum import Enum
 
 class SamplePlot(INode):
-    def __init__(self, numberOfChannels, samplingRate, displayedTimeRangeS, amplitude):
+    class DisplayMode(Enum):
+        Overriding = 1
+        Continous = 2
+
+    def __init__(self, numberOfChannels, samplingRate, displayedTimeRangeS, amplitude, displayMode=DisplayMode.Overriding):
         super().__init__()
         self.add_i_stream(IStream(0, 'in'))
         self.numberOfChannels = numberOfChannels
@@ -14,7 +19,10 @@ class SamplePlot(INode):
         self.displayedTimeRangeSamples = samplingRate * displayedTimeRangeS
         self.x = np.linspace(1, self.displayedTimeRangeSamples, self.displayedTimeRangeSamples)
         self.x = np.divide(self.x,self.samplingRate)
-        self.buffer = OverridingBuffer(self.displayedTimeRangeSamples , self.numberOfChannels)
+        if displayMode is self.DisplayMode.Overriding:
+            self.buffer = OverridingBuffer(self.displayedTimeRangeSamples , self.numberOfChannels, OverridingBuffer.OutputMode.NotAligned)
+        else:
+            self.buffer = OverridingBuffer(self.displayedTimeRangeSamples , self.numberOfChannels, OverridingBuffer.OutputMode.Aligned)
         self.offsets = []
         for i in range(0, self.numberOfChannels):
             if i % 2 == 0:
@@ -36,7 +44,7 @@ class SamplePlot(INode):
         else:
             minMaxAmplitude = (amplitude/2)+((self.numberOfChannels/2)-0.5)*amplitude
             self.plotWidget.setYRange(-1 * minMaxAmplitude, minMaxAmplitude, 0)
-            
+
         self.timer = pg.QtCore.QTimer()
         self.timer.timeout.connect(self.update_plot)
         self.timer.start(round(1/25))

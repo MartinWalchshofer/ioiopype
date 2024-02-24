@@ -1,10 +1,16 @@
 import numpy as np
+from enum import Enum
 
 class OverridingBuffer:
+    class OutputMode(Enum):
+        Aligned = 1
+        NotAligned = 2
+
     __frame = None
     __cnt = 0
-    def __init__(self, samples_count, channel_count):
+    def __init__(self, samples_count, channel_count, outputMode = OutputMode.Aligned):
         self.__frame = np.zeros((samples_count, channel_count))
+        self.outputMode = outputMode
         self.__cnt = 0
 
     def setData(self, data):
@@ -28,4 +34,7 @@ class OverridingBuffer:
             raise TypeError("Type not supported.")
         
     def getFrame(self):
-        return np.concatenate((self.__frame[self.__cnt :], self.__frame[:self.__cnt ]), axis=0)
+        if self.outputMode is self.OutputMode.Aligned:
+            return np.concatenate((self.__frame[self.__cnt :], self.__frame[:self.__cnt ]), axis=0)
+        else:
+            return self.__frame
