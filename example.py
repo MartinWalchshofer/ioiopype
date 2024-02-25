@@ -3,15 +3,18 @@ from ioiopype import DataGenerator, ConsoleLog, Buffer, FramePlot, SamplePlot, P
 #initialize nodes
 samplingRate = 250
 numberOfChannels = 8
-bufferSizeInSamples = 250 * 4
-bufferOverlapInSamples = 250 * 4 - 25
+signalAmplitude = 10
+signalFrequency = 10
+timesSamplingRate = 4
+bufferSizeInSamples = samplingRate * timesSamplingRate
+bufferOverlapInSamples = samplingRate * timesSamplingRate - 25
 displayedTimeRangeS = 6
 displayedAmplitude = 100
 
-dg = DataGenerator(samplingRate, numberOfChannels)
+dg = DataGenerator(samplingRate, numberOfChannels, signalAmplitude=signalAmplitude, signalFrequencyHz=signalFrequency, signalNoise=10)
 buf = Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples)
 pw = PWelch(samplingRate)
-fp1 = FramePlot(samplingRate=samplingRate, displayedAmplitude=[0, 1])
+fp1 = FramePlot(samplingRate=4, displayedAmplitude=[0, 10])
 fp2 = FramePlot(samplingRate=samplingRate, displayedAmplitude=[-20, 20] )
 sp = SamplePlot(numberOfChannels, samplingRate, displayedTimeRangeS, displayedAmplitude)
 cl1 = ConsoleLog()

@@ -27,7 +27,7 @@ class PWelch(IONode):
             columns = data.shape[1]
             if self.spectrum is None:
                 self.spectrum = np.zeros((rows// 2 + 1, columns))
-            for i in range(columns):
-                frequencies, self.spectrum[:, i] = sp.welch(data[:, i], fs=self.samplingRate, nperseg=rows, average='median', scaling='spectrum')
+            frequencies, self.spectrum = sp.welch(data, fs=self.samplingRate, nperseg=rows, average='median', scaling='spectrum', axis=0)
+            self.spectrum = np.sqrt(self.spectrum)
             self.write(0, self.spectrum)   
             self.write(1, frequencies)      

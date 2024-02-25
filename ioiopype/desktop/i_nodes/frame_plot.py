@@ -4,12 +4,15 @@ import pyqtgraph as pg
 import numpy as np
 
 class FramePlot(INode):
-    def __init__(self, samplingRate=1, displayedAmplitude=[-10,10]):
+    def __init__(self, samplingRate=1, displayedAmplitude=[]):
         super().__init__()
         self.add_i_stream(IStream(0, 'in'))
         self.samplingRate = samplingRate
         self.plotWidget = pg.plot(title="frame plot")
-        self.plotWidget.setYRange(displayedAmplitude[0], displayedAmplitude[1], 0)
+        if len(displayedAmplitude) is 2:
+            self.plotWidget.setYRange(displayedAmplitude[0], displayedAmplitude[1], 0)
+        elif len(displayedAmplitude) is 1:
+            self.plotWidget.setYRange(-displayedAmplitude[0], displayedAmplitude[0], 0)
         self.x = None
         self.y = None
         self.numberOfChannels = 0
