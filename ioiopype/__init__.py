@@ -26,6 +26,7 @@ from .common.o_nodes.data_generator import DataGenerator
 #ionodes
 from .common.io_nodes.buffer import Buffer
 from .common.io_nodes.framer import Framer
+from .common.io_nodes.pwelch import PWelch
 
 #desktop nodes
 from .utilities.system import is_mobile, get_system
