@@ -27,7 +27,12 @@ from .common.o_nodes.data_generator import DataGenerator
 from .common.io_nodes.buffer import Buffer
 from .common.io_nodes.framer import Framer
 from .common.io_nodes.pwelch import PWelch
+from .common.io_nodes.downsample import Downsample
+from .common.io_nodes.offset_correction import OffsetCorrection
+from .common.io_nodes.butterworth_iir import ButterworthIIR
 
+#enumerations
+from .common.enumerations.FilterType import FilterType
 #desktop nodes
 from .utilities.system import is_mobile, get_system
 system = get_system()
