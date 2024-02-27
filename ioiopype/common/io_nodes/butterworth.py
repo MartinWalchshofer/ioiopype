@@ -12,7 +12,7 @@ class Butterworth(IONode):
         Bandpass = 3
         Notch = 4
 
-    def __init__(self, type, order, cutoffFrequencies):
+    def __init__(self, type, samplingRate, order, cutoffFrequencies):
         super().__init__()
         self.add_i_stream(IStream(0, 'sample'))
         self.add_o_stream(OStream(0,'sample'))
@@ -23,13 +23,13 @@ class Butterworth(IONode):
             if len(cutoffFrequencies) != 2:
                 raise ValueError("Number of cutoff frequencies must be 2 for bandpass and notch filters.")
         if type is self.FilterType.Lowpass:
-            self.b, self.a = butter(order, cutoffFrequencies,'lowpass', analog=False)
+            self.b, self.a = butter(order, cutoffFrequencies/(samplingRate/2), 'lowpass', analog=False)
         elif type is self.FilterType.Highpass:
-            self.b, self.a = butter(order, cutoffFrequencies,'highpass', analog=False)
+            self.b, self.a = butter(order, cutoffFrequencies/(samplingRate/2),'highpass', analog=False)
         if type is self.FilterType.Lowpass:
-            self.b, self.a = butter(order, cutoffFrequencies,'bandpass', analog=False)
+            self.b, self.a = butter(order, cutoffFrequencies/(samplingRate/2),'bandpass', analog=False)
         elif type is self.FilterType.Highpass:
-            self.b, self.a = butter(order, cutoffFrequencies,'bandstop', analog=False)
+            self.b, self.a = butter(order, cutoffFrequencies/(samplingRate/2),'bandstop', analog=False)
 
     def __del__(self):
         super().__del__()
