@@ -29,7 +29,7 @@ from .common.io_nodes.framer import Framer
 from .common.io_nodes.pwelch import PWelch
 from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.offset_correction import OffsetCorrection
-from .common.io_nodes.butterworth_iir import ButterworthIIR
+from .common.io_nodes.butterworth_filter import ButterworthFilter
 
 #enumerations
 from .common.enumerations.FilterType import FilterType

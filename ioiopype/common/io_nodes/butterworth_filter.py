@@ -4,7 +4,7 @@ from ...pattern.i_stream import IStream
 from ..utilities.butterworth import Butterworth
 import numpy as np
 
-class ButterworthIIR(IONode):
+class ButterworthFilter(IONode):
 
     def __init__(self, type, samplingRate, order, cutoffFrequencies):
         super().__init__()
