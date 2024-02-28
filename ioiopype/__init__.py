@@ -22,6 +22,7 @@ from .common.i_nodes.console_log import ConsoleLog
 
 #onodes
 from .common.o_nodes.data_generator import DataGenerator
+from .common.o_nodes.frame import Frame
 
 #ionodes
 from .common.io_nodes.buffer import Buffer
@@ -30,7 +31,7 @@ from .common.io_nodes.pwelch import PWelch
 from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.butterworth_filter import ButterworthFilter
-
+from .common.io_nodes.to_sample import ToSample
 #functions
 from .common.utilities.filter_types import FilterType
 
