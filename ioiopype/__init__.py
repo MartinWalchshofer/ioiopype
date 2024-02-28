@@ -32,7 +32,7 @@ from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.butterworth_filter import ButterworthFilter
 
 #functions
-from .common.utilities.butterworth import butterworth
+from .common.utilities.filter_types import FilterType
 
 #desktop nodes
 from .utilities.system import is_mobile, get_system

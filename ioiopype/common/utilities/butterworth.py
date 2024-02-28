@@ -1,12 +1,6 @@
 
 from scipy.signal import butter
-from enum import Enum
-
-class FilterType(Enum):
-        Lowpass = 1
-        Highpass = 2
-        Bandpass = 3
-        Notch = 4
+from filter_types import FilterType
 
 def butterworth(type, samplingRate, order, cutoffFrequencies):
     b = 0

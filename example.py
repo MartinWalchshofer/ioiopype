@@ -1,4 +1,4 @@
-from ioiopype import DataGenerator, ConsoleLog, Buffer, FramePlot, SamplePlot, PWelch, ButterworthIIR, FilterType
+from ioiopype import DataGenerator, ConsoleLog, Buffer, FramePlot, SamplePlot, PWelch, ButterworthFilter, FilterType
 
 #initialize nodes
 samplingRate = 250
