@@ -31,8 +31,9 @@ from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.butterworth_filter import ButterworthFilter
 
-#enumerations
-from .common.enumerations.FilterType import FilterType
+#functions
+from .common.utilities.butterworth import butterworth
+
 #desktop nodes
 from .utilities.system import is_mobile, get_system
 system = get_system()

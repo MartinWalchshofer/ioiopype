@@ -1,7 +1,7 @@
 from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
-from ..utilities.butterworth import Butterworth
+from ..utilities.butterworth import butterworth
 import numpy as np
 import scipy.signal as sp
 
@@ -11,8 +11,7 @@ class ButterworthFiltFilt(IONode):
         super().__init__()
         self.add_i_stream(IStream(0, 'frame'))
         self.add_o_stream(OStream(0, 'frame'))
-        bw = Butterworth(type, samplingRate, order, cutoffFrequencies)
-        self.b, self.a = bw.get_coefficients()
+        self.b, self.a = butterworth(type, samplingRate, order, cutoffFrequencies)
 
     def __del__(self):
         super().__del__()
