@@ -4,10 +4,16 @@ import os
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
+import time
 import ioiopype as ioio
 import numpy as np
 import matplotlib.pyplot as mp
 
+def on_data_available(data):
+    global dataProcessed
+    dataProcessed = data
+
+dataProcessed = None
 rowCount = 2500
 columnCount = 8
 mu = 100
@@ -25,6 +31,7 @@ lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, fs, 2, [100])
 n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, fs, 2, [48,52])
 b = ioio.Buffer(columnCount,rowCount,0)
 tw = ioio.ToWorkspace()
+tw.add_data_available_eventhandler(on_data_available)
 
 #build pype
 f.connect(0, ts.InputStreams[0])
@@ -37,8 +44,13 @@ b.connect(0, tw.InputStreams[0])
 #send data
 f.send_frame(data)
 
-#TBD
-#wait until data is available
+#wait until data is processed
+while dataProcessed is None:
+    time.sleep(1/1000)
+
+#check if frequency bands are dampened
+
+tw.remove_data_available_eventhandler(on_data_available)
 
 #plot timeseries
 t = np.linspace(0, rowCount/fs, num=rowCount)

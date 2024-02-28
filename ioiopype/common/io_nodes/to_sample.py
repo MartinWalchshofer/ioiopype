@@ -1,7 +1,7 @@
 from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
-
+import numpy as np
 class ToSample(IONode):
     def __init__(self):
         super().__init__()
@@ -17,4 +17,4 @@ class ToSample(IONode):
             data = self.InputStreams[0].read()
         if data is not None:
              for row in data:
-                    self.write(0, row)      
+                    self.write(0, np.array([row]))      

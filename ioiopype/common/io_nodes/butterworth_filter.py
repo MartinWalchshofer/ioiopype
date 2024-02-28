@@ -3,6 +3,7 @@ from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
 from ..utilities.butterworth import butterworth
 import scipy.signal as sp
+import numpy as np
 
 class ButterworthFilter(IONode):
 
@@ -24,6 +25,7 @@ class ButterworthFilter(IONode):
              if self.zi is None:
                  self.zi = sp.lfilter_zi(self.b, self.a)
              for row in data:
-                row_filt, zf = sp.lfilter(self.b, self.a, row,axis=0, zi=self.zi)
+                d = np.array([row])
+                row_filt, zf = sp.lfilter(self.b, self.a, d, axis=0, zi=self.zi)
                 self.zi = zf
                 self.write(0, row_filt)
