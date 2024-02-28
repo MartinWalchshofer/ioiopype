@@ -5,14 +5,15 @@ samplingRate = 250
 numberOfChannels = 8
 signalAmplitude = 10
 signalFrequency = 10
+signalOffset = 100
+signalNoise = 10
 timesSamplingRate = 4
 bufferSizeInSamples = samplingRate * timesSamplingRate
 bufferOverlapInSamples = samplingRate * timesSamplingRate - 25
 displayedTimeRangeS = 6
 displayedAmplitude = 100
 
-bw = ButterworthFilter(FilterType.Lowpass, samplingRate, 4, [10]) #TBD NOT FINISHED YET
-dg = DataGenerator(samplingRate, numberOfChannels, signalAmplitude=signalAmplitude, signalFrequencyHz=signalFrequency, signalNoise=10)
+dg = DataGenerator(samplingRate, numberOfChannels, signalAmplitude=signalAmplitude, signalFrequencyHz=signalFrequency, signalOffset=signalOffset, signalNoise=signalNoise)
 buf = Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples)
 pw = PWelch(samplingRate)
 fp1 = FramePlot(samplingRate=4, displayedAmplitude=[0, 10])
