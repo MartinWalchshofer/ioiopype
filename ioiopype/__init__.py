@@ -19,6 +19,7 @@ from .__version__ import __version__
 #common nodes
 #inodes
 from .common.i_nodes.console_log import ConsoleLog
+from .common.i_nodes.to_workspace import ToWorkspace
 
 #onodes
 from .common.o_nodes.data_generator import DataGenerator

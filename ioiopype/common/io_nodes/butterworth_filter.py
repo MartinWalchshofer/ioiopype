@@ -24,6 +24,6 @@ class ButterworthFilter(IONode):
              if self.zi is None:
                  self.zi = sp.lfilter_zi(self.b, self.a)
              for row in data:
-                row_filt, zf = sp.lfilter(self.b, self.a, row,axis=0, zi=zi)
-                zi = zf
+                row_filt, zf = sp.lfilter(self.b, self.a, row,axis=0, zi=self.zi)
+                self.zi = zf
                 self.write(0, row_filt)
