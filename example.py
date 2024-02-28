@@ -11,6 +11,7 @@ bufferOverlapInSamples = samplingRate * timesSamplingRate - 25
 displayedTimeRangeS = 6
 displayedAmplitude = 100
 
+bw = ButterworthFilter(FilterType.Lowpass, samplingRate, 4, [10]) #TBD NOT FINISHED YET
 dg = DataGenerator(samplingRate, numberOfChannels, signalAmplitude=signalAmplitude, signalFrequencyHz=signalFrequency, signalNoise=10)
 buf = Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples)
 pw = PWelch(samplingRate)

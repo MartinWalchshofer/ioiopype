@@ -1,6 +1,6 @@
 
 from scipy.signal import butter
-from filter_types import FilterType
+from .filter_types import FilterType
 
 def butterworth(type, samplingRate, order, cutoffFrequencies):
     b = 0
