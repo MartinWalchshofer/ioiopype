@@ -16,7 +16,7 @@ def on_data_available(data):
 dataProcessed = None
 rowCount = 2500
 columnCount = 8
-mu = 100
+mu = 1000
 sigma = 50
 fs = 250
 
