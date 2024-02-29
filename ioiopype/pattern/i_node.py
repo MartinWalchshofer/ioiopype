@@ -40,44 +40,38 @@ class INode(ABC):
             self.__updateThread.join()
             self.__updateThread = None
 
-    def __data_available(self):
-        if len(self.InputStreams) <= 0:
-            return False
+    def __on_data_available(self):
         if self.NodeUpdateMode is self.UpdateMode.Asynchron:
-            anyStreamAcquired = False
-            for stream in self.InputStreams:
-                if stream.DataCount > 0:
-                    anyStreamAcquired = True
-                    break
-            return anyStreamAcquired
+            self.__event.set()
         else:
             allStreamsAcquired = True
             for stream in self.InputStreams:
                 if stream.DataCount <= 0:
                     allStreamsAcquired = False
                     break
-            return allStreamsAcquired
-
-    def __on_data_available(self):
-        if self.__data_available():
-            self.__event.set()
+            if allStreamsAcquired:
+                self.__event.set()
 
     def __updateThread_DoWork(self):
         try:
             self.__event.wait()
             self.__event.clear()
             while self.__updateThreadRunning:
-                if self.__data_available() == False:
-                    self.__event.wait()
-                    self.__event.clear()
-                
                 if self.__updateThreadRunning:
-                    start = time.time()
-                    self.update()
-                    end = time.time()
-                    self.__updateCnt += 1
-                    self.__totalTimeMs += (end - start)*1000
-                    self.__updateTimeMs = self.__totalTimeMs / self.__updateCnt
+                    updateCnt = -1
+                    for stream in self.InputStreams:
+                        if updateCnt == -1 or stream.DataCount <= updateCnt:
+                            updateCnt = stream.DataCount
+                    for i in range(updateCnt):
+                        start = time.time()
+                        self.update()
+                        end = time.time()
+                        self.__updateCnt += 1
+                        self.__totalTimeMs += (end - start)*1000
+                        self.__updateTimeMs = self.__totalTimeMs / self.__updateCnt
+
+                self.__event.wait()
+                self.__event.clear()
                     
         except Exception as e:
             self.__stop()
