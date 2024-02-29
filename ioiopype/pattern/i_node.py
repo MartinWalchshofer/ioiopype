@@ -4,6 +4,7 @@ from .i_stream import IStream
 import threading
 from abc import ABC, abstractmethod
 from enum import Enum
+import time
 
 class INode(ABC):
 
@@ -18,6 +19,9 @@ class INode(ABC):
         self.__event : threading.Event = threading.Event()
         self.__updateThreadRunning = False
         self.__updateThread = None
+        self.__updateCnt = 0
+        self.__totalTimeMs = 0
+        self.__updateTimeMs = 0
         self.__start()
 
     def __del__(self):
@@ -36,25 +40,45 @@ class INode(ABC):
             self.__updateThread.join()
             self.__updateThread = None
 
-    def __on_data_available(self):
+    def __data_available(self):
+        if len(self.InputStreams) <= 0:
+            return False
         if self.NodeUpdateMode is self.UpdateMode.Asynchron:
-            self.__event.set()
+            anyStreamAcquired = False
+            for stream in self.InputStreams:
+                if stream.DataCount > 0:
+                    anyStreamAcquired = True
+                    break
+            return anyStreamAcquired
         else:
             allStreamsAcquired = True
             for stream in self.InputStreams:
                 if stream.DataCount <= 0:
                     allStreamsAcquired = False
                     break
-            if allStreamsAcquired:
-                self.__event.set()
-        
+            return allStreamsAcquired
+
+    def __on_data_available(self):
+        if self.__data_available():
+            self.__event.set()
+
     def __updateThread_DoWork(self):
         try:
+            self.__event.wait()
+            self.__event.clear()
             while self.__updateThreadRunning:
-                self.__event.wait()
-                self.__event.clear()
+                if self.__data_available() == False:
+                    self.__event.wait()
+                    self.__event.clear()
+                
                 if self.__updateThreadRunning:
+                    start = time.time()
                     self.update()
+                    end = time.time()
+                    self.__updateCnt += 1
+                    self.__totalTimeMs += (end - start)*1000
+                    self.__updateTimeMs = self.__totalTimeMs / self.__updateCnt
+                    
         except Exception as e:
             self.__stop()
         
@@ -62,7 +86,7 @@ class INode(ABC):
         #TODO CHECK IF ID IS UNIQE
         if isinstance(inputStream, IStream):
             self.InputStreams.append(inputStream)
-            inputStream.add_data_available_eventhandler(self.__on_data_available)
+            inputStream.set_data_available_eventhandler(self.__on_data_available)
         else:
             raise TypeError("'inputStream' must be type of 'InputStream'")
 

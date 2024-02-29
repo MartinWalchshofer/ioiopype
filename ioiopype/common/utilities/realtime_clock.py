@@ -32,7 +32,7 @@ class RealtimeClock(ABC):
             self.__timestamp = time.time()*1000 - self.__timestampStart
 
             if self.__samplesSent >= round(self.__timestamp / self.__targetDt):
-                time.sleep(1/1000)
+                time.sleep(self.__targetDt /1000)
             else:
                 samplesToSend = round(self.__timestamp / self.__targetDt) - self.__samplesSent
                 for i in range(0, samplesToSend):

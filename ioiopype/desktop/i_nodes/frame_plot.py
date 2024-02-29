@@ -32,7 +32,7 @@ class FramePlot(INode):
                 self.items.append(pg.PlotCurveItem())
                 self.plotWidget.addItem(self.items[i])
         for i in range(0, self.numberOfChannels):
-                self.items[i].setData(x=self.x, y= self.y[:,i])
+            self.items[i].setData(x=self.x, y= self.y[:,i])
 
     def update(self):
         data = None

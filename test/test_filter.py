@@ -46,7 +46,7 @@ f.send_frame(data)
 
 #wait until data is processed
 while dataProcessed is None:
-    time.sleep(1/1000)
+    time.sleep(1)
 
 #check if frequency bands are dampened
 
@@ -58,8 +58,10 @@ fig, axs = mp.subplots(columnCount, 1, sharex=True)
 fig.subplots_adjust(hspace=0)
 for i in range(columnCount):
     axs[i].plot(t, data[:, i], color='blue', linestyle='-')
+    axs[i].plot(t, dataProcessed[:, i], color='red', linestyle='-')
     axs[i].set_ylabel(f'EEG {i+1} [µV]')
     axs[i].set_xlim(0, t[t.shape[0]-1])
 
 axs[columnCount - 1].set_xlabel('t [s]')
 mp.show()
+input()

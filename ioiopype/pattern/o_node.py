@@ -5,6 +5,7 @@ from .i_stream import IStream
 class ONode:
     def __init__(self):
         self.OutputStreams : list[OStream] = []
+        self.__writeCnt = 0
         
     def __del__(self):
         for outputstream in self.OutputStreams:
@@ -32,6 +33,7 @@ class ONode:
 
     def write(self, id : int, data):
         if id < len(self.OutputStreams):
+            self.__writeCnt += 1
             self.OutputStreams[id].write(data)
         else:
             raise IndexError("Index out of range")

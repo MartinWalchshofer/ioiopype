@@ -17,4 +17,4 @@ class ToSample(IONode):
             data = self.InputStreams[0].read()
         if data is not None:
              for row in data:
-                    self.write(0, np.array([row]))      
+                self.write(0, np.array([row]))      
