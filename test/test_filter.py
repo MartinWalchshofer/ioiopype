@@ -48,8 +48,6 @@ f.send_frame(data)
 while dataProcessed is None:
     time.sleep(1)
 
-#check if frequency bands are dampened
-
 tw.remove_data_available_eventhandler(on_data_available)
 
 #plot timeseries
@@ -61,7 +59,7 @@ for i in range(columnCount):
     axs[i].plot(t, dataProcessed[:, i], color='red', linestyle='-')
     axs[i].set_ylabel(f'EEG {i+1} [µV]')
     axs[i].set_xlim(0, t[t.shape[0]-1])
-
 axs[columnCount - 1].set_xlabel('t [s]')
+
+'''TODO CHECK IF FREQUENCY BANDS ARE DAMPENED'''
 mp.show()
-input()
