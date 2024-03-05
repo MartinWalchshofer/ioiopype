@@ -1,4 +1,4 @@
-'''This ecample builds a realtime pipeline with different processing steps, plots and console outputs'''
+'''This example builds a realtime pipeline with different processing steps, plots and console outputs'''
 
 import sys
 import os

@@ -33,6 +33,10 @@ from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.butterworth_filter import ButterworthFilter
 from .common.io_nodes.to_sample import ToSample
+
+#ioiopypes
+from .ioiopypes.ioiopype_builder import IOIOPypeBuilder
+
 #functions
 from .common.utilities.filter_types import FilterType
 

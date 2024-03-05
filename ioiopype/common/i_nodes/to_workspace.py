@@ -5,7 +5,7 @@ from ...pattern.stream_info import StreamInfo
 class ToWorkspace(INode):
     def __init__(self):
         super().__init__()
-        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Variable)))
+        self.add_i_stream(IStream(StreamInfo(0, 'data', StreamInfo.Datatype.Variable)))
         self.__eventHandlers = []
 
     def __del__(self):

@@ -1,0 +1,29 @@
+{
+    "Nodes" : [
+        {
+            "id" : 1,
+            "name" : "DataGenerator",
+            "samplingRate" : 250,
+            "numberOfChannels" : 8,
+            "signalAmplitude" : 50,
+            "signalFrequencyHz" : 10,
+            "signalOffset" : 1000,
+            "signalNoise" : 10
+        },
+        {
+            "id" : 2,
+            "name" : "ButterworthFilter",
+            "type" : "Bandstop",
+            "order" : 2,
+            "fc" : [48, 52]
+        }
+    ],
+    "Connections" : [
+        {
+            "oNodeId" : 1,
+            "oStream" : 0,
+            "iNode" : 2,
+            "iStreamId" : 0
+        }
+    ]
+}

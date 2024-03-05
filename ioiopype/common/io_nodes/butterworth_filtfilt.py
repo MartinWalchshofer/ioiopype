@@ -7,7 +7,6 @@ import numpy as np
 import scipy.signal as sp
 
 class ButterworthFiltFilt(IONode):
-
     def __init__(self, type, samplingRate, order, cutoffFrequencies):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Frame)))
