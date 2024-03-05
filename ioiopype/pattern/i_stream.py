@@ -1,13 +1,13 @@
 #Copyright © 2024 Martin Walchshofer
 
 import queue
+from .stream_info  import StreamInfo
 
 class IStream:
-    def __init__(self, id : int, name : str):
+    def __init__(self, streamInfo : StreamInfo):
         self.__queue : queue.Queue = queue.Queue()
         self.DataCount : int = 0
-        self.Id : int = id
-        self.Name : str = name
+        self.StreamInfo = streamInfo
         self.IsConnected = False
         self.__eventHandler : function
         self.__readCnt = 0

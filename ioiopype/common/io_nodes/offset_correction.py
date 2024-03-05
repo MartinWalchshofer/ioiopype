@@ -1,6 +1,7 @@
 from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
+from ...pattern.stream_info import StreamInfo
 import numpy as np
 from enum import Enum
 
@@ -12,8 +13,8 @@ class OffsetCorrection(IONode):
 
     def __init__(self, numberOfSamples, mode=OffsetCorrectionMode.Linear):
         super().__init__()
-        self.add_i_stream(IStream(0, 'frame'))
-        self.add_o_stream(OStream(0,'frame'))
+        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Frame)))
+        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Frame)))
         self.numberOfSamples = numberOfSamples
         self.mode = mode
 

@@ -1,12 +1,12 @@
 #Copyright © 2024 Martin Walchshofer
 
 from .i_stream import IStream
+from .stream_info  import StreamInfo
 
 class OStream:
-    def __init__(self, id : int, name : str):
+    def __init__(self, streamInfo : StreamInfo):
         self.__inputStreams : list [IStream] = []
-        self.Id : int = id
-        self.Name  : str = name
+        self.StreamInfo = streamInfo
         self.IsConnected = False
     
     def connect(self, inputStream : IStream):

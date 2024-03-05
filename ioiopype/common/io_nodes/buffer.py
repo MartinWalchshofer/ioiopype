@@ -2,12 +2,13 @@ from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
 from ..utilities.overriding_buffer import OverridingBuffer
+from ...pattern.stream_info import StreamInfo
 
 class Buffer(IONode):
     def __init__(self, numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples):
         super().__init__()
-        self.add_i_stream(IStream(0, 'sample'))
-        self.add_o_stream(OStream(0,'frame'))
+        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Frame)))
         self.buffer = OverridingBuffer(bufferSizeInSamples, numberOfChannels)
         self.sampleCnt = 0
         self.threshold = bufferSizeInSamples - bufferOverlapInSamples

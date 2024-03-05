@@ -1,6 +1,7 @@
 from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
+from ...pattern.stream_info import StreamInfo
 from ..utilities.butterworth import butterworth
 from ..utilities.filter_types import FilterType
 import scipy.signal as sp
@@ -10,8 +11,8 @@ class ButterworthFilter(IONode):
 
     def __init__(self, type, samplingRate, order, cutoffFrequencies):
         super().__init__()
-        self.add_i_stream(IStream(0, 'sample'))
-        self.add_o_stream(OStream(0,'sample'))
+        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))
         self.b, self.a = butterworth(type, samplingRate, order, cutoffFrequencies)
         self.zi = None
         self.ziSize = order

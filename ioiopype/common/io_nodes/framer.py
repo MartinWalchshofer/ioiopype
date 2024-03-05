@@ -1,14 +1,15 @@
 from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
+from ...pattern.stream_info import StreamInfo
 from ..utilities.overriding_buffer import OverridingBuffer
 
 class Framer(IONode):
     def __init__(self):
         super().__init__()
-        self.add_i_stream(IStream(0, 'sample'))
-        self.add_i_stream(IStream(1, 'trigger'))
-        self.add_o_stream(OStream(0,'frame'))
+        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
+        self.add_i_stream(IStream(StreamInfo(1, 'trig', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Frame)))
         raise NotImplementedError("TBD")
 
     def __del__(self):

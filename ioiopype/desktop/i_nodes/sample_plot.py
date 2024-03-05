@@ -1,5 +1,6 @@
 from ...pattern.i_node import INode
 from ...pattern.i_stream import IStream
+from ...pattern.stream_info import StreamInfo
 from ...common.utilities.overriding_buffer import OverridingBuffer
 import pyqtgraph as pg
 import numpy as np
@@ -12,7 +13,7 @@ class SamplePlot(INode):
 
     def __init__(self, numberOfChannels, samplingRate, displayedTimeRangeS, amplitude, displayMode=DisplayMode.Overriding):
         super().__init__()
-        self.add_i_stream(IStream(0, 'in'))
+        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
         self.numberOfChannels = numberOfChannels
         self.samplingRate = samplingRate
         self.displayedTimeRangeS = displayedTimeRangeS

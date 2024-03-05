@@ -2,6 +2,7 @@
 
 from ...pattern.o_stream import OStream
 from ...pattern.o_node import ONode
+from ...pattern.stream_info import StreamInfo
 from ..utilities.realtime_clock import RealtimeClock
 import numpy as np
 import random
@@ -10,8 +11,8 @@ class DataGenerator(ONode, RealtimeClock):
     def __init__(self, sampling_rate, channel_count, signalAmplitude=10, signalFrequencyHz=1, signalOffset = 0, signalNoise = 0):
         super().__init__()
         super(ONode, self).__init__(sampling_rate)
-        self.add_o_stream(OStream(0,'data')) #todo extend type, range, etc.
-        self.add_o_stream(OStream(1,'cnt'))
+        self.add_o_stream(OStream(StreamInfo(0, 'data', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(1, 'cnt', StreamInfo.Datatype.Frame)))
         self.sampling_rate = sampling_rate
         self.channel_count = channel_count
         self.signalAmplitude = signalAmplitude

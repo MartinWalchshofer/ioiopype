@@ -1,15 +1,16 @@
 from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
+from ...pattern.stream_info import StreamInfo
 import numpy as np
 import scipy.signal as sp
 
 class PWelch(IONode):
     def __init__(self, samplingRate):
         super().__init__()
-        self.add_i_stream(IStream(0, 'frame'))
-        self.add_o_stream(OStream(0,'spectrum'))
-        self.add_o_stream(OStream(1,'frequency'))
+        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Frame)))
+        self.add_o_stream(OStream(StreamInfo(0, 'spectrum', StreamInfo.Datatype.Frame)))
+        self.add_o_stream(OStream(StreamInfo(1, 'frequency', StreamInfo.Datatype.Frame)))
         self.samplingRate = samplingRate
         self.spectrum = None
         
