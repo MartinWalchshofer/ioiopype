@@ -8,6 +8,8 @@ import time
 import ioiopype as ioio
 import numpy as np
 import matplotlib.pyplot as mp
+import scipy.signal as sp
+from utilities.noise import pinknoise_multichannel
 
 def on_data_available(data):
     global dataProcessed
@@ -20,15 +22,15 @@ mu = 1000
 sigma = 50
 fs = 250
 
-#create test data
-data = mu + sigma * np.random.randn(rowCount, columnCount)
+# create test data
+data = pink_noise_signal = pinknoise_multichannel(rowCount, columnCount)
 
 #define nodes
 f = ioio.Frame()
 ts = ioio.ToSample()
-hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, fs, 2, [1])
-lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, fs, 2, [100])
-n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, fs, 2, [48,52])
+hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, fs, 2, [10])
+lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, fs, 2, [50])
+n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, fs, 4, [48,52])
 b = ioio.Buffer(columnCount,rowCount,0)
 tw = ioio.ToWorkspace()
 tw.add_data_available_eventhandler(on_data_available)
@@ -60,6 +62,20 @@ for i in range(columnCount):
     axs[i].set_ylabel(f'EEG {i+1} [µV]')
     axs[i].set_xlim(0, t[t.shape[0]-1])
 axs[columnCount - 1].set_xlabel('t [s]')
+mp.show()
 
-'''TODO CHECK IF FREQUENCY BANDS ARE DAMPENED'''
+segmentLength = 4 * fs
+frequencies, spectrum = sp.welch(data, fs=fs, nperseg=segmentLength, average='median', scaling='spectrum', axis=0)
+frequenciesProcessed, spectrumProcessed = sp.welch(dataProcessed, fs=fs, nperseg=segmentLength, average='median', scaling='spectrum', axis=0)
+
+fig, axs = mp.subplots(columnCount, 1, sharex=True)
+fig.subplots_adjust(hspace=0)
+for i in range(columnCount):
+    axs[i].semilogy(frequencies, spectrum[:, i], color='blue', linestyle='-')
+    axs[i].semilogy(frequenciesProcessed, spectrumProcessed[:, i], color='red', linestyle='-')
+    axs[i].grid(True, which="both",ls="--",c='gray')
+    axs[i].set_ylabel(f'Ch. {i+1}')
+    axs[i].set_xlim(0, frequencies[frequencies.shape[0]-1])
+
+axs[columnCount - 1].set_xlabel('frequency [Hz]')
 mp.show()
