@@ -1,7 +1,7 @@
 '''
 This test creates a pink noise frame with specified number of channels and samples.
 The frame is processed sample by sample and ran throug some iir filters sequentially.
-In the end it is checked if the defined frequency bands are really dampened
+Data before and after filtering is plotted to verify that the desired frequency bands are dampened.
 '''
 
 import sys
@@ -71,7 +71,7 @@ for i in range(columnCount):
 axs[columnCount - 1].set_xlabel('t [s]')
 mp.show()
 
-segmentLength = 4 * fs
+segmentLength = 5 * fs
 frequencies, spectrum = sp.welch(data, fs=fs, nperseg=segmentLength, average='median', scaling='spectrum', axis=0)
 frequenciesProcessed, spectrumProcessed = sp.welch(dataProcessed, fs=fs, nperseg=segmentLength, average='median', scaling='spectrum', axis=0)
 
