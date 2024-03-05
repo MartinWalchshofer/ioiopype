@@ -1,3 +1,9 @@
+'''
+This test creates a pink noise frame with specified number of channels and samples.
+The frame is processed sample by sample and ran throug some iir filters sequentially.
+In the end it is checked if the defined frequency bands are really dampened
+'''
+
 import sys
 import os
 
@@ -18,19 +24,20 @@ def on_data_available(data):
 dataProcessed = None
 rowCount = 2500
 columnCount = 8
-mu = 1000
-sigma = 50
 fs = 250
+fclp = [10]
+fchp = [80]
+fcn = [48,52]
 
 # create test data
-data = pink_noise_signal = pinknoise_multichannel(rowCount, columnCount)
+data  = pinknoise_multichannel(rowCount, columnCount) * 100
 
 #define nodes
 f = ioio.Frame()
 ts = ioio.ToSample()
-hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, fs, 2, [10])
-lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, fs, 2, [50])
-n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, fs, 4, [48,52])
+hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, fs, 2, fclp)
+lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, fs, 4, fchp)
+n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, fs, 4, fcn)
 b = ioio.Buffer(columnCount,rowCount,0)
 tw = ioio.ToWorkspace()
 tw.add_data_available_eventhandler(on_data_available)
@@ -59,7 +66,7 @@ fig.subplots_adjust(hspace=0)
 for i in range(columnCount):
     axs[i].plot(t, data[:, i], color='blue', linestyle='-')
     axs[i].plot(t, dataProcessed[:, i], color='red', linestyle='-')
-    axs[i].set_ylabel(f'EEG {i+1} [µV]')
+    axs[i].set_ylabel(f'Ch. {i+1}')
     axs[i].set_xlim(0, t[t.shape[0]-1])
 axs[columnCount - 1].set_xlabel('t [s]')
 mp.show()
