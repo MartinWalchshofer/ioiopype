@@ -21,6 +21,10 @@ nodes.append(ioio.DataGenerator(samplingRate, numberOfChannels, signalAmplitude=
 nodes.append(ioio.Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples))
 nodes.append(ioio.PWelch(samplingRate))
 
+'''TODO
+NODES AND CONNECTIONS (PIPE) TO JSON
+JSON TO NODES AND CONNECTIONS'''
+
 dgjson = str(nodes[0])
 dg = ioio.DataGenerator.initialize(dgjson)
 
