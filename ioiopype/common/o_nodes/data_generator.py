@@ -6,15 +6,16 @@ from ...pattern.stream_info import StreamInfo
 from ..utilities.realtime_clock import RealtimeClock
 import numpy as np
 import random
+import json
 
 class DataGenerator(ONode, RealtimeClock):
-    def __init__(self, sampling_rate, channel_count, signalAmplitude=10, signalFrequencyHz=1, signalOffset = 0, signalNoise = 0):
+    def __init__(self, samplingRate, channelCount, signalAmplitude=10, signalFrequencyHz=1, signalOffset = 0, signalNoise = 0):
         super().__init__()
-        super(ONode, self).__init__(sampling_rate)
+        super(ONode, self).__init__(samplingRate)
         self.add_o_stream(OStream(StreamInfo(0, 'data', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(1, 'cnt', StreamInfo.Datatype.Frame)))
-        self.sampling_rate = sampling_rate
-        self.channel_count = channel_count
+        self.samplingRate = samplingRate
+        self.channelCount = channelCount
         self.signalAmplitude = signalAmplitude
         self.signalFrequencyHz = signalFrequencyHz
         self.signalOffset = signalOffset
@@ -24,11 +25,26 @@ class DataGenerator(ONode, RealtimeClock):
     def __del__(self):
         super().__del__()
 
+    def __str__(self):
+        return json.dumps({
+            "samplingRate": self.samplingRate,
+            "channelCount": self.channelCount,
+            "signalAmplitude": self.signalAmplitude,
+            "signalFrequencyHz": self.signalFrequencyHz,
+            "signalOffset": self.signalOffset,
+            "signalNoise": self.signalNoise
+        })
+
+    @classmethod
+    def initialize(cls, data):
+        ds = json.loads(data)
+        return cls(**ds)
+
     def update(self):
-        data = [0]*self.channel_count
+        data = [0]*self.channelCount
         self.__cnt += 1
-        for i in range(self.channel_count):
-            data[i] = np.sin(2*np.pi*self.__cnt*self.signalFrequencyHz/ self.sampling_rate)*self.signalAmplitude+self.signalOffset+(random.random()-0.5)*self.signalNoise
+        for i in range(self.channelCount):
+            data[i] = np.sin(2*np.pi*self.__cnt*self.signalFrequencyHz/ self.samplingRate)*self.signalAmplitude+self.signalOffset+(random.random()-0.5)*self.signalNoise
             if i % 2 == 0:
                 data[i] = data[i] * -1
 

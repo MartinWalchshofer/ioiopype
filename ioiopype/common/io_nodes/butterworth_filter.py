@@ -9,7 +9,7 @@ import numpy as np
 
 class ButterworthFilter(IONode):
 
-    def __init__(self, type, samplingRate, order, cutoffFrequencies):
+    def __init__(self, type, samplingRate, order, cutoffFrequencies, **kwargs):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))

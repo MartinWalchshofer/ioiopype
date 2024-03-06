@@ -35,7 +35,8 @@ from .common.io_nodes.butterworth_filter import ButterworthFilter
 from .common.io_nodes.to_sample import ToSample
 
 #ioiopypes
-from .ioiopypes.ioiopype_builder import IOIOPypeBuilder
+from .ioiopypes.ioiopype_builder import IOIOPypeBuilder #TBD
+from .ioiopypes.ioiopype_builder import IOIOPype #TBD
 
 #functions
 from .common.utilities.filter_types import FilterType
