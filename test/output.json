@@ -1,0 +1,10 @@
+{
+    "1": "{\"type\": \"Highpass\", \"samplingRate\": 250, \"order\": 2, \"cutoffFrequencies\": [10]}",
+    "2": "{\"type\": \"Lowpass\", \"samplingRate\": 250, \"order\": 4, \"cutoffFrequencies\": [80]}",
+    "3": "{\"type\": \"Notch\", \"samplingRate\": 250, \"order\": 4, \"cutoffFrequencies\": [48, 52]}",
+    "4": "{\"numberOfChannels\": 8, \"bufferSizeInSamples\": 240, \"bufferOverlapInSamples\": 240}",
+    "5": "{\"downsamplingFactor\": 4}",
+    "6": "{\"numberOfSamples\": 100, \"mode\": \"Linear\"}",
+    "7": "{\"samplingRate\": 250}",
+    "8": "{}"
+}

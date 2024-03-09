@@ -3,6 +3,7 @@ from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
 import numpy as np
+import json
 
 class Downsample(IONode):
     def __init__(self, downsamplingFactor):
@@ -13,6 +14,19 @@ class Downsample(IONode):
 
     def __del__(self):
         super().__del__()
+
+    def __dict__(self):
+        return {
+            "downsamplingFactor": self.downsamplingFactor,
+        }
+    
+    def __str__(self):
+        return json.dumps(self.__dict__())
+
+    @classmethod
+    def initialize(cls, data):
+        ds = json.loads(data)
+        return cls(**ds)
 
     def update(self):
         data = None

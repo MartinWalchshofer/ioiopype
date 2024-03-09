@@ -4,6 +4,7 @@ from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
 import numpy as np
 import scipy.signal as sp
+import json
 
 class PWelch(IONode):
     def __init__(self, samplingRate):
@@ -18,6 +19,19 @@ class PWelch(IONode):
 
     def __del__(self):
         super().__del__()
+
+    def __dict__(self):
+        return {
+            "samplingRate": self.samplingRate,
+        }
+    
+    def __str__(self):
+        return json.dumps(self.__dict__())
+
+    @classmethod
+    def initialize(cls, data):
+        ds = json.loads(data)
+        return cls(**ds)
 
     def update(self):
         data = None

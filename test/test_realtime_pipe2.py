@@ -6,31 +6,46 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 import ioiopype as ioio
 import json
-samplingRate = 250
-numberOfChannels = 8
-signalAmplitude = 10
-signalFrequency = 10
-signalOffset = 100
-signalNoise = 10
-timesSamplingRate = 4
-bufferSizeInSamples = samplingRate * timesSamplingRate
-bufferOverlapInSamples = samplingRate * timesSamplingRate - 25
 
-nodes = []
-nodes.append(ioio.DataGenerator(samplingRate, numberOfChannels, signalAmplitude=signalAmplitude, signalFrequencyHz=signalFrequency, signalOffset=signalOffset, signalNoise=signalNoise))
-nodes.append(ioio.Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples))
-nodes.append(ioio.PWelch(samplingRate))
+fs = 250
+fclp = [10]
+fchp = [80]
+fcn = [48,52]
+
+nodes = {
+    1: ioio.ButterworthFilter(ioio.FilterType.Highpass, fs, 2, fclp),
+    2: ioio.ButterworthFilter(ioio.FilterType.Lowpass, fs, 4, fchp),
+    3: ioio.ButterworthFilter(ioio.FilterType.Notch, fs, 4, fcn),
+    4: ioio.Buffer(8, fs, fs-10),
+    5: ioio.Downsample(4),
+    6: ioio.OffsetCorrection(100, ioio.OffsetCorrection.OffsetCorrectionMode.Linear),
+    7: ioio.PWelch(fs),
+    8: ioio.ToSample()
+}
+
+print(str(nodes[1]))
+print(str(nodes[2]))
+print(str(nodes[3]))
+#nodes.append(ioio.Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples))
+#nodes.append(ioio.PWelch(samplingRate))
 
 '''TODO
 NODES AND CONNECTIONS (PIPE) TO JSON
 JSON TO NODES AND CONNECTIONS'''
 
-dgjson = str(nodes[0])
-dg = ioio.DataGenerator.initialize(dgjson)
+print(str(nodes[1]))
+print(str(nodes[1].__dict__))
+print(json.dumps(nodes, default=lambda o: str(o), indent=4))
 
-with open(SCRIPT_DIR + 'output.json', 'w') as json_file:
-    json.dump(nodes, json_file)
 
+dictjson = json.dumps(nodes, default=lambda o: str(o), indent=4)
+
+with open(SCRIPT_DIR + '/output.json', 'w') as json_file:
+    json.dump(nodes, json_file, default=lambda o: str(o), indent=4)
+
+#serialize one node
+dgjson = str(nodes[1])
+dg = ioio.ButterworthFilter.initialize(dgjson)
 
 connections = []
 

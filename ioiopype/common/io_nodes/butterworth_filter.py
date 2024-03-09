@@ -6,13 +6,18 @@ from ..utilities.butterworth import butterworth
 from ..utilities.filter_types import FilterType
 import scipy.signal as sp
 import numpy as np
+import json
 
 class ButterworthFilter(IONode):
 
-    def __init__(self, type, samplingRate, order, cutoffFrequencies, **kwargs):
+    def __init__(self, type, samplingRate, order, cutoffFrequencies):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
-        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))    
+        self.type = type
+        self.samplingRate = samplingRate
+        self.order = order
+        self.cutoffFrequencies = cutoffFrequencies
         self.b, self.a = butterworth(type, samplingRate, order, cutoffFrequencies)
         self.zi = None
         self.ziSize = order
@@ -21,6 +26,22 @@ class ButterworthFilter(IONode):
         
     def __del__(self):
         super().__del__()
+
+    def __dict__(self):
+        return {
+            "type": self.type.name,
+            "samplingRate": self.samplingRate,
+            "order": self.order,
+            "cutoffFrequencies": self.cutoffFrequencies
+        }
+    
+    def __str__(self):
+        return json.dumps(self.__dict__())
+
+    @classmethod
+    def initialize(cls, data):
+        ds = json.loads(data)
+        return cls(**ds)
 
     def update(self):
         data = None

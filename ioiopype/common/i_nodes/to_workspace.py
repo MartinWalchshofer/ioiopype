@@ -1,6 +1,7 @@
 from ...pattern.i_node import INode
 from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
+import json
 
 class ToWorkspace(INode):
     def __init__(self):
@@ -10,6 +11,18 @@ class ToWorkspace(INode):
 
     def __del__(self):
         super().__del__()
+
+    def __dict__(self):
+        return {
+        }
+    
+    def __str__(self):
+        return json.dumps(self.__dict__())
+
+    @classmethod
+    def initialize(cls, data):
+        ds = json.loads(data)
+        return cls(**ds)
 
     def add_data_available_eventhandler(self, handler):
         self.__eventHandlers.append(handler)

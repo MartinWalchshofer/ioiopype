@@ -4,7 +4,7 @@ from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
 import numpy as np
 from enum import Enum
-
+import json
 class OffsetCorrection(IONode):
     class OffsetCorrectionMode(Enum):
         Constant = 1
@@ -21,14 +21,28 @@ class OffsetCorrection(IONode):
     def __del__(self):
         super().__del__()
 
+    def __dict__(self):
+        return {
+            "numberOfSamples": self.numberOfSamples,
+            "mode": self.mode.name
+        }
+    
+    def __str__(self):
+        return json.dumps(self.__dict__())
+
+    @classmethod
+    def initialize(cls, data):
+        ds = json.loads(data)
+        return cls(**ds)
+
     def update(self):
         data = None
         if self.InputStreams[0].DataCount > 0:
             data = self.InputStreams[0].read()
         if data is not None:
-            if self.mode is self.OffsetCorrectionMode.Constant:
+            if self.mode is self.OffsetCorrectionMode.Constant or self.mode == self.OffsetCorrectionMode.Constant.name:
                 self.write(0, data - np.mean(data[:self.numberOfSamples, :], axis=0))
-            elif self.mode is self.OffsetCorrectionMode.Linear:
+            elif self.mode is self.OffsetCorrectionMode.Linear or self.mode == self.OffsetCorrectionMode.Linear.name:
                 first_avg = np.mean(data[:self.numberOfSamples, :], axis=0)
                 last_avg = np.mean(data[-self.numberOfSamples:, :], axis=0)
                 k = (last_avg - first_avg) / (data.shape[0] - self.numberOfSamples)

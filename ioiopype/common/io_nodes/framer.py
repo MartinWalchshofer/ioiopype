@@ -3,6 +3,7 @@ from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
 from ..utilities.overriding_buffer import OverridingBuffer
+import json
 
 class Framer(IONode):
     def __init__(self):
@@ -14,6 +15,17 @@ class Framer(IONode):
 
     def __del__(self):
         super().__del__()
+
+    def __dict__(self):
+        raise NotImplementedError("TBD")
+    
+    def __str__(self):
+        return json.dumps(self.__dict__())
+
+    @classmethod
+    def initialize(cls, data):
+        ds = json.loads(data)
+        return cls(**ds)
 
     def update(self):
         data = None
