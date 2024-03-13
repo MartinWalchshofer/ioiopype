@@ -24,6 +24,7 @@ class Buffer(IONode):
 
     def __dict__(self):
         return {
+            "name": self.__class__.__name__,
             "numberOfChannels": self.numberOfChannels,
             "bufferSizeInSamples": self.bufferSizeInSamples,
             "bufferOverlapInSamples": self.bufferOverlapInSamples,
@@ -35,6 +36,7 @@ class Buffer(IONode):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
 
     def update(self):

@@ -1,12 +1,17 @@
 import sys
 import os
 
+import serial as ps
+import serial.tools.list_ports
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 import ioiopype as ioio
 import json
 
+devices = ioio.Unicorn.get_available_devices()
+device = ioio.Unicorn(devices[0])
 fs = 250
 fclp = [10]
 fchp = [80]
@@ -39,6 +44,7 @@ print(json.dumps(nodes, default=lambda o: str(o), indent=4))
 
 
 dictjson = json.dumps(nodes, default=lambda o: str(o), indent=4)
+nodes1 = json.loads(dictjson)
 
 with open(SCRIPT_DIR + '/output.json', 'w') as json_file:
     json.dump(nodes, json_file, default=lambda o: str(o), indent=4)

@@ -22,6 +22,7 @@ class PWelch(IONode):
 
     def __dict__(self):
         return {
+            "name": self.__class__.__name__,
             "samplingRate": self.samplingRate,
         }
     
@@ -31,6 +32,7 @@ class PWelch(IONode):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
 
     def update(self):
@@ -42,7 +44,7 @@ class PWelch(IONode):
             columns = data.shape[1]
             if self.spectrum is None:
                 self.spectrum = np.zeros((rows// 2 + 1, columns))
-            frequencies, self.spectrum = sp.welch(data, fs=self.samplingRate, nperseg=rows, average='median', scaling='spectrum', axis=0)
+            frequencies, self.spectrum = sp.welch(data, fs=self.samplingRate, window='hamming' ,nperseg=rows, average='median', scaling='spectrum', axis=0)
             self.spectrum = np.sqrt(self.spectrum)
             self.write(0, self.spectrum)   
             self.write(1, frequencies)      

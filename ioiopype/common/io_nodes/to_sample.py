@@ -16,6 +16,7 @@ class ToSample(IONode):
 
     def __dict__(self):
         return {
+            "name": self.__class__.__name__,
         }
     
     def __str__(self):
@@ -24,6 +25,7 @@ class ToSample(IONode):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
     
     def update(self):

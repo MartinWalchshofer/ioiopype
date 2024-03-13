@@ -17,6 +17,7 @@ class Downsample(IONode):
 
     def __dict__(self):
         return {
+            "name": self.__class__.__name__,
             "downsamplingFactor": self.downsamplingFactor,
         }
     
@@ -26,6 +27,7 @@ class Downsample(IONode):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
 
     def update(self):

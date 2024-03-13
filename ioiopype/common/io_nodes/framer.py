@@ -25,6 +25,7 @@ class Framer(IONode):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
 
     def update(self):

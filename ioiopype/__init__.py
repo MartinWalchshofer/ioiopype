@@ -17,6 +17,9 @@ from .__version__ import __version__
 
 # allow lazy loading
 #common nodes
+#ondevices
+from .common.o_devices.unicorn import Unicorn
+
 #inodes
 from .common.i_nodes.console_log import ConsoleLog
 from .common.i_nodes.to_workspace import ToWorkspace

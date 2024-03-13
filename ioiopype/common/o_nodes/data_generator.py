@@ -27,6 +27,7 @@ class DataGenerator(ONode, RealtimeClock):
 
     def __dict__(self):
         return {
+            "name": self.__class__.__name__,
             "samplingRate": self.samplingRate,
             "channelCount": self.channelCount,
             "signalAmplitude": self.signalAmplitude,
@@ -41,6 +42,7 @@ class DataGenerator(ONode, RealtimeClock):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
 
     def update(self):

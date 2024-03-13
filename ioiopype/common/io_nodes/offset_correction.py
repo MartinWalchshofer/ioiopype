@@ -23,6 +23,7 @@ class OffsetCorrection(IONode):
 
     def __dict__(self):
         return {
+            "name": self.__class__.__name__,
             "numberOfSamples": self.numberOfSamples,
             "mode": self.mode.name
         }
@@ -33,6 +34,7 @@ class OffsetCorrection(IONode):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
 
     def update(self):

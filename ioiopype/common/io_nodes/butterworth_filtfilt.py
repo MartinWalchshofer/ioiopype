@@ -23,6 +23,7 @@ class ButterworthFiltFilt(IONode):
 
     def __dict__(self):
         return {
+            "name": self.__class__.__name__,
             "type": self.type.name,
             "samplingRate": self.samplingRate,
             "order": self.order,
@@ -35,6 +36,7 @@ class ButterworthFiltFilt(IONode):
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
+        ds.pop('name', None)
         return cls(**ds)
 
     def update(self):
