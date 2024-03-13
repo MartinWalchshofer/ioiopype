@@ -1,9 +1,6 @@
 import sys
 import os
 
-import serial as ps
-import serial.tools.list_ports
-
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 

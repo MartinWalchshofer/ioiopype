@@ -13,7 +13,7 @@ class DataGenerator(ONode, RealtimeClock):
         super().__init__()
         super(ONode, self).__init__(samplingRate)
         self.add_o_stream(OStream(StreamInfo(0, 'data', StreamInfo.Datatype.Sample)))
-        self.add_o_stream(OStream(StreamInfo(1, 'cnt', StreamInfo.Datatype.Frame)))
+        self.add_o_stream(OStream(StreamInfo(1, 'cnt', StreamInfo.Datatype.Sample)))
         self.samplingRate = samplingRate
         self.channelCount = channelCount
         self.signalAmplitude = signalAmplitude

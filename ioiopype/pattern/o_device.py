@@ -27,5 +27,5 @@ class ODevice( ONode):
 
     @staticmethod
     @abstractmethod
-    def remove_devices_discovered_eventhandler(handler):
+    def remove_devices_discovered_eventhandler():
         pass
