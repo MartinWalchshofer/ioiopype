@@ -13,5 +13,5 @@ Execute this command from root folder to create 'requirements.txt'.
 ```pipreqs ./ --force``` 
 
 ## Contact
-Join IOIOPype on [Discord](https://discord.gg/pKEumyD9)
+Join IOIOPype on [Discord](https://discord.gg/pKEumyD9)<br>
 Contact: ```mwalchsoferyt at gmail dot com```
