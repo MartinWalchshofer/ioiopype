@@ -15,7 +15,7 @@
 - Buffer - Buffers data with a defined window size and overlap
 - Framer - TBD
 - PWelch - Calculates a Pwelch spectrum from a frame
-- Downsample - Samples a dataframe down by a given factor
+- Downsample - Samples a data frame down by a given factor
 - OffsetCorrection - Removes the offset from a data frame
 - ButterworthFilter - Applies a butterworth filter to a sample based signal
 - ToSample - Slices and forwards a data frame into samples
@@ -26,8 +26,8 @@
 
 ## Supported platforms
 
-| Windows       | Linux         | Mac  |
-| ------------- |:-------------:| -----:|
+| Windows    | Linux    | Mac  |
+| :--------- |:---------| :----|
 
 ## Create 'requirements.txt'
 
