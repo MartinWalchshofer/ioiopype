@@ -35,7 +35,7 @@ class Unicorn(ODevice):
                             end = rfcommDevice.Name.index( ')' )
                             port = rfcommDevice.Name[start+1:end]
                             devices.append(Unicorn.Device(serial, port))
-        elif not ismobile and (system is System.Mac or system is System.Linux):
+        elif not ismobile and system is System.Mac:
             ports = p.comports()
             for port in ports:
                 portName = port.name
@@ -44,7 +44,10 @@ class Unicorn(ODevice):
                     serial = portName[start:]
                     serial =  serial[:7] + '.' + serial[7:]
                     serial =  serial[:10] + '.' + serial[10:]
-                    devices.append(Unicorn.Device(serial, port.device))
+                    portTemp = port.device
+                    if 'cu.' in portTemp:
+                        portTemp = portTemp.replace('cu.', 'tty.')
+                    devices.append(Unicorn.Device(serial, portTemp))
         else:
             raise NotImplementedError()
 
@@ -71,6 +74,14 @@ class Unicorn(ODevice):
         self.__serialPort.open()
         if not self.__serialPort.is_open:
             raise ValueError("Could not open device")
+        
+        CMD_START_ACQUISITION = b'\x61\x7C\x87'
+        CMD_STOP_ACQUISITION = b'\x63\x5C\xC5'
+        RES_OK = b'\x00\x00\x00'
+
+        self.__serialPort.write(CMD_START_ACQUISITION)
+
+
         #TODO NOT FINISHED YET
 
     def __del__(self):

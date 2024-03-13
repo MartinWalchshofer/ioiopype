@@ -10,8 +10,6 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 import ioiopype as ioio
 import json
 
-devices = ioio.Unicorn.get_available_devices()
-device = ioio.Unicorn(devices[0])
 fs = 250
 fclp = [10]
 fchp = [80]
