@@ -12,6 +12,8 @@ class Unicorn(ODevice):
     CMD_START_ACQUISITION = b'\x61\x7C\x87'
     CMD_STOP_ACQUISITION = b'\x63\x5C\xC5'
     RES_OK = b'\x00\x00\x00'
+    PAYLOAD_HEADER = b'\xC0\x00'
+    RAW_PAYLOADLENGTH_BYTES = 45
     __deviceDiscoveredEventHandler = None
     __discoveryThread = None
     __discoveryThreadRunning = False
@@ -119,15 +121,37 @@ class Unicorn(ODevice):
         if not self.__serialPort.is_open:
             raise ValueError("Could not open device")
         self.__connected = True
+
+        self.__acquisitionRunning = False
+        self._acquisitionThread = None
         self.__serialPort.write(Unicorn.CMD_START_ACQUISITION)
         res = self.__serialPort.read(3)
         if res != Unicorn.RES_OK:
             raise ValueError("Could not start acquisition")
-        self.__acquisitionRunning = True
+        self.__start_acquisition()
 
-    def __del__(self):
+    def __start_acquisition(self):
+        if not self.__acquisitionRunning:
+            self.__acquisitionRunning = True
+            self._acquisitionThread = threading.Thread(target=self.__acquisitionThread_DoWork, daemon=True)
+            self._acquisitionThread.start()
+
+    def __stop_acquisition(self):
         if self.__acquisitionRunning:
             self.__serialPort.write(Unicorn.CMD_STOP_ACQUISITION)
+            self.__acquisitionRunning = False
+            self._acquisitionThread .join()
+            self._acquisitionThread  = None
+
+    def __del__(self):
+        self.__stop_acquisition()
         if self.__connected :
             self.__serialPort.close()
         self.__serialPort = None
+
+    def __acquisitionThread_DoWork(self):
+        while self.__acquisitionRunning:
+            payloadRaw = self.__serialPort.read(Unicorn.RAW_PAYLOADLENGTH_BYTES)
+            start = payloadRaw.index(Unicorn.PAYLOAD_HEADER)
+            #TODO PARSE RAW PAYLOAD
+            print(str(len(payloadRaw)) + " / " + str(start))

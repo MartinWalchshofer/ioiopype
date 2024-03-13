@@ -30,7 +30,6 @@ ioio.Unicorn.stop_scanning()
 #open device
 print('selected: ' + discovered_devices[selectedId])
 device = ioio.Unicorn(discovered_devices[selectedId])
-
 input('Press any key to terminate the application\n')
 
 #close device
