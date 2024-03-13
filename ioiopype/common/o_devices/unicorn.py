@@ -46,7 +46,7 @@ class Unicorn(ODevice):
                             end = rfcommDevice.Name.index( ')' )
                             port = rfcommDevice.Name[start+1:end]
                             devices.append(Unicorn.Device(serial, port))
-        elif not ismobile and system is System.Mac:
+        elif not ismobile and (system is System.Mac or system is System.Linux):
             ports = p.comports()
             for port in ports:
                 portName = port.name

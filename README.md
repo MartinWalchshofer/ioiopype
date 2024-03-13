@@ -1,6 +1,29 @@
 # IOIOpype
  IOIOpype is processing framework for realtime applications written in python. Data is propergated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
 
+## Supported Devices
+- Unicorn Hybrid Black (g.tec medical engineering GmbH)
+- Unicorn Hybrid Black Simulator
+
+## INodes
+- ConsoleLog - Writes received data to the console
+- ToWorkspace - Propagates data to the main thread via event
+- FramePlot - Plots a data frame
+-  SamplePlot - Plots time series data
+
+## IONodes
+- Buffer - Buffers data with a defined window size and overlap
+- Framer - TBD
+- PWelch - Calculates a Pwelch spectrum from a frame
+- Downsample - Samples a dataframe down by a given factor
+- OffsetCorrection - Removes the offset from a data frame
+- ButterworthFilter - Applies a butterworth filter to a sample based signal
+- ToSample - Slices and forwards a data frame into samples
+
+## ONodes
+- DataGenerator - Generates sample based time series data with configurable frequency and amplitude
+- Frame - Allows to send a data frame to INodes
+
 ## Supported platforms
 
 | Windows       | Linux         | Mac  |
