@@ -7,6 +7,7 @@ import serial as ps
 import serial.tools.list_ports as p
 import threading
 import time
+import numpy as np
 
 class Unicorn(ODevice):
     NumberOfAcquiredChannels = 17
@@ -15,8 +16,8 @@ class Unicorn(ODevice):
     NumberOfAccChannels = 3
     NumberOfGyrChannels = 3
     NumberOfCntChannels = 1
-    NumberOfBatteryLevelChannels = 1
-    NumberOfValidationIndicatorChannels = 1
+    NumberOfBatChannels = 1
+    NumberOfValidChannels = 1
 
     __CmdStartAcquisition = b'\x61\x7C\x87'
     __CmdStopAcquisition = b'\x63\x5C\xC5'
@@ -35,7 +36,7 @@ class Unicorn(ODevice):
     __HeaderLength = 2
     __HeaderOffset = 0
     __BytesPerBatteryLevelChannel = 1
-    __BatteryLevelLength = NumberOfBatteryLevelChannels * __BytesPerBatteryLevelChannel
+    __BatteryLevelLength = NumberOfBatChannels * __BytesPerBatteryLevelChannel
     __BatteryLevelOffset = __HeaderLength
     __BytesPerEegChannel = 3
     __EegLength = NumberOfEEGChannels * __BytesPerEegChannel
@@ -57,9 +58,9 @@ class Unicorn(ODevice):
     __EegOffsetConverted = 0
     __AccOffsetConverted = NumberOfEEGChannels
     __GyrOffsetConverted = NumberOfEEGChannels + NumberOfAccChannels
-    __BatOffsetConverted = NumberOfEEGChannels + NumberOfAccChannels + NumberOfBatteryLevelChannels
-    __CntOffsetConverted = NumberOfEEGChannels + NumberOfAccChannels + NumberOfBatteryLevelChannels + NumberOfBatteryLevelChannels
-    __ValidOffsetConverted = NumberOfEEGChannels + NumberOfAccChannels + NumberOfBatteryLevelChannels + NumberOfBatteryLevelChannels + NumberOfCntChannels
+    __BatOffsetConverted = NumberOfEEGChannels + NumberOfAccChannels + NumberOfBatChannels
+    __CntOffsetConverted = NumberOfEEGChannels + NumberOfAccChannels + NumberOfBatChannels + NumberOfBatChannels
+    __ValidOffsetConverted = NumberOfEEGChannels + NumberOfAccChannels + NumberOfBatChannels + NumberOfBatChannels + NumberOfCntChannels
 
     __deviceDiscoveredEventHandler = None
     __discoveryThread = None
@@ -209,7 +210,7 @@ class Unicorn(ODevice):
             if (eegTemp & 0x00800000) == 0x00800000:
                 eegTemp = (eegTemp | 0xFF000000)
 
-            self.__payloadConverted[i]= eegTemp * Unicorn.__EegScale
+            self.__payloadConverted[i + Unicorn.__EegOffsetConverted]= eegTemp * Unicorn.__EegScale
         
         for i in range (0, Unicorn.NumberOfAccChannels):
             accTemp = int(((payloadRaw[Unicorn.__AccOffset + i * Unicorn.__BytesPerAccChannel] & 0xFF) |
@@ -226,9 +227,13 @@ class Unicorn(ODevice):
         self.__payloadConverted[Unicorn.__CntOffsetConverted] = int(((payloadRaw[Unicorn.__CntOffset] & 0xFF) | (payloadRaw[Unicorn.__CntOffset + 1] & 0xFF) << 8 | (payloadRaw[Unicorn.__CntOffset + 2] & 0xFF) << 16 | (payloadRaw[Unicorn.__CntOffset + 3] & 0xFF) << 24))
         self.__payloadConverted[Unicorn.__ValidOffsetConverted] = 1
 
-    def __send_data(self):
-        x = 0
-        #TODO FORWARD DATA TO ACCORDING STREAMS
+    def __send_data(self, payload):
+        self.write(0, np.array(payload[Unicorn.__EegOffsetConverted:Unicorn.NumberOfEEGChannels]).reshape(1, -1)) 
+        self.write(1, np.array(payload[Unicorn.__AccOffsetConverted:Unicorn.NumberOfAccChannels]).reshape(1, -1)) 
+        self.write(2, np.array(payload[Unicorn.__GyrOffsetConverted:Unicorn.NumberOfGyrChannels]).reshape(1, -1)) 
+        self.write(3, np.array(payload[Unicorn.__BatOffsetConverted:Unicorn.NumberOfBatChannels]).reshape(1, -1)) 
+        self.write(4, np.array(payload[Unicorn.__CntOffsetConverted:Unicorn.NumberOfCntChannels]).reshape(1, -1)) 
+        self.write(5, np.array(payload[Unicorn.__ValidOffsetConverted:Unicorn.NumberOfValidChannels]).reshape(1, -1)) 
 
     def __acquisitionThread_DoWork(self):
         while self.__acquisitionRunning:
@@ -251,12 +256,6 @@ class Unicorn(ODevice):
                     for i in range(0, samplesLost):
                         self.__prevPayloadConverted[Unicorn.__CntOffsetConverted] = cntVal + i + 1
                         self.__prevPayloadConverted[Unicorn.__ValidOffsetConverted] = 0
-                        #TODO SEND INTERPOLATED PAYLOADS
-
-                #TODO SEND PAYLOAD
-                #CHECK FOR DATA LOSS
-                #CONVERT TO NUMPY ARRAY
-                #FORWARD TO PIPELINE
-                print(self.__payloadConverted)
-
+                        self.__send_data(self.__prevPayloadConverted)
+                self.__send_data(self.__payloadConverted)
                 self.__prevPayloadConverted = self.__payloadConverted.copy()

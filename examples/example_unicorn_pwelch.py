@@ -1,3 +1,5 @@
+'''This example shows how to connect to a 'Unicorn - The Brain Interface' device, calculate and visualize a pwelch spectrum '''
+
 import sys
 import os
 
@@ -27,10 +29,23 @@ selectedId = int(input('Select device by id:\n'))
 ioio.Unicorn.remove_devices_discovered_eventhandler()
 ioio.Unicorn.stop_scanning()
 
-#open device
-print('selected: ' + discovered_devices[selectedId])
+#initialize nodes
 device = ioio.Unicorn(discovered_devices[selectedId])
+buf = ioio.Buffer(device.NumberOfEEGChannels, 4 * device.SamplingRateInHz, 4 * device.SamplingRateInHz - 25)
+pw = ioio.PWelch(device.SamplingRateInHz)
+fp = ioio.FramePlot(samplingRate=4)
+
+#build ioiopype
+device.connect(0, buf.InputStreams[0])
+buf.connect(0, pw.InputStreams[0])
+pw.connect(0, fp.InputStreams[0])
+
 input('Press any key to terminate the application\n')
+
+#disconnect ioiopype
+device.disconnect(0, buf.InputStreams[0])
+buf.disconnect(0, pw.InputStreams[0])
+pw.disconnect(0, fp.InputStreams[0])
 
 #close device
 del device
