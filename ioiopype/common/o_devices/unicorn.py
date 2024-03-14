@@ -9,11 +9,51 @@ import threading
 import time
 
 class Unicorn(ODevice):
-    CMD_START_ACQUISITION = b'\x61\x7C\x87'
-    CMD_STOP_ACQUISITION = b'\x63\x5C\xC5'
-    RES_OK = b'\x00\x00\x00'
-    PAYLOAD_HEADER = b'\xC0\x00'
-    RAW_PAYLOADLENGTH_BYTES = 45
+    NumberOfAcquiredChannels = 17
+    SamplingRateInHz = 250
+    NumberOfEEGChannels = 8
+    NumberOfAccChannels = 3
+    NumberOfGyrChannels = 3
+    NumberOfCntChannels = 1
+    NumberOfBatteryLevelChannels = 1
+    NumberOfValidationIndicatorChannels = 1
+
+    CmdStartAcquisition = b'\x61\x7C\x87'
+    CmdStopAcquisition = b'\x63\x5C\xC5'
+    ResOk = b'\x00\x00\x00'
+    RawPayloadLengthBytes = 45
+    HeaderStartSequence = b'\xC0\x00'
+    FooterStopSequence = b'\x0D\x0A'
+    
+    EegScale = 4500000.0 / 50331642.0
+    BatteryScale = 1.2 / 16.0
+    BatteryOffset = 3.0
+    BatteryPercentageFactor = 100.0 / 4.2
+    BatteryBitMask = 0x0F
+    AccelerometerScale = 1.0 / 4096.0
+    GyroscopeScale = 1.0 / 32.8
+    HeaderLength = 2
+    HeaderOffset = 0
+    BytesPerBatteryLevelChannel = 1
+    BatteryLevelLength = NumberOfBatteryLevelChannels * BytesPerBatteryLevelChannel
+    BatteryLevelOffset = HeaderLength
+    BytesPerEegChannel = 3
+    EegLength = NumberOfEEGChannels * BytesPerEegChannel
+    EegOffset = HeaderLength + BatteryLevelLength
+    BytesPerAccChannel = 2
+    AccLength = NumberOfAccChannels * BytesPerAccChannel
+    AccOffset = HeaderLength + BatteryLevelLength + EegLength
+    BytesPerGyrChannel = 2
+    GyrLength = NumberOfGyrChannels * BytesPerGyrChannel
+    GyrOffset = HeaderLength + BatteryLevelLength + EegLength + AccLength
+    BytesPerCntChannel = 4
+    CntLength = NumberOfCntChannels * BytesPerCntChannel
+    CntOffset = HeaderLength + BatteryLevelLength + EegLength + AccLength + GyrLength
+    NumberOfFooterChannels = 1
+    BytesPerFooterChannel = 2
+    FooterLength = NumberOfFooterChannels * BytesPerFooterChannel
+    FooterOffset = HeaderLength + BatteryLevelLength + EegLength + AccLength + GyrLength + CntLength
+    
     __deviceDiscoveredEventHandler = None
     __discoveryThread = None
     __discoveryThreadRunning = False
@@ -110,6 +150,7 @@ class Unicorn(ODevice):
         self.add_o_stream(OStream(StreamInfo(3, 'CNT', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(4, 'BAT', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(5, 'VALID', StreamInfo.Datatype.Sample)))
+
         self.__devices = Unicorn.__get_available_devices()
         self.__device = None
         for device in self.__devices:
@@ -124,10 +165,13 @@ class Unicorn(ODevice):
 
         self.__acquisitionRunning = False
         self._acquisitionThread = None
-        self.__serialPort.write(Unicorn.CMD_START_ACQUISITION)
+        self.__serialPort.write(Unicorn.CmdStartAcquisition)
         res = self.__serialPort.read(3)
-        if res != Unicorn.RES_OK:
+        if res != Unicorn.ResOk:
             raise ValueError("Could not start acquisition")
+        
+        self.__payloadConverted = [None] * Unicorn.NumberOfAcquiredChannels
+        self.__prevPayloadConverted = [None] * Unicorn.NumberOfAcquiredChannels
         self.__start_acquisition()
 
     def __start_acquisition(self):
@@ -138,7 +182,7 @@ class Unicorn(ODevice):
 
     def __stop_acquisition(self):
         if self.__acquisitionRunning:
-            self.__serialPort.write(Unicorn.CMD_STOP_ACQUISITION)
+            self.__serialPort.write(Unicorn.CmdStopAcquisition)
             self.__acquisitionRunning = False
             self._acquisitionThread .join()
             self._acquisitionThread  = None
@@ -149,9 +193,48 @@ class Unicorn(ODevice):
             self.__serialPort.close()
         self.__serialPort = None
 
+    def __convert_raw_data_payload(self, payloadRaw):
+        for i in range(0, Unicorn.NumberOfEEGChannels):
+            eegTemp = int((((payloadRaw[Unicorn.EegOffset + i * Unicorn.BytesPerEegChannel] & 0xFF) << 16) |
+                ((payloadRaw[Unicorn.EegOffset + i * Unicorn.BytesPerEegChannel + 1] & 0xFF) << 8) |
+                (payloadRaw[Unicorn.EegOffset + i * Unicorn.BytesPerEegChannel + 2] & 0xFF)))
+
+            if (eegTemp & 0x00800000) == 0x00800000:
+                eegTemp = (eegTemp | 0xFF000000)
+
+            self.__payloadConverted[i]= eegTemp * Unicorn.EegScale
+        
+        for i in range (0, Unicorn.NumberOfAccChannels):
+            accTemp = int(((payloadRaw[Unicorn.AccOffset + i * Unicorn.BytesPerAccChannel] & 0xFF) |
+                    ((payloadRaw[Unicorn.AccOffset + i * Unicorn.BytesPerAccChannel + 1] & 0xFF) << 8)))
+
+            self.__payloadConverted[i + Unicorn.NumberOfEEGChannels] = accTemp * Unicorn.AccelerometerScale
+
+        for i in range(0, Unicorn.NumberOfGyrChannels):
+            gyrTemp = int(((payloadRaw[Unicorn.GyrOffset + i * Unicorn.BytesPerGyrChannel] & 0xFF) |
+                    ((payloadRaw[Unicorn.GyrOffset + i * Unicorn.BytesPerGyrChannel + 1] & 0xFF) << 8)))
+            self.__payloadConverted[i + Unicorn.NumberOfEEGChannels + Unicorn.NumberOfAccChannels] = gyrTemp * Unicorn.GyroscopeScale;
+        
+        self.__payloadConverted[Unicorn.NumberOfEEGChannels + Unicorn.NumberOfAccChannels + Unicorn.NumberOfGyrChannels] = int(((payloadRaw[Unicorn.BatteryLevelOffset] & Unicorn.BatteryBitMask)) * Unicorn.BatteryScale + Unicorn.BatteryOffset) * Unicorn.BatteryPercentageFactor
+
+        self.__payloadConverted[Unicorn.NumberOfEEGChannels + Unicorn.NumberOfAccChannels + Unicorn.NumberOfGyrChannels + Unicorn.NumberOfBatteryLevelChannels] = int(((payloadRaw[Unicorn.CntOffset] & 0xFF) | (payloadRaw[Unicorn.CntOffset + 1] & 0xFF) << 8 | (payloadRaw[Unicorn.CntOffset + 2] & 0xFF) << 16 | (payloadRaw[Unicorn.CntOffset + 3] & 0xFF) << 24))
+
     def __acquisitionThread_DoWork(self):
         while self.__acquisitionRunning:
-            payloadRaw = self.__serialPort.read(Unicorn.RAW_PAYLOADLENGTH_BYTES)
-            start = payloadRaw.index(Unicorn.PAYLOAD_HEADER)
-            #TODO PARSE RAW PAYLOAD
-            print(str(len(payloadRaw)) + " / " + str(start))
+            payloadRaw = self.__serialPort.read(Unicorn.RawPayloadLengthBytes)
+            payloadValid = False
+            try:
+                headerIndex = payloadRaw.index(Unicorn.HeaderStartSequence)
+                footerIndex = payloadRaw.index(Unicorn.FooterStopSequence)
+                if footerIndex - headerIndex == Unicorn.RawPayloadLengthBytes - 2 and headerIndex == 0:
+                    payloadValid = True
+            except:
+                payloadValid = False
+            
+            if payloadValid:
+                self.__convert_raw_data_payload(payloadRaw)
+                print(self.__payloadConverted)
+                #CHECK FOR DATA LOSS
+                #CONVERT TO NUMPY ARRAY
+                #FORWARD TO PIPELINE
+                self.__payloadConverted = self.__payloadConverted.copy()
