@@ -2,7 +2,7 @@
  IOIOpype is processing framework for realtime applications written in python. Data is propergated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
 
 ## Supported Devices
-- Unicorn Hybrid Black (g.tec medical engineering GmbH) - TBD
+- Unicorn Hybrid Black (g.tec medical engineering GmbH)
 - Unicorn Hybrid Black Simulator - TBD
 
 ## INodes
