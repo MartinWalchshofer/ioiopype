@@ -13,7 +13,6 @@
 
 ## IONodes
 - Buffer - Buffers data with a defined window size and overlap
-- Framer - TBD
 - PWelch - Calculates a Pwelch spectrum from a frame
 - Downsample - Samples a data frame down by a given factor
 - OffsetCorrection - Removes the offset from a data frame

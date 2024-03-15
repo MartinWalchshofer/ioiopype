@@ -30,7 +30,6 @@ from .common.o_nodes.frame import Frame
 
 #ionodes
 from .common.io_nodes.buffer import Buffer
-from .common.io_nodes.framer import Framer
 from .common.io_nodes.pwelch import PWelch
 from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.offset_correction import OffsetCorrection
