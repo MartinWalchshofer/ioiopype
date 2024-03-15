@@ -3,7 +3,6 @@
 
 ## Supported Devices
 - Unicorn Hybrid Black (g.tec medical engineering GmbH)
-- Unicorn Hybrid Black Simulator - TBD
 
 ## INodes
 - ConsoleLog - Writes received data to the console
