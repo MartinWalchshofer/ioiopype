@@ -3,8 +3,11 @@ import os
 
 dir = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(dir, 'requirements.txt')) as f:
-    requirements = f.read().splitlines()
+#with open(os.path.join(dir, 'requirements.txt')) as f:
+#    requirements = f.read().splitlines()
+
+with open(os.path.join(dir, 'README.md'), encoding='utf-8') as rm:
+    description = rm.read()
 
 ver = {}
 with open(os.path.join(dir, 'ioiopype', '__version__.py')) as v:
@@ -16,7 +19,9 @@ setup(
     name='ioiopype',
     version=ver['__version__'],
     packages=pkg,
-    install_requires=requirements,
+    long_description=description,
+    long_description_content_type="text/markdown",
+    #install_requires=requirements,
     classifiers=[
         #'Development Status :: 1 - Planning',
         'Development Status :: 2 - Pre-Alpha',
