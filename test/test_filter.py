@@ -7,8 +7,8 @@ Data before and after filtering is plotted to verify that the desired frequency 
 import sys
 import os
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(SCRIPT_DIR))
+dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(dir))
 
 import time
 import ioiopype as ioio

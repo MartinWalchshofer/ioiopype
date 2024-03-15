@@ -1,8 +1,8 @@
 import sys
 import os
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(SCRIPT_DIR))
+dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(dir))
 
 import ioiopype as ioio
 import json
@@ -41,7 +41,7 @@ print(json.dumps(nodes, default=lambda o: str(o), indent=4))
 dictjson = json.dumps(nodes, default=lambda o: str(o), indent=4)
 nodes1 = json.loads(dictjson)
 
-with open(SCRIPT_DIR + '/output.json', 'w') as json_file:
+with open(dir + '/output.json', 'w') as json_file:
     json.dump(nodes, json_file, default=lambda o: str(o), indent=4)
 
 #serialize one node
@@ -50,6 +50,6 @@ dg = ioio.ButterworthFilter.initialize(dgjson)
 
 connections = []
 
-ioioPype = ioio.IOIOPypeBuilder(SCRIPT_DIR + "/test_realtime_pipe2.json")
+ioioPype = ioio.IOIOPypeBuilder(dir + "/test_realtime_pipe2.json")
 
 '''TODO NOT FINISHED YET'''

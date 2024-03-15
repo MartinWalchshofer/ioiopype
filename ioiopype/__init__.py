@@ -3,7 +3,7 @@
 ioiopype
 -------
 
-A toolbox for realtime signalprocessing
+A realtime processing framework for python
 
 :copyright: (c) 2024 by Martin Walchshofer
 
