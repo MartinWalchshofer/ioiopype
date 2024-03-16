@@ -87,7 +87,7 @@ class UnicornSimulator(ODevice, RealtimeClock):
         self.__valid = [0]*UnicornSimulator.NumberOfValidChannels
 
         self.__eegSignalFrequencyHz = 10
-        self.__eegSignalAmplitudeuV = 30
+        self.__eegSignalAmplitudeuV = 20
         self.__eegSignalOffsetuV = 20000
         self.__eegPowerLineFrequencyHz = 50
         self.__eegPowerLineAmplitude = 1000

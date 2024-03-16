@@ -230,12 +230,12 @@ class Unicorn(ODevice):
         self.__payloadConverted[Unicorn.__ValidOffsetConverted] = 1
 
     def __send_data(self, payload):
-        self.write(0, np.array(payload[Unicorn.__EegOffsetConverted:Unicorn.NumberOfEEGChannels]).reshape(1, -1)) 
-        self.write(1, np.array(payload[Unicorn.__AccOffsetConverted:Unicorn.NumberOfAccChannels]).reshape(1, -1)) 
-        self.write(2, np.array(payload[Unicorn.__GyrOffsetConverted:Unicorn.NumberOfGyrChannels]).reshape(1, -1)) 
-        self.write(3, np.array(payload[Unicorn.__BatOffsetConverted:Unicorn.NumberOfBatChannels]).reshape(1, -1)) 
-        self.write(4, np.array(payload[Unicorn.__CntOffsetConverted:Unicorn.NumberOfCntChannels]).reshape(1, -1)) 
-        self.write(5, np.array(payload[Unicorn.__ValidOffsetConverted:Unicorn.NumberOfValidChannels]).reshape(1, -1)) 
+        self.write(0, np.array([payload[Unicorn.__EegOffsetConverted:Unicorn.NumberOfEEGChannels]])) 
+        self.write(1, np.array([payload[Unicorn.__AccOffsetConverted:Unicorn.NumberOfAccChannels]])) 
+        self.write(2, np.array([payload[Unicorn.__GyrOffsetConverted:Unicorn.NumberOfGyrChannels]])) 
+        self.write(3, np.array([payload[Unicorn.__BatOffsetConverted:Unicorn.NumberOfBatChannels]])) 
+        self.write(4, np.array([payload[Unicorn.__CntOffsetConverted:Unicorn.NumberOfCntChannels]])) 
+        self.write(5, np.array([payload[Unicorn.__ValidOffsetConverted:Unicorn.NumberOfValidChannels]])) 
 
     def __acquisitionThread_DoWork(self):
         while self.__acquisitionRunning:

@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(dir))
 import ioiopype as ioio
 
 #use simulator or real device
-useSimulator = True
+use_device_siulator = True
 
 #on devices discovered event / prints discovered devices to the console
 discovered_devices = []
@@ -22,7 +22,7 @@ def on_devices_discovered(devices):
         cnt = cnt+1
 
 #start scanning for devices
-if useSimulator:
+if use_device_siulator:
     ioio.UnicornSimulator.add_devices_discovered_eventhandler(on_devices_discovered)
     ioio.UnicornSimulator.start_scanning()
 else:
@@ -33,7 +33,7 @@ else:
 selectedId = int(input('Select device by id:\n'))
 
 #stop scanning for devices
-if useSimulator:
+if use_device_siulator:
     ioio.UnicornSimulator.remove_devices_discovered_eventhandler()
     ioio.UnicornSimulator.stop_scanning()
 else:
@@ -41,11 +41,11 @@ else:
     ioio.Unicorn.stop_scanning()
 
 #initialize nodes
-if useSimulator:
+if use_device_siulator:
     device = ioio.UnicornSimulator(discovered_devices[selectedId])
 else:
     device = ioio.Unicorn(discovered_devices[selectedId])
-    
+
 buf = ioio.Buffer(device.NumberOfEEGChannels, 4 * device.SamplingRateInHz, 4 * device.SamplingRateInHz - 25)
 pw = ioio.PWelch(device.SamplingRateInHz)
 fp = ioio.FramePlot(samplingRate=4)
