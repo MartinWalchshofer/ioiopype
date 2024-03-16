@@ -39,15 +39,13 @@ This example shows how to connect to a 'Unicorn - The Brain Interface' device an
 ```python
 import ioiopype as ioio
 
-#use simulator or real device
-use_device_simulator = True
-
-#initialize nodes
+use_device_simulator = True #Use device simulator (True) or real device (False)
 if use_device_simulator:
     device = ioio.UnicornSimulator('UN-0000.00.00')
 else:
     device = ioio.Unicorn('UN-2023-02.25') #Enter your device serial here
 
+#initialize processing nodes
 buf = ioio.Buffer(device.NumberOfEEGChannels, 4 * device.SamplingRateInHz, 4 * device.SamplingRateInHz - 25)
 pw = ioio.PWelch(device.SamplingRateInHz)
 fp = ioio.FramePlot(samplingRate=4)
