@@ -27,13 +27,14 @@ class FramePlot(INode):
         self.timer.stop()
 
     def update_plot(self):
-        self.numberOfChannels = self.y.shape[1]
-        if len(self.items) is not self.numberOfChannels:
+        if self.y is not None:
+            self.numberOfChannels = self.y.shape[1]
+            if len(self.items) is not self.numberOfChannels:
+                for i in range(0, self.numberOfChannels):
+                    self.items.append(pg.PlotCurveItem())
+                    self.plotWidget.addItem(self.items[i])
             for i in range(0, self.numberOfChannels):
-                self.items.append(pg.PlotCurveItem())
-                self.plotWidget.addItem(self.items[i])
-        for i in range(0, self.numberOfChannels):
-            self.items[i].setData(x=self.x, y= self.y[:,i])
+                self.items[i].setData(x=self.x, y= self.y[:,i])
 
     def update(self):
         data = None

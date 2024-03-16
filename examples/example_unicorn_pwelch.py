@@ -8,6 +8,9 @@ sys.path.append(os.path.dirname(dir))
 
 import ioiopype as ioio
 
+#use simulator or real device
+useSimulator = True
+
 #on devices discovered event / prints discovered devices to the console
 discovered_devices = []
 def on_devices_discovered(devices):
@@ -19,18 +22,30 @@ def on_devices_discovered(devices):
         cnt = cnt+1
 
 #start scanning for devices
-ioio.Unicorn.add_devices_discovered_eventhandler(on_devices_discovered)
-ioio.Unicorn.start_scanning()
+if useSimulator:
+    ioio.UnicornSimulator.add_devices_discovered_eventhandler(on_devices_discovered)
+    ioio.UnicornSimulator.start_scanning()
+else:
+    ioio.Unicorn.add_devices_discovered_eventhandler(on_devices_discovered)
+    ioio.Unicorn.start_scanning()
 
 #select device
 selectedId = int(input('Select device by id:\n'))
 
 #stop scanning for devices
-ioio.Unicorn.remove_devices_discovered_eventhandler()
-ioio.Unicorn.stop_scanning()
+if useSimulator:
+    ioio.UnicornSimulator.remove_devices_discovered_eventhandler()
+    ioio.UnicornSimulator.stop_scanning()
+else:
+    ioio.Unicorn.remove_devices_discovered_eventhandler()
+    ioio.Unicorn.stop_scanning()
 
 #initialize nodes
-device = ioio.Unicorn(discovered_devices[selectedId])
+if useSimulator:
+    device = ioio.UnicornSimulator(discovered_devices[selectedId])
+else:
+    device = ioio.Unicorn(discovered_devices[selectedId])
+    
 buf = ioio.Buffer(device.NumberOfEEGChannels, 4 * device.SamplingRateInHz, 4 * device.SamplingRateInHz - 25)
 pw = ioio.PWelch(device.SamplingRateInHz)
 fp = ioio.FramePlot(samplingRate=4)

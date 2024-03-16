@@ -19,6 +19,7 @@ from .__version__ import __version__
 #common nodes
 #ondevices
 from .common.o_devices.unicorn import Unicorn
+from .common.o_devices.unicorn_simulator import UnicornSimulator
 
 #inodes
 from .common.i_nodes.console_log import ConsoleLog

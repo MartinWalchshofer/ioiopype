@@ -24,6 +24,7 @@ class DataGenerator(ONode, RealtimeClock):
 
     def __del__(self):
         super().__del__()
+        super(ONode, self).__del__()
 
     def __dict__(self):
         return {

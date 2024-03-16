@@ -6,7 +6,6 @@ import os
 dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(dir))
 
-import time
 import ioiopype as ioio
 
 #initialize nodes
