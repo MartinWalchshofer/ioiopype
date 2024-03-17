@@ -18,7 +18,7 @@ class ToWorkspace(INode):
         }
     
     def __str__(self):
-        return json.dumps(self.__dict__())
+        return json.dumps(self.__dict__(), indent=4)
 
     @classmethod
     def initialize(cls, data):

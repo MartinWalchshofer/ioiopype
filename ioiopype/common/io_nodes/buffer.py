@@ -23,20 +23,30 @@ class Buffer(IONode):
         super().__del__()
 
     def __dict__(self):
+        istreams = []
+        for i in range(0,len(self.InputStreams)):
+            istreams.append(self.InputStreams[i].StreamInfo.__dict__())
+        ostreams = []
+        for i in range(0,len(self.OutputStreams)):
+            ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
             "numberOfChannels": self.numberOfChannels,
             "bufferSizeInSamples": self.bufferSizeInSamples,
             "bufferOverlapInSamples": self.bufferOverlapInSamples,
+            "i_streams": istreams,
+            "o_streams": ostreams
         }
     
     def __str__(self):
-        return json.dumps(self.__dict__())
+        return json.dumps(self.__dict__(), indent=4)
 
     @classmethod
     def initialize(cls, data):
         ds = json.loads(data)
         ds.pop('name', None)
+        ds.pop('i_streams', None)
+        ds.pop('o_streams', None)
         return cls(**ds)
 
     def update(self):
@@ -45,7 +55,7 @@ class Buffer(IONode):
             data = self.InputStreams[0].read()
         if data is not None:
              for row in data:
-                self.buffer.setData(data)
+                self.buffer.setData(row)
                 self.sampleCnt += 1
                 if self.sampleCnt % self.threshold == 0 and self.sampleCnt > 0:
                     self.write(0, self.buffer.getFrame())      

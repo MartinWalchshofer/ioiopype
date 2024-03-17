@@ -37,9 +37,13 @@ from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.butterworth_filter import ButterworthFilter
 from .common.io_nodes.to_sample import ToSample
 
-#ioiopypes
-from .ioiopypes.ioiopype_builder import IOIOPypeBuilder #TBD
-from .ioiopypes.ioiopype_builder import IOIOPype #TBD
+#pattern
+from .pattern.i_node import INode
+from .pattern.o_node import ONode
+from .pattern.io_node import IONode
+from .pattern.i_stream import IStream
+from .pattern.o_stream import OStream
+from .pattern.stream_info import StreamInfo
 
 #functions
 from .common.utilities.filter_types import FilterType
