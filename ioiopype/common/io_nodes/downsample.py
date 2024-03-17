@@ -16,9 +16,17 @@ class Downsample(IONode):
         super().__del__()
 
     def __dict__(self):
+        istreams = []
+        for i in range(0,len(self.InputStreams)):
+            istreams.append(self.InputStreams[i].StreamInfo.__dict__())
+        ostreams = []
+        for i in range(0,len(self.OutputStreams)):
+            ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
             "downsamplingFactor": self.downsamplingFactor,
+            "i_streams": istreams,
+            "o_streams": ostreams
         }
     
     def __str__(self):

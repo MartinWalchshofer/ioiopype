@@ -27,6 +27,9 @@ class DataGenerator(ONode, RealtimeClock):
         super(ONode, self).__del__()
 
     def __dict__(self):
+        ostreams = []
+        for i in range(0,len(self.OutputStreams)):
+            ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
             "samplingRate": self.samplingRate,
@@ -34,7 +37,8 @@ class DataGenerator(ONode, RealtimeClock):
             "signalAmplitude": self.signalAmplitude,
             "signalFrequencyHz": self.signalFrequencyHz,
             "signalOffset": self.signalOffset,
-            "signalNoise": self.signalNoise
+            "signalNoise": self.signalNoise,
+            "o_streams": ostreams
         }
     
     def __str__(self):

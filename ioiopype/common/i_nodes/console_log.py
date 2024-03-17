@@ -12,8 +12,12 @@ class ConsoleLog(INode):
         super().__del__()
 
     def __dict__(self):
+        istreams = []
+        for i in range(0,len(self.InputStreams)):
+            istreams.append(self.InputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
+            "i_streams": istreams,
         }
     
     def __str__(self):

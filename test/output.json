@@ -1,10 +1,169 @@
 {
-    "1": "{\n    \"name\": \"ButterworthFilter\",\n    \"type\": \"Highpass\",\n    \"samplingRate\": 250,\n    \"order\": 2,\n    \"cutoffFrequencies\": [\n        10\n    ]\n}",
-    "2": "{\n    \"name\": \"ButterworthFilter\",\n    \"type\": \"Lowpass\",\n    \"samplingRate\": 250,\n    \"order\": 4,\n    \"cutoffFrequencies\": [\n        80\n    ]\n}",
-    "3": "{\n    \"name\": \"ButterworthFilter\",\n    \"type\": \"Notch\",\n    \"samplingRate\": 250,\n    \"order\": 4,\n    \"cutoffFrequencies\": [\n        48,\n        52\n    ]\n}",
-    "4": "{\n    \"name\": \"Buffer\",\n    \"numberOfChannels\": 8,\n    \"bufferSizeInSamples\": 240,\n    \"bufferOverlapInSamples\": 240\n}",
-    "5": "{\n    \"name\": \"Downsample\",\n    \"downsamplingFactor\": 4\n}",
-    "6": "{\n    \"name\": \"OffsetCorrection\",\n    \"numberOfSamples\": 100,\n    \"mode\": \"Linear\"\n}",
-    "7": "{\n    \"name\": \"PWelch\",\n    \"samplingRate\": 250\n}",
-    "8": "{\n    \"name\": \"ToSample\"\n}"
+    "1": {
+        "name": "ButterworthFilter",
+        "type": "Highpass",
+        "samplingRate": 250,
+        "order": 2,
+        "cutoffFrequencies": [
+            10
+        ],
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "out",
+                "type": "Sample"
+            }
+        ]
+    },
+    "2": {
+        "name": "ButterworthFilter",
+        "type": "Lowpass",
+        "samplingRate": 250,
+        "order": 4,
+        "cutoffFrequencies": [
+            80
+        ],
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "out",
+                "type": "Sample"
+            }
+        ]
+    },
+    "3": {
+        "name": "ButterworthFilter",
+        "type": "Notch",
+        "samplingRate": 250,
+        "order": 4,
+        "cutoffFrequencies": [
+            48,
+            52
+        ],
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "out",
+                "type": "Sample"
+            }
+        ]
+    },
+    "4": {
+        "name": "Buffer",
+        "numberOfChannels": 8,
+        "bufferSizeInSamples": 240,
+        "bufferOverlapInSamples": 240,
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "out",
+                "type": "Sample"
+            }
+        ]
+    },
+    "5": {
+        "name": "Downsample",
+        "downsamplingFactor": 4,
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "out",
+                "type": "Sample"
+            }
+        ]
+    },
+    "6": {
+        "name": "OffsetCorrection",
+        "numberOfSamples": 100,
+        "mode": "Linear",
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "out",
+                "type": "Sample"
+            }
+        ]
+    },
+    "7": {
+        "name": "PWelch",
+        "samplingRate": 250,
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "spectrum",
+                "type": "Sample"
+            },
+            {
+                "id": 1,
+                "name": "frequency",
+                "type": "Sample"
+            }
+        ]
+    },
+    "8": {
+        "name": "ToSample",
+        "i_streams": [
+            {
+                "id": 0,
+                "name": "in",
+                "type": "Sample"
+            }
+        ],
+        "o_streams": [
+            {
+                "id": 0,
+                "name": "out",
+                "type": "Sample"
+            }
+        ]
+    }
 }

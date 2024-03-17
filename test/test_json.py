@@ -39,7 +39,7 @@ for node in nodes:
 
 '''nodes to file'''
 with open(dir + '/output.json', 'w') as json_file:
-    json.dump(nodes, json_file, default=lambda o: str(o), indent=4)
+    json.dump(nodes, json_file, default=lambda o: o.__dict__(), indent=4)
 
 '''file to nodes'''
 with open(dir + '/output.json', 'r') as json_file:
