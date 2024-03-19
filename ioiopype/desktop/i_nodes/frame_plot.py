@@ -20,7 +20,7 @@ class FramePlot(INode):
         self.items = []
         self.timer = pg.QtCore.QTimer()
         self.timer.timeout.connect(self.update_plot)
-        self.timer.start(round(1/25))
+        self.timer.start(round(1000/25))
 
     def __del__(self):
         super().__del__()
