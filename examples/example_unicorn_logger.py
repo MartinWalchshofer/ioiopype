@@ -15,12 +15,13 @@ else:
     device = ioio.Unicorn('UN-2023.02.15') #Enter your device serial here
 
 csv = ioio.CSVLogger(len(device.OutputStreams))
-csv.open(dir + '/test.csv')
+csv.open(dir + '/test.csv', header='EEG1,EEG2,EEG3,EEG4,EEG5,EEG6,EEG7,EEG8,ACCX,ACCY,ACCZ,GYRX,GYRY,GYRZ,CNT,BAT,VALID')
 for i in range(0, len(device.OutputStreams)):
     device.connect(i, csv.InputStreams[i])
 
 input('Press ENTER to terminate the application\n')
 
+csv.close()
 for i in range(0, len(device.OutputStreams)):
     device.disconnect(i, csv.InputStreams[i])
 

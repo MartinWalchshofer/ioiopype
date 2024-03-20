@@ -39,7 +39,7 @@ class CSVLogger(INode):
     def open(self, filepath, header=''):
         if self.__csvfile is None:
             self.__csvfile = open(filepath, 'w')
-            if len(header > 0):
+            if len(header) > 0:
                 self.__csvfile.write(header + '\n')
         else:
             raise ValueError('File already open')
