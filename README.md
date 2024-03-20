@@ -10,7 +10,7 @@
 - ToWorkspace - Propagates data to the main thread via event
 - FramePlot - Plots a data frame
 - SamplePlot - Plots time series data
-- CSV Logger - Loggs data to csv files
+- CSV Logger - Logs data to csv files
 
 ## IONodes
 - Buffer - Buffers data with a defined window size and overlap
