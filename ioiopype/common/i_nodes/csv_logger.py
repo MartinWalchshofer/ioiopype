@@ -36,9 +36,11 @@ class CSVLogger(INode):
         ds.pop('name', None)
         return cls(**ds)
 
-    def open(self, filepath):
+    def open(self, filepath, header=''):
         if self.__csvfile is None:
             self.__csvfile = open(filepath, 'w')
+            if len(header > 0):
+                self.__csvfile.write(header + '\n')
         else:
             raise ValueError('File already open')
 
@@ -49,7 +51,6 @@ class CSVLogger(INode):
         
     def update(self):
         for i in range (0, len(self.InputStreams)):
-            s=None
             data = self.InputStreams[i].read()
             if data.ndim == 1:
                 data = np.array([data])
