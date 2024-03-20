@@ -17,7 +17,7 @@ class QTSamplePlot(QtCore.QObject):
         self.numberOfChannels = numberOfChannels
         self.samplingRate = samplingRate
         
-        self.x = np.linspace(1, displayedTimeRangeSamples, displayedTimeRangeSamples)
+        self.x = np.linspace(1, int(displayedTimeRangeSamples), int(displayedTimeRangeSamples))
         self.x = np.divide(self.x,samplingRate)
 
         self.offsets = []

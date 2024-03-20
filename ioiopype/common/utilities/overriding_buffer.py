@@ -9,7 +9,7 @@ class OverridingBuffer:
     __frame = None
     __cnt = 0
     def __init__(self, samples_count, channel_count, outputMode = OutputMode.Aligned):
-        self.__frame = np.zeros((samples_count, channel_count))
+        self.__frame = np.zeros((int(samples_count), int(channel_count)))
         self.outputMode = outputMode
         self.__cnt = 0
 
