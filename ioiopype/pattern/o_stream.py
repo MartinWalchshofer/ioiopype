@@ -10,6 +10,8 @@ class OStream:
         self.IsConnected = False
     
     def connect(self, inputStream : IStream):
+        if self.StreamInfo.Datatype is not inputStream.StreamInfo.Datatype:
+            raise TypeError("input and output stream must be the same type")
         if isinstance(inputStream, IStream):
             inputStream.IsConnected = True
             self.__inputStreams.append(inputStream)
