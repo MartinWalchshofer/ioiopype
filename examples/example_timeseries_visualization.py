@@ -14,7 +14,6 @@ else:
     device = ioio.Unicorn('UN-2023.02.15') #Enter your device serial here
 
 #initialize processing nodes
-hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, device.SamplingRateInHz, 2, [2])
 sp1 = ioio.SamplePlot(device.NumberOfAccChannels, device.SamplingRateInHz, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Overriding)
 sp2 = ioio.SamplePlot(device.NumberOfAccChannels, device.SamplingRateInHz, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Continous)
 
