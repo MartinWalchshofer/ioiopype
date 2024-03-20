@@ -14,15 +14,24 @@ if use_device_simulator:
 else:
     device = ioio.Unicorn('UN-2023.02.15') #Enter your device serial here
 
+#create csv logger for every output stream the unicorn provides
 csv = ioio.CSVLogger(len(device.OutputStreams))
+
+#open file
 csv.open(dir + '/test.csv', header='EEG1,EEG2,EEG3,EEG4,EEG5,EEG6,EEG7,EEG8,ACCX,ACCY,ACCZ,GYRX,GYRY,GYRZ,CNT,BAT,VALID')
+
+#connect every output stream of the unicorn to an input stream of the csv logger
 for i in range(0, len(device.OutputStreams)):
     device.connect(i, csv.InputStreams[i])
 
 input('Press ENTER to terminate the application\n')
 
+#close file
 csv.close()
+
+#disconnect streams
 for i in range(0, len(device.OutputStreams)):
     device.disconnect(i, csv.InputStreams[i])
 
+#close device
 del device
