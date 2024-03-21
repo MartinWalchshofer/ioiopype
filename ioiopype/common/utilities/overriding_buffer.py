@@ -18,9 +18,9 @@ class OverridingBuffer:
             data = np.array([data])
 
         if isinstance(data, np.ndarray):
-            if data.ndim is 1:
+            if data.ndim == 1:
                 data = data[np.newaxis,:]
-            if data.ndim is not 2:
+            if data.ndim != 2:
                 raise ValueError("Dimensions do not match.")
             if data.shape[1] is not self.__frame.shape[1]:
                 raise ValueError("Number of channels do not match.")

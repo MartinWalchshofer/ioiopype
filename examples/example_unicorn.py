@@ -38,7 +38,7 @@ n60.connect(0, hp.InputStreams[0])
 hp.connect(0, lp.InputStreams[0])
 lp.connect(0, sp.InputStreams[0])
 
-app.exec_()
+app.exec()
 
 #disconnect ioiopype
 device.disconnect(0, buf.InputStreams[0])
