@@ -6,7 +6,10 @@ import os
 dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(dir))
 
+from PySide6.QtWidgets import QApplication
 import ioiopype as ioio
+
+app = QApplication(sys.argv)
 
 use_device_simulator = True #Use device simulator (True) or real device (False)
 
@@ -65,7 +68,7 @@ n60.connect(0, hp.InputStreams[0])
 hp.connect(0, lp.InputStreams[0])
 lp.connect(0, sp.InputStreams[0])
 
-input('Press ENTER to terminate the application\n')
+app.exec_()
 
 #disconnect ioiopype
 device.disconnect(0, buf.InputStreams[0])

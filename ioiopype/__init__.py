@@ -48,6 +48,7 @@ from .pattern.stream_info import StreamInfo
 
 #functions
 from .common.utilities.filter_types import FilterType
+from .common.utilities.overriding_buffer import OverridingBuffer #TODO REMOVE
 
 #desktop nodes
 from .utilities.system import is_mobile, get_system

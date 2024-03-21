@@ -1,16 +1,16 @@
 from ...pattern.i_node import INode
 from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
-from PyQt6 import QtCore, QtGui
+from PySide6.QtCore import QObject, Signal, Slot 
 import pyqtgraph as pg
 import numpy as np
 import time
 
-class QTFramePlot(QtCore.QObject):
-    updateSignal = QtCore.pyqtSignal(np.ndarray)
+class QTFramePlot(QObject):
+    updateSignal = Signal(np.ndarray)
 
     def __init__(self, samplingRate=1, displayedAmplitude=[]):
-        super(QtCore.QObject, self).__init__()
+        super(QTFramePlot, self).__init__()
 
         self.samplingRate = samplingRate
         self.plotWidget = pg.plot(title="frame plot")
@@ -24,7 +24,8 @@ class QTFramePlot(QtCore.QObject):
         self.items = []
 
         self.updateSignal.connect(self.update_plot)
-    
+
+    @Slot(np.ndarray)
     def update_plot(self, y):
         if y is not None:
             if self.x is None or self.x.shape[0] != y.shape[0]:

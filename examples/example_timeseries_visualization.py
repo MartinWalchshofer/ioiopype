@@ -5,7 +5,10 @@ import os
 dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(dir))
 
+from PySide6.QtWidgets import QApplication
 import ioiopype as ioio
+
+app = QApplication(sys.argv)
 
 use_device_simulator = True #Use device simulator (True) or real device (False)
 if use_device_simulator:
@@ -21,7 +24,7 @@ sp2 = ioio.SamplePlot(device.NumberOfAccChannels, device.SamplingRateInHz, 5.2, 
 device.connect(1, sp1.InputStreams[0])
 device.connect(1, sp2.InputStreams[0])
 
-input('Press ENTER to terminate the application\n')
+app.exec()
 
 #disconnect ioiopype
 device.disconnect(1, sp1.InputStreams[0])
