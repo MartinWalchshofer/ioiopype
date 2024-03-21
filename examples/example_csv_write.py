@@ -1,5 +1,3 @@
-'''This example shows how to connect to a 'Unicorn - The Brain Interface' device, calculate and visualize a pwelch spectrum '''
-
 import sys
 import os
 
