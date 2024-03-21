@@ -155,3 +155,4 @@ cython_debug/
 test/output.json
 TODO.md
 examples/test.csv
+scripts/**
