@@ -38,7 +38,10 @@
 This example shows how to connect to a 'Unicorn - The Brain Interface' device and establish a data acquisition. Raw data acquired from the device is filtered with Butterworth IIR filters and visualized using a timeseries plot. Additionally the raw spectrum is calculated using a pwelch spectrum. The spectrum is visualized using a frame plot.
 
 ```python
+from PySide6.QtWidgets import QApplication
 import ioiopype as ioio
+
+app = QApplication(sys.argv)
 
 use_device_simulator = True #Use device simulator (True) or real device (False)
 if use_device_simulator:
@@ -67,7 +70,7 @@ n60.connect(0, hp.InputStreams[0])
 hp.connect(0, lp.InputStreams[0])
 lp.connect(0, sp.InputStreams[0])
 
-input('Press ENTER to terminate the application\n')
+app.exec()
 
 #disconnect ioiopype
 device.disconnect(0, buf.InputStreams[0])
