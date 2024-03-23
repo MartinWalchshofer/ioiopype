@@ -40,6 +40,7 @@ from .common.io_nodes.butterworth_filter import ButterworthFilter
 from .common.io_nodes.to_sample import ToSample
 from .common.io_nodes.square import Square
 from .common.io_nodes.log import Log
+from .common.io_nodes.mux import Mux
 
 #pattern
 from .pattern.i_node import INode

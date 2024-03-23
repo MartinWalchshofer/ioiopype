@@ -5,11 +5,12 @@ from ...pattern.stream_info import StreamInfo
 import numpy as np
 import json
 
-class Log(IONode):
+class Mux(IONode):
 
-    def __init__(self):
+    def __init__(self, numberOfInputSignals):
         super().__init__()
-        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
+        for i in range(0, numberOfInputSignals):
+            self.add_i_stream(IStream(StreamInfo(0, 'in' + str(i+1), StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))    
         
     def __del__(self):
@@ -24,6 +25,7 @@ class Log(IONode):
             ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
+            "numberOfInputSignals": len(self.InputStreams),
             "i_streams": istreams,
             "o_streams": ostreams
         }
@@ -38,12 +40,15 @@ class Log(IONode):
         return cls(**ds)
 
     def update(self):
-        data = None
-        if self.InputStreams[0].DataCount > 0:
-            data = self.InputStreams[0].read()
-        if data is not None:
-            if data.ndim == 1:
-                data = np.array([data])
-            if data.ndim > 2:
+        data = []
+        for i in range(0,len(self.InputStreams)):
+            dataTmp = self.InputStreams[i].read()
+            if dataTmp.ndim == 1:
+                dataTmp = np.array([dataTmp])
+            if dataTmp.ndim > 2:
                 raise ValueError("Dimensions do not fit")
-            self.write(0, np.log(data))
+            data.append(dataTmp)
+        for i in range(0, len(data)-1):
+            if data[i].shape[0] != data[i+1].shape[0]:
+                raise ValueError("Inconsistent matrix dimensions. All multiplexed signals must have the same number of rows.")
+        self.write(0,np.concatenate(data, axis=1))

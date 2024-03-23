@@ -21,6 +21,7 @@
 - ToSample - Slices and forwards a data frame into samples
 - Log - Applies a logarithm to the input signal
 - Square - Squares the input signal
+- Mux - Concatenates multiple signals into one
 
 ## ONodes
 - DataGenerator - Generates sample based time series data with configurable frequency and amplitude
