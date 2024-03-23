@@ -38,6 +38,8 @@ from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.butterworth_filter import ButterworthFilter
 from .common.io_nodes.to_sample import ToSample
+from .common.io_nodes.square import Square
+from .common.io_nodes.log import Log
 
 #pattern
 from .pattern.i_node import INode

@@ -1,7 +1,7 @@
 #Copyright © 2024 Martin Walchshofer
 
 from .o_node import ONode
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
 class ODevice( ONode):
     def __init__(self):
@@ -12,12 +12,12 @@ class ODevice( ONode):
 
     @staticmethod
     @abstractmethod
-    def start_scanning(self):
+    def start_scanning():
         pass
 
     @staticmethod
     @abstractmethod
-    def stop_scanning(self):
+    def stop_scanning():
         pass
 
     @staticmethod

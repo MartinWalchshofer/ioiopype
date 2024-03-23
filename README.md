@@ -19,6 +19,8 @@
 - OffsetCorrection - Removes the offset from a data frame
 - ButterworthFilter - Applies a butterworth filter to a sample based signal
 - ToSample - Slices and forwards a data frame into samples
+- Log - Applies a logarithm to the input signal
+- Square - Squares the input signal
 
 ## ONodes
 - DataGenerator - Generates sample based time series data with configurable frequency and amplitude
