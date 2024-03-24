@@ -1,4 +1,4 @@
-'''This example shows how timeseries data can be be visualized in different ways using a sample plot'''
+'''This example shows how to concatenate two signals into one using the 'Mux' node'''
 import sys
 import os
 
