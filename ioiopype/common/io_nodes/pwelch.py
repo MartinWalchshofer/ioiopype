@@ -53,6 +53,6 @@ class PWelch(IONode):
             if self.spectrum is None:
                 self.spectrum = np.zeros((rows// 2 + 1, columns))
             frequencies, self.spectrum = sp.welch(data, fs=self.samplingRate, window='hann' ,nperseg=rows, average='median', scaling='spectrum', axis=0)
-            self.spectrum = np.sqrt(self.spectrum)
+            self.spectrum = np.sqrt(self.spectrum*2)
             self.write(0, self.spectrum)   
             self.write(1, frequencies)      

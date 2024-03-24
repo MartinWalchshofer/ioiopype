@@ -2,21 +2,15 @@ from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
-from enum import Enum
 import numpy as np
 import json
 
-class Log(IONode):
-    class LogMode(Enum):
-        Ln = 1
-        LogTen = 2
-        TenLogTen = 3
+class Sqrt(IONode):
 
-    def __init__(self, logmode = LogMode.Ln):
+    def __init__(self):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))    
-        self.logmode = logmode
         
     def __del__(self):
         super().__del__()
@@ -30,7 +24,6 @@ class Log(IONode):
             ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
-            "logmode": self.logmode.name,
             "i_streams": istreams,
             "o_streams": ostreams
         }
@@ -53,9 +46,4 @@ class Log(IONode):
                 data = np.array([data])
             if data.ndim > 2:
                 raise ValueError("Dimensions do not fit")
-            if self.logmode is Log.LogMode.Ln:
-                self.write(0, np.log(data))
-            elif self.logmode is Log.LogMode.LogTen:
-                self.write(0, np.log10(data))
-            elif self.logmode is Log.LogMode.TenLogTen:
-                self.write(0, 10 * np.log10(data))
+            self.write(0, np.sqrt(data))

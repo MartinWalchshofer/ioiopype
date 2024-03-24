@@ -21,6 +21,7 @@
 - ToSample - Slices and forwards a data frame into samples
 - Log - Applies a logarithm to the input signal
 - Square - Squares the input signal
+- Sqrt - Calsulates the square root of the input signal
 - Mux - Concatenates multiple signals into one
 
 ## ONodes

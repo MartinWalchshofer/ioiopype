@@ -6,7 +6,10 @@ import os
 dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(dir))
 
+from PySide6.QtWidgets import QApplication
 import ioiopype as ioio
+
+app = QApplication(sys.argv)
 
 #initialize nodes
 samplingRate = 250
@@ -26,7 +29,7 @@ dg = ioio.DataGenerator(samplingRate, numberOfChannels, signalAmplitude=signalAm
 buf = ioio.Buffer(numberOfChannels, bufferSizeInSamples, bufferOverlapInSamples)
 oc = ioio.OffsetCorrection(100, mode=ioio.OffsetCorrection.OffsetCorrectionMode.Linear)
 pw = ioio.PWelch(samplingRate)
-fp1 = ioio.FramePlot(samplingRate=4, displayedAmplitude=[0, 10])
+fp1 = ioio.FramePlot(samplingRate=4, displayedAmplitude=[0, 12])
 fp2 = ioio.FramePlot(samplingRate=samplingRate, displayedAmplitude=[-50, 50] )
 sp = ioio.SamplePlot(numberOfChannels, samplingRate, displayedTimeRangeS, displayedAmplitude)
 cl1 = ioio.ConsoleLog()
@@ -48,7 +51,7 @@ dg.connect(1, cl3.InputStreams[0])
 dg.start()
 
 print('Press ENTER to terminate the script')
-input()
+app.exec()
 
 #disconnect nodes
 dg.disconnect(0, buf.InputStreams[0])

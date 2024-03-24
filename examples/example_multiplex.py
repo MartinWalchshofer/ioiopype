@@ -20,7 +20,7 @@ else:
 m = ioio.Mux(2)
 sp = ioio.SamplePlot(device.NumberOfAccChannels + device.NumberOfGyrChannels, device.SamplingRateInHz, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Continous)
 
-#build ioiopype
+#build ioiopype - connect signal 1 (ACC) and 2 (GYR) from unicorn to signal 0 and 1 of mux. Plot concatenated signal.
 device.connect(1, m.InputStreams[0])
 device.connect(2, m.InputStreams[1])
 m.connect(0, sp.InputStreams[0])
