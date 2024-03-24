@@ -19,10 +19,11 @@
 - OffsetCorrection - Removes the offset from a data frame
 - ButterworthFilter - Applies a butterworth filter to a sample based signal
 - ToSample - Slices and forwards a data frame into samples
-- Log - Applies a logarithm to the input signal
+- Log - Applies a logarithm to the input signal (ln, log10, 10*log10)
 - Square - Squares the input signal
 - Sqrt - Calsulates the square root of the input signal
 - Mux - Concatenates multiple signals into one
+- Element wise operation - Adds, Subtracts, Multiplies, Divides signals element wise
 
 ## ONodes
 - DataGenerator - Generates sample based time series data with configurable frequency and amplitude
