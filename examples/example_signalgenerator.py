@@ -16,7 +16,7 @@ fs = 100
 numberOfChannels = 2
 amplitude = 50
 frequency = 0.5
-offset = 0
+offset = 50
 siggen1 = ioio.SignalGenerator(fs, numberOfChannels, ioio.SignalGenerator.SignalMode.Sine, amplitude, frequency, offset)
 siggen2 = ioio.SignalGenerator(fs, numberOfChannels, ioio.SignalGenerator.SignalMode.Sawtooth, amplitude, frequency, offset)
 siggen3 = ioio.SignalGenerator(fs, numberOfChannels, ioio.SignalGenerator.SignalMode.Square, amplitude, frequency, offset)
@@ -25,7 +25,7 @@ mux = ioio.Mux(4)
 buf = ioio.Buffer(numberOfChannels * 4, 4 * fs, 4 * fs - 25)
 pw = ioio.PWelch(fs)
 fp = ioio.FramePlot(samplingRate=4)
-sp = ioio.SamplePlot(numberOfChannels * 4, fs, 5.5, 100)
+sp = ioio.SamplePlot(numberOfChannels * 4, fs, 5.5, (amplitude + offset)*2)
 
 #build ioiopype
 siggen1.connect(0, mux.InputStreams[0])
