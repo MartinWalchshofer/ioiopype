@@ -70,26 +70,28 @@ class SignalGenerator(ONode, RealtimeClock):
         data = [0]*self.channelCount
         if self.mode == SignalGenerator.SignalMode.Sine:
             for i in range(self.channelCount):
-                data[i] = np.sin(2*np.pi*self.__cnt*self.signalFrequencyHz/self.samplingRate)*self.signalAmplitude+self.signalOffset
+                data[i] = np.sin(2*np.pi*self.__cnt*self.signalFrequencyHz/self.samplingRate)*self.signalAmplitude
         elif self.mode == SignalGenerator.SignalMode.Square:
             if self.__cnt % self.__halfPeriodSamples == 0:
                 self.__direction = self.__direction * -1
             for i in range(self.channelCount):
-                data[i] = self.__direction * self.signalAmplitude + self.signalOffset
+                data[i] = self.__direction * self.signalAmplitude
         elif self.mode == SignalGenerator.SignalMode.Sawtooth:
             for i in range(self.channelCount):
-                data[i] = (self.__cnt % self.__periodSamples * self.__k- self.signalAmplitude) + self.signalOffset
+                data[i] = self.__cnt % self.__periodSamples * self.__k- self.signalAmplitude
         elif self.mode == SignalGenerator.SignalMode.Triangle:
             if self.__cnt % self.__halfPeriodSamples == 0:
                 self.__direction = self.__direction * -1
             for i in range(self.channelCount):
                 if self.__direction  > 0:
-                    data[i] = (self.__cnt % self.__halfPeriodSamples * self.__k - self.signalAmplitude) + self.signalOffset
+                    data[i] = self.__cnt % self.__halfPeriodSamples * self.__k - self.signalAmplitude
                 else:
-                    data[i] = (self.__cnt % self.__halfPeriodSamples * -self.__k+ self.signalAmplitude) + self.signalOffset
+                    data[i] = self.__cnt % self.__halfPeriodSamples * -self.__k+ self.signalAmplitude
         for i in range(self.channelCount):
-            if i % 2 == 0:
+            if i % 2 == 1:
                 data[i] = data[i] * -1
+        for i in range(self.channelCount):
+                data[i] += self.signalOffset
         
         self.__cnt += 1
         self.write(0, np.array([data]))

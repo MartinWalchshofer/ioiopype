@@ -69,3 +69,4 @@ class ElementWiseOperation(IONode):
                 dataOut = dataOut * data[i]
             elif self.operation is ElementWiseOperation.Operation.DotDivide:
                 dataOut = dataOut / data[i]
+        self.write(0, dataOut)

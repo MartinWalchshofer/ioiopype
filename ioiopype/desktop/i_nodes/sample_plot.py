@@ -35,7 +35,8 @@ class SamplePlot(INode):
                     self.offsets.append(amplitude * ((numberOfChannels/2)-0.5) - i*amplitude)
 
             self.plotWidget = pg.plot(title="sample plot")
-            self.plotWidget.getPlotItem().hideAxis('left')
+            if numberOfChannels > 1:
+                self.plotWidget.getPlotItem().hideAxis('left')
             self.items = []
             for i in range(0, self.numberOfChannels):
                 self.items.append(pg.PlotCurveItem())

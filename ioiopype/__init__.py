@@ -33,14 +33,18 @@ from .common.o_nodes.csv_reader import CSVReader
 
 #ionodes
 from .common.io_nodes.buffer import Buffer
-from .common.io_nodes.pwelch import PWelch
-from .common.io_nodes.downsample import Downsample
-from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.butterworth_filter import ButterworthFilter
-from .common.io_nodes.to_sample import ToSample
-from .common.io_nodes.square import Square
+from .common.io_nodes.butterworth_filtfilt import ButterworthFiltFilt
+from .common.io_nodes.downsample import Downsample
+from .common.io_nodes.element_wise_operation import ElementWiseOperation
+#from .common.io_nodes.framer import Framer
 from .common.io_nodes.log import Log
 from .common.io_nodes.mux import Mux
+from .common.io_nodes.offset_correction import OffsetCorrection
+from .common.io_nodes.pwelch import PWelch
+from .common.io_nodes.sqrt import Sqrt
+from .common.io_nodes.square import Square
+from .common.io_nodes.to_sample import ToSample
 
 #pattern
 from .pattern.i_node import INode
