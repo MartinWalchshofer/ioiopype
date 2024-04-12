@@ -13,16 +13,16 @@ class IStream:
         self.__readCnt = 0
     
     def write(self, data):
-        self.__queue.put(data)
+        self.__queue.put(data, block=True, timeout=None)
         self.DataCount = self.__queue.qsize()
         if self.__eventHandler is not None:
             self.__eventHandler()
 
     def read(self):
-        if self.__queue.qsize() > 0:
+        if self.DataCount > 0:
             try:
                 self.__readCnt += 1
-                return self.__queue.get()
+                return self.__queue.get(block=True, timeout=None)
             except:
                 return None
         else:

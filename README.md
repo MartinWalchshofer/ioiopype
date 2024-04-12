@@ -26,7 +26,7 @@
 - Element wise operation - Adds, Subtracts, Multiplies, Divides signals element wise
 
 ## ONodes
-- DataGenerator - Generates sample based time series data with configurable frequency and amplitude
+- SignalGenerator -  Generates sample based time series signals. Sine, Square, Sawtooth and Triangle signals can be generated
 - Frame - Allows to send a data frame to INodes
 
 ## Supported platforms

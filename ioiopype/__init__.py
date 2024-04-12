@@ -27,7 +27,7 @@ from .common.i_nodes.console_log import ConsoleLog
 from .common.i_nodes.to_workspace import ToWorkspace
 
 #onodes
-from .common.o_nodes.data_generator import DataGenerator
+from .common.o_nodes.signal_generator import SignalGenerator
 from .common.o_nodes.frame import Frame
 from .common.o_nodes.csv_reader import CSVReader
 

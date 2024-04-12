@@ -11,7 +11,7 @@ import ioiopype as ioio
 
 app = QApplication(sys.argv)
 
-use_device_simulator = True #Use device simulator (True) or real device (False)
+use_device_simulator = False #Use device simulator (True) or real device (False)
 if use_device_simulator:
     device = ioio.UnicornSimulator('UN-0000.00.00')
 else:

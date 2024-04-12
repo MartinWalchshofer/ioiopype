@@ -10,7 +10,7 @@ class Mux(IONode):
     def __init__(self, numberOfInputSignals):
         super().__init__()
         for i in range(0, numberOfInputSignals):
-            self.add_i_stream(IStream(StreamInfo(0, 'in' + str(i+1), StreamInfo.Datatype.Sample)))
+            self.add_i_stream(IStream(StreamInfo(i, 'in' + str(i+1), StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))    
         
     def __del__(self):
