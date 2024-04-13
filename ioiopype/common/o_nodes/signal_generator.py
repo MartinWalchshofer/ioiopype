@@ -5,7 +5,6 @@ from ...pattern.o_node import ONode
 from ...pattern.stream_info import StreamInfo
 from ..utilities.realtime_clock import RealtimeClock
 import numpy as np
-import random
 import json
 from enum import Enum
 
@@ -14,7 +13,7 @@ class SignalGenerator(ONode, RealtimeClock):
         Sine = 1
         Square = 2
         Sawtooth = 3
-        Triangle = 4 
+        Triangle = 4
 
     def __init__(self, samplingRate, channelCount, mode, signalAmplitude=10, signalFrequencyHz=1, signalOffset = 0):
         super().__init__()

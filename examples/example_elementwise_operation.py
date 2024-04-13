@@ -13,41 +13,55 @@ app = QApplication(sys.argv)
 
 #initialize processing nodes
 fs = 100
-numberOfChannels = 8
+numberOfChannels = 2
 amplitude = 0.5
 frequency = 0.1
 offset = 0.5
-siggenScale = ioio.SignalGenerator(fs, numberOfChannels, ioio.SignalGenerator.SignalMode.Sine, amplitude, frequency, offset)
-sp1 = ioio.SamplePlot(numberOfChannels, fs, 10, (amplitude + offset)*2)
+displayedTimeRange = 10.5
+sigScale = ioio.SignalGenerator(fs, numberOfChannels, ioio.SignalGenerator.SignalMode.Sine, amplitude, frequency, offset)
+sp1 = ioio.SamplePlot(numberOfChannels, fs, displayedTimeRange, (amplitude + offset)*2)
 
-numberOfChannels = 8
 frequency = 10
 amplitude = 50
 offset = 0
-siggenSig = ioio.SignalGenerator(fs, numberOfChannels, ioio.SignalGenerator.SignalMode.Sine, amplitude, frequency, offset)
-sp2 = ioio.SamplePlot(numberOfChannels, fs, 10, (amplitude + offset)*2)
+sigSin = ioio.SignalGenerator(fs, numberOfChannels, ioio.SignalGenerator.SignalMode.Sine, amplitude, frequency, offset)
+sp2 = ioio.SamplePlot(numberOfChannels, fs, displayedTimeRange, (amplitude + offset)*2)
 
-add = ioio.ElementWiseOperation(2, ioio.ElementWiseOperation.Operation.DotMultiply)
-sp3 = ioio.SamplePlot(numberOfChannels, fs, 5.5, (amplitude + offset)*2)
+sigNoise = ioio.NoiseGenerator(fs, numberOfChannels, 0, 10)
+sp3 = ioio.SamplePlot(numberOfChannels, fs, displayedTimeRange, (amplitude + offset)*2)
+
+add = ioio.ElementWiseOperation(2, ioio.ElementWiseOperation.Operation.DotAdd)
+mult = ioio.ElementWiseOperation(2, ioio.ElementWiseOperation.Operation.DotMultiply)
+sp4 = ioio.SamplePlot(numberOfChannels, fs, displayedTimeRange, (amplitude + offset)*2)
 
 #build ioiopype
-siggenScale.connect(0, sp1.InputStreams[0])
-siggenSig.connect(0, sp2.InputStreams[0])
-siggenScale.connect(0, add.InputStreams[0])
-siggenSig.connect(0, add.InputStreams[1])
-add.connect(0, sp3.InputStreams[0])
+sigScale.connect(0, sp1.InputStreams[0])
+sigSin.connect(0, sp2.InputStreams[0])
+sigNoise.connect(0, sp3.InputStreams[0])
 
-siggenScale.start()
-siggenSig.start()
+sigSin.connect(0, add.InputStreams[0])
+sigNoise.connect(0, add.InputStreams[1])
+add.connect(0, mult.InputStreams[0])
+sigScale.connect(0, mult.InputStreams[1])
+mult.connect(0, sp4.InputStreams[0])
+
+sigScale.start()
+sigSin.start()
+sigNoise.start()
 
 app.exec()
 
-siggenScale.stop()
-siggenSig.stop()
+sigScale.stop()
+sigSin.stop()
+sigNoise.stop()
 
 #disconnect ioiopype
-siggenScale.disconnect(0, sp1.InputStreams[0])
-siggenSig.disconnect(0, sp2.InputStreams[0])
-siggenScale.disconnect(0, add.InputStreams[0])
-siggenSig.disconnect(0, add.InputStreams[1])
-add.disconnect(0, sp3.InputStreams[0])
+sigScale.disconnect(0, sp1.InputStreams[0])
+sigSin.disconnect(0, sp2.InputStreams[0])
+sigNoise.disconnect(0, sp3.InputStreams[0])
+
+sigSin.disconnect(0, add.InputStreams[0])
+sigNoise.disconnect(0, add.InputStreams[1])
+add.disconnect(0, mult.InputStreams[0])
+sigScale.disconnect(0, mult.InputStreams[1])
+mult.disconnect(0, sp4.InputStreams[0])
