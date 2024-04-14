@@ -6,19 +6,20 @@ from enum import Enum
 import numpy as np
 import json
 
-class ElementWiseOperation(IONode):
-    class Operation(Enum):
+class Operation(IONode):
+    class Type(Enum):
         Add = 1
         Subtract = 2
         Multiply = 3
         Divide = 4
+        MatrixMultiply = 5
 
-    def __init__(self, numberOfInputSignals, operation):
+    def __init__(self, numberOfInputSignals, type):
         super().__init__()
         for i in range(0, numberOfInputSignals):
             self.add_i_stream(IStream(StreamInfo(i, 'in' + str(i+1), StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))    
-        self.operation = operation
+        self.type = type
         
     def __del__(self):
         super().__del__()
@@ -32,7 +33,7 @@ class ElementWiseOperation(IONode):
             ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
-            "operation": self.operation.name,
+            "type": self.type.name,
             "i_streams": istreams,
             "o_streams": ostreams
         }
@@ -58,12 +59,14 @@ class ElementWiseOperation(IONode):
         
         dataOut = data[0]
         for i in range(1, len(data)):
-            if self.operation is ElementWiseOperation.Operation.Add:
+            if self.type is Operation.Type.Add:
                 dataOut = dataOut + data[i]
-            elif self.operation is ElementWiseOperation.Operation.Subtract:
+            elif self.type is Operation.Type.Subtract:
                 dataOut = dataOut - data[i]
-            elif self.operation is ElementWiseOperation.Operation.Multiply:
+            elif self.type is Operation.Type.Multiply:
                 dataOut = dataOut * data[i]
-            elif self.operation is ElementWiseOperation.Operation.Divide:
+            elif self.type is Operation.Type.Divide:
                 dataOut = dataOut / data[i]
+            elif self.type is Operation.Type.MatrixMultiply:
+                dataOut = dataOut @ data[i]
         self.write(0, dataOut)

@@ -30,8 +30,8 @@ sp2 = ioio.SamplePlot(numberOfChannels, fs, displayedTimeRange, (amplitude + off
 sigNoise = ioio.NoiseGenerator(fs, numberOfChannels, 0, 10)
 sp3 = ioio.SamplePlot(numberOfChannels, fs, displayedTimeRange, (amplitude + offset)*2)
 
-add = ioio.ElementWiseOperation(2, ioio.ElementWiseOperation.Operation.Add)
-mult = ioio.ElementWiseOperation(2, ioio.ElementWiseOperation.Operation.Multiply)
+add = ioio.Operation(2, ioio.Operation.Type.Add)
+mult = ioio.Operation(2, ioio.Operation.Type.Multiply)
 sp4 = ioio.SamplePlot(numberOfChannels, fs, displayedTimeRange, (amplitude + offset)*2)
 
 #build ioiopype

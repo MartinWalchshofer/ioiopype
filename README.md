@@ -23,8 +23,7 @@
 - Square - Squares the input signal
 - Sqrt - Calsulates the square root of the input signal
 - Mux - Concatenates multiple signals into one
-- MatrixMultiply - Multiplies two input matrices
-- Element wise operation - Adds, Subtracts, Multiplies, Divides signals element wise
+- Operation - Adds, Subtracts, Multiplies, Divides or applies a matrix multiplication
 
 ## ONodes
 - Constant - forwards constant data with a defined sampling rate

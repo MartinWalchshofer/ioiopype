@@ -11,7 +11,7 @@ samplingRate = 100
 v = ioio.NoiseGenerator(samplingRate, 3, 0, 1)
 m2 = ioio.Constant(samplingRate, np.random.rand(3,3))
 m3 = ioio.Constant(samplingRate, np.random.rand(3,3))
-m = ioio.MatrixMultiply(3)
+m = ioio.Operation(3, ioio.Operation.Type.MatrixMultiply)
 c = ioio.ConsoleLog()
 
 v.connect(0, m.InputStreams[0])
