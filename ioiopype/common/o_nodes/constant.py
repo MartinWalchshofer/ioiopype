@@ -8,16 +8,17 @@ import numpy as np
 import json
 from enum import Enum
 
-class NoiseGenerator(ONode, RealtimeClock):
-
-    def __init__(self, samplingRate, channelCount, mean, std):
+class Constant(ONode, RealtimeClock):
+    def __init__(self, samplingRate, channelCount, data):
         super().__init__()
         super(ONode, self).__init__(samplingRate)
         self.add_o_stream(OStream(StreamInfo(0, 'data', StreamInfo.Datatype.Sample)))
         self.samplingRate = samplingRate
         self.channelCount = channelCount
-        self.mean = mean
-        self.std = std         
+        if type(data) is not np.ndarray:
+                ValueError('Input must be a numpy array')
+        self.data = data
+
 
     def __del__(self):
         super().__del__()
@@ -31,8 +32,7 @@ class NoiseGenerator(ONode, RealtimeClock):
             "name": self.__class__.__name__,
             "samplingRate": self.samplingRate,
             "channelCount": self.channelCount,
-            "mean": self.mean,
-            "std": self.std,
+            "data": self.data,
             "o_streams": ostreams
         }
     
@@ -46,4 +46,4 @@ class NoiseGenerator(ONode, RealtimeClock):
         return cls(**ds)
 
     def update(self):
-        self.write(0, np.random.normal(self.mean, self.std, size=[1, self.channelCount]))
+        self.write(0, self.data)

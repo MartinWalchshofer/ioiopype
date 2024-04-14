@@ -94,5 +94,3 @@ class SignalGenerator(ONode, RealtimeClock):
         
         self.__cnt += 1
         self.write(0, np.array([data]))
-
-        

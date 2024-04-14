@@ -26,6 +26,7 @@
 - Element wise operation - Adds, Subtracts, Multiplies, Divides signals element wise
 
 ## ONodes
+- Constant - forwards constant data with a defined sampling rate
 - NoiseGenerator - Generates gaussian noise as a timeseries signal.
 - SignalGenerator - Generates sample based timeseries signals. Sine, Square, Sawtooth and Triangle signals can be generated
 - Frame - Allows to send a data frame to INodes
