@@ -42,6 +42,7 @@ from .common.io_nodes.element_wise_operation import ElementWiseOperation
 #from .common.io_nodes.framer import Framer
 from .common.io_nodes.log import Log
 from .common.io_nodes.mux import Mux
+from .common.io_nodes.matrix_multiply import MatrixMultiply
 from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.pwelch import PWelch
 from .common.io_nodes.sqrt import Sqrt

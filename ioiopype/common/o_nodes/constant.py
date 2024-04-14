@@ -9,12 +9,11 @@ import json
 from enum import Enum
 
 class Constant(ONode, RealtimeClock):
-    def __init__(self, samplingRate, channelCount, data):
+    def __init__(self, samplingRate, data):
         super().__init__()
         super(ONode, self).__init__(samplingRate)
         self.add_o_stream(OStream(StreamInfo(0, 'data', StreamInfo.Datatype.Sample)))
         self.samplingRate = samplingRate
-        self.channelCount = channelCount
         if type(data) is not np.ndarray:
                 ValueError('Input must be a numpy array')
         self.data = data
@@ -31,7 +30,6 @@ class Constant(ONode, RealtimeClock):
         return {
             "name": self.__class__.__name__,
             "samplingRate": self.samplingRate,
-            "channelCount": self.channelCount,
             "data": self.data,
             "o_streams": ostreams
         }
