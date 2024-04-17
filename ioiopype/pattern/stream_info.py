@@ -4,8 +4,9 @@ import json
 class StreamInfo:
     class Datatype(Enum):
         Sample = 1,
-        Frame = 1,
-        Variable = 1,
+        Frame = 2,
+        Variable = 3,
+        String = 4,
 
     def __init__(self, id : int, name :str, type : Datatype):
         self.Id : int = id

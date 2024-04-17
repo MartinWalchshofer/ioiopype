@@ -3,9 +3,9 @@ numpy==1.26.4
 pyqtgraph==0.13.3
 pyserial==3.5
 PySide6==6.6.2
-PySide6==6.6.2
+PySide6==6.7.0
 PySide6_Addons==6.6.2
 PySide6_Essentials==6.6.2
-scipy==1.12.0
+scipy==1.13.0
 setuptools==69.1.0
 wmi==1.5.1

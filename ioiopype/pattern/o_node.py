@@ -21,6 +21,8 @@ class ONode:
         
     def connect(self, id : int, inputStream : IStream):
         if id < len(self.OutputStreams):
+            if self.OutputStreams[id].StreamInfo.Datatype is not inputStream.StreamInfo.Datatype:
+                raise ValueError("Data types do not match")
             self.OutputStreams[id].connect(inputStream)
         else:
             raise IndexError("Index out of range")
