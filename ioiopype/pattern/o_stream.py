@@ -10,7 +10,7 @@ class OStream:
         self.IsConnected = False
     
     def connect(self, inputStream : IStream):
-        if self.StreamInfo.Datatype is not inputStream.StreamInfo.Datatype:
+        if self.StreamInfo.Datatype is not inputStream.StreamInfo.Datatype and inputStream.StreamInfo.Datatype is not StreamInfo.Datatype.Any:
             raise TypeError("input and output stream must be the same type")
         if isinstance(inputStream, IStream):
             inputStream.IsConnected = True
@@ -24,7 +24,6 @@ class OStream:
             inputStream.IsConnected = False
             self.__inputStreams.remove(inputStream)
             self.IsConnected = False
-            self.__inputStream = None
 
     def write(self, data):
         if len(self.__inputStreams) > 0:

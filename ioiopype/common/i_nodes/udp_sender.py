@@ -1,15 +1,20 @@
+
 from ...pattern.i_node import INode
 from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
+import socket
 import json
 
-class ToWorkspace(INode):
-    def __init__(self):
+class UDPSender(INode):
+    def __init__(self, ip, port):
         super().__init__()
-        self.add_i_stream(IStream(StreamInfo(0, 'data', StreamInfo.Datatype.Any)))
-        self.__eventHandlers = []
+        self.add_i_stream(IStream(StreamInfo(0, 'data', StreamInfo.Datatype.String)))
+        self.__ip = ip
+        self.__port = port
+        self.__socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def __del__(self):
+        self.__socket.close()
         super().__del__()
 
     def __dict__(self):
@@ -18,7 +23,9 @@ class ToWorkspace(INode):
             istreams.append(self.InputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
-            "i_streams": istreams
+            "ip": self.__ip,
+            "port": self.__port,
+            "i_streams": istreams,
         }
     
     def __str__(self):
@@ -29,17 +36,8 @@ class ToWorkspace(INode):
         ds = json.loads(data)
         ds.pop('name', None)
         return cls(**ds)
-
-    def add_data_available_eventhandler(self, handler):
-        self.__eventHandlers.append(handler)
-
-    def remove_data_available_eventhandler(self, handler):
-        self.__eventHandlers.remove(handler)
-
+        
     def update(self):
-        data = None
-        if self.InputStreams[0].DataCount > 0:
-            data = self.InputStreams[0].read()
-        if data is not None:
-            for handler in self.__eventHandlers:
-                handler(data)
+        for i in range (0, len(self.InputStreams)):
+            data = self.InputStreams[i].read()
+            self.__socket.sendto(data.encode('utf-8'), (self.__ip, self.__port))

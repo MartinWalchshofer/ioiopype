@@ -4,24 +4,17 @@ from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
 import numpy as np
 import json
-from json import JSONEncoder
 from enum import Enum
 
-class Serialize(IONode):
+class Deserialize(IONode):
     class Mode(Enum):
         Json = 1
         xml = 2
 
-    class __NumpyArrayEncoder(JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, np.ndarray):
-                return obj.tolist()
-            return JSONEncoder.default(self, obj)
-
     def __init__(self, id, mode):
         super().__init__()
-        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
-        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.String)))    
+        self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.String)))
+        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))    
         self.__id = id
         self.__mode = mode
         
@@ -57,13 +50,9 @@ class Serialize(IONode):
         if self.InputStreams[0].DataCount > 0:
             data = self.InputStreams[0].read()
         if data is not None:
-            if data.ndim == 1:
-                data = np.array([data])
-            if data.ndim > 2:
-                raise ValueError("Dimensions do not fit")
-            if self.__mode is Serialize.Mode.Json:
-                self.write(0, json.dumps({self.__id: data}, cls=self.__NumpyArrayEncoder))
-            elif self.__mode is Serialize.Mode.xml:
+            if self.__mode is Deserialize.Mode.Json:
+                decodedArrays = json.loads(data)
+                self.write(0,np.asarray(decodedArrays[self.__id]))
+            elif self.__mode is Deserialize.Mode.xml:
                 raise NotImplementedError("Not implemented yet")
-            else:
-                raise TypeError("Unknown type")
+            

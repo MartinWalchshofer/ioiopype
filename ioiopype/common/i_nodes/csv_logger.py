@@ -9,7 +9,7 @@ class CSVLogger(INode):
     def __init__(self, numberOfStreams):
         super().__init__()
         for i in range(0, numberOfStreams):
-            self.add_i_stream(IStream(StreamInfo(i, 'data' + str(i), StreamInfo.Datatype.Variable)))
+            self.add_i_stream(IStream(StreamInfo(i, 'data' + str(i), StreamInfo.Datatype.Sample)))
         self.__csvfile = None
         np.set_printoptions(threshold=np.inf)
         np.set_printoptions(linewidth=np.inf)

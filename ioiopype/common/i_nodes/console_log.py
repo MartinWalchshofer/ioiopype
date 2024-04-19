@@ -6,7 +6,7 @@ import json
 class ConsoleLog(INode):
     def __init__(self):
         super().__init__()
-        self.add_i_stream(IStream(StreamInfo(0, 'data', StreamInfo.Datatype.Variable)))
+        self.add_i_stream(IStream(StreamInfo(0, 'data', StreamInfo.Datatype.Any)))
 
     def __del__(self):
         super().__del__()

@@ -166,7 +166,7 @@ class Unicorn(ODevice):
                 self.__device = device     
         if self.__device is None:
              raise ValueError("Could find device with the specified serial number '" + serial + "'.")
-        self.__serialPort = ps.Serial()
+        self.__serialPort = ps.Serial(timeout=1)
         self.__serialPort.port = self.__device.Port
         self.__serialPort.open()
         if not self.__serialPort.is_open:

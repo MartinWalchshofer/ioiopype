@@ -11,6 +11,7 @@
 - FramePlot - Plots a data frame
 - SamplePlot - Plots time series data
 - CSV Logger - Logs data to csv files
+- UDP Receiver - Receives data via UDP
 
 ## IONodes
 - Buffer - Buffers data with a defined window size and overlap
@@ -18,18 +19,22 @@
 - Downsample - Samples a data frame down by a given factor
 - OffsetCorrection - Removes the offset from a data frame
 - ButterworthFilter - Applies a butterworth filter to a sample based signal
+- ButterworthFiltFilt - Applies a butterworth filter to a frame as filtfilt
 - ToSample - Slices and forwards a data frame into samples
 - Log - Applies a logarithm to the input signal (ln, log10, 10*log10)
 - Square - Squares the input signal
 - Sqrt - Calsulates the square root of the input signal
 - Mux - Concatenates multiple signals into one
 - Operation - Adds, Subtracts, Multiplies, Divides or applies a matrix multiplication
+- Serialize - Serialized data into json or xml strings
+- Deserialize - Deserializes XML or JSON serialized data
 
 ## ONodes
 - Constant - forwards constant data with a defined sampling rate
 - NoiseGenerator - Generates gaussian noise as a timeseries signal.
 - SignalGenerator - Generates sample based timeseries signals. Sine, Square, Sawtooth and Triangle signals can be generated
 - Frame - Allows to send a data frame to INodes
+- UDPSender - Sends data via UDP
 
 ## Supported platforms
 
