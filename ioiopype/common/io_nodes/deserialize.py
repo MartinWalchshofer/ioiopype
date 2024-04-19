@@ -11,11 +11,11 @@ class Deserialize(IONode):
         Json = 1
         xml = 2
 
-    def __init__(self, id, mode):
+    def __init__(self, tag, mode):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.String)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))    
-        self.__id = id
+        self.__id = tag
         self.__mode = mode
         
     def __del__(self):

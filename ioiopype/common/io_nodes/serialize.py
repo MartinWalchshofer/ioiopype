@@ -18,11 +18,11 @@ class Serialize(IONode):
                 return obj.tolist()
             return JSONEncoder.default(self, obj)
 
-    def __init__(self, id, mode):
+    def __init__(self, tag, mode):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.String)))    
-        self.__id = id
+        self.__id = tag
         self.__mode = mode
         
     def __del__(self):
