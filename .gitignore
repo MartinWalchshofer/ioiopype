@@ -156,3 +156,5 @@ test/output.json
 TODO.md
 examples/test.csv
 scripts/**
+examples/data_raw.csv
+examples/data_filt.csv

@@ -85,7 +85,7 @@
             {
                 "id": 0,
                 "name": "out",
-                "type": "Sample"
+                "type": "Frame"
             }
         ]
     },
@@ -96,14 +96,14 @@
             {
                 "id": 0,
                 "name": "in",
-                "type": "Sample"
+                "type": "Frame"
             }
         ],
         "o_streams": [
             {
                 "id": 0,
                 "name": "out",
-                "type": "Sample"
+                "type": "Frame"
             }
         ]
     },
@@ -115,14 +115,14 @@
             {
                 "id": 0,
                 "name": "in",
-                "type": "Sample"
+                "type": "Frame"
             }
         ],
         "o_streams": [
             {
                 "id": 0,
                 "name": "out",
-                "type": "Sample"
+                "type": "Frame"
             }
         ]
     },
@@ -133,19 +133,19 @@
             {
                 "id": 0,
                 "name": "in",
-                "type": "Sample"
+                "type": "Frame"
             }
         ],
         "o_streams": [
             {
                 "id": 0,
                 "name": "spectrum",
-                "type": "Sample"
+                "type": "Frame"
             },
             {
                 "id": 1,
                 "name": "frequency",
-                "type": "Sample"
+                "type": "Frame"
             }
         ]
     },
@@ -155,7 +155,7 @@
             {
                 "id": 0,
                 "name": "in",
-                "type": "Sample"
+                "type": "Frame"
             }
         ],
         "o_streams": [
