@@ -108,7 +108,7 @@ class Unicorn(ODevice):
                         portTemp = portTemp.replace('cu.', 'tty.')
                     devices.append(Unicorn.Device(serial, portTemp))
         else:
-            raise NotImplementedError()
+            raise NotImplementedError("Device not available on the selected platform")
 
         return devices
     
@@ -166,20 +166,19 @@ class Unicorn(ODevice):
                 self.__device = device     
         if self.__device is None:
              raise ValueError("Could find device with the specified serial number '" + serial + "'.")
-        self.__serialPort = ps.Serial(timeout=1)
+        self.__serialPort = ps.Serial(timeout=5)
         self.__serialPort.port = self.__device.Port
         self.__serialPort.open()
         if not self.__serialPort.is_open:
             raise ValueError("Could not open device")
         self.__connected = True
-
         self.__acquisitionRunning = False
         self._acquisitionThread = None
         self.__serialPort.write(Unicorn.__CmdStartAcquisition)
         res = self.__serialPort.read(3)
         if res != Unicorn.__ResOk:
-            raise ValueError("Could not start acquisition")
-        
+            self.__serialPort.close()
+            raise ValueError("Could not start acquisition")      
         self.__payloadConverted = [0] * Unicorn.NumberOfAcquiredChannels
         self.__prevPayloadConverted = [0] * Unicorn.NumberOfAcquiredChannels
         self.__start_acquisition()
