@@ -41,9 +41,7 @@
 
 ```pip install ioiopype```
 
-## Unicorn Hybrid Black - Acquisition and data visualization example
-
-This example shows how to connect to a 'Unicorn - The Brain Interface' device and establish a data acquisition. Raw data acquired from the device is filtered with Butterworth IIR filters and visualized using a timeseries plot. Additionally the raw spectrum is calculated using a pwelch spectrum. The spectrum is visualized using a frame plot.
+## Acquisition and data visualization example
 
 ```python
 import sys
