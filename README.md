@@ -1,10 +1,6 @@
 # IOIOpype
  IOIOpype is processing framework for realtime applications written in python. Data is propergated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
 
-## Supported Devices
-- Unicorn Hybrid Black (g.tec medical engineering GmbH)
-- Unicorn Hybrid Black Simulator
-
 ## INodes
 - ConsoleLog - Writes received data to the console
 - ToWorkspace - Propagates data to the main thread via event
@@ -50,56 +46,52 @@
 This example shows how to connect to a 'Unicorn - The Brain Interface' device and establish a data acquisition. Raw data acquired from the device is filtered with Butterworth IIR filters and visualized using a timeseries plot. Additionally the raw spectrum is calculated using a pwelch spectrum. The spectrum is visualized using a frame plot.
 
 ```python
+import sys
+import os
+
+dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(dir))
+
 from PySide6.QtWidgets import QApplication
 import ioiopype as ioio
 
 app = QApplication(sys.argv)
 
-use_device_simulator = True #Use device simulator (True) or real device (False)
-if use_device_simulator:
-    device = ioio.UnicornSimulator('UN-0000.00.00')
-else:
-    device = ioio.Unicorn('UN-2023.02.15') #Enter your device serial here
+samplingRate = 500
+channelCount = 2
+sig1 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 0.5, 2, 0)
+sig2 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Triangle, 0.5, 2, 0)
+sig3 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sawtooth, 0.5, 2, 0)
+mux = ioio.Mux(3)
 
 #initialize processing nodes
-buf = ioio.Buffer(device.NumberOfEEGChannels, 4 * device.SamplingRateInHz, 4 * device.SamplingRateInHz - 25)
-pw = ioio.PWelch(device.SamplingRateInHz)
-fp = ioio.FramePlot(samplingRate=4)
-hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, device.SamplingRateInHz, 2, [2])
-lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, device.SamplingRateInHz, 4, [30])
-n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, device.SamplingRateInHz, 4, [48, 52])
-n60 = ioio.ButterworthFilter(ioio.FilterType.Notch, device.SamplingRateInHz, 4, [58, 62])
-sp = ioio.SamplePlot(device.NumberOfEEGChannels, device.SamplingRateInHz, 6, 100)
+numberOfChannels = len(mux.InputStreams) * channelCount
+sp2 = ioio.SamplePlot(numberOfChannels, samplingRate, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Continous)
 
 #build ioiopype
-device.connect(0, buf.InputStreams[0])
-buf.connect(0, pw.InputStreams[0])
-pw.connect(0, fp.InputStreams[0])
+sig1.connect(0, mux.InputStreams[0])
+sig2.connect(0, mux.InputStreams[1])
+sig3.connect(0, mux.InputStreams[2])
+mux.connect(0, sp2.InputStreams[0])
 
-device.connect(0, n50.InputStreams[0])
-n50.connect(0, n60.InputStreams[0])
-n60.connect(0, hp.InputStreams[0])
-hp.connect(0, lp.InputStreams[0])
-lp.connect(0, sp.InputStreams[0])
+sig1.start()
+sig2.start()
+sig3.start()
 
 app.exec()
 
+sig1.stop()
+sig2.stop()
+sig3.stop()
+
 #disconnect ioiopype
-device.disconnect(0, buf.InputStreams[0])
-buf.disconnect(0, pw.InputStreams[0])
-pw.disconnect(0, fp.InputStreams[0])
-
-device.disconnect(0, n50.InputStreams[0])
-n50.disconnect(0, n60.InputStreams[0])
-n60.disconnect(0, hp.InputStreams[0])
-hp.disconnect(0, lp.InputStreams[0])
-lp.disconnect(0, sp.InputStreams[0])
-
-#close device
-del device
+sig1.disconnect(0, mux.InputStreams[0])
+sig2.disconnect(0, mux.InputStreams[1])
+sig3.disconnect(0, mux.InputStreams[2])
+mux.disconnect(0, sp2.InputStreams[0])
 ```
 
-![Unicorn Hybrid Black - Acquisition and data visualization example](https://github.com/MartinWalchshofer/ioiopype/blob/main/img/example1.png)
+![Data Acquisition Example](img/example1.png)
 
 ## Contact
 Support this project: [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/MartinWalchshofer)<br>
