@@ -9,9 +9,9 @@ import ioiopype as ioio
 
 app = QApplication(sys.argv)
 
-#replay file with 250Hz and loop
+#replay file with 500Hz and loop
 cr = ioio.CSVReader(250, True)
-sp1 = ioio.SamplePlot(17, 250, 10, 100, displayMode=ioio.SamplePlot.DisplayMode.Overriding)
+sp1 = ioio.SamplePlot(6, 500, 10, 100, displayMode=ioio.SamplePlot.DisplayMode.Overriding)
 
 #connect file output to plot
 cr.connect(0, sp1.InputStreams[0])

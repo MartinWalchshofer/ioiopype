@@ -1,5 +1,3 @@
-'''This example shows how to connect to use a signal generator, visualize data and calculate a pwelch spectum'''
-
 import sys
 import os
 

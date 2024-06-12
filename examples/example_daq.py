@@ -19,14 +19,12 @@ mux = ioio.Mux(3)
 
 #initialize processing nodes
 numberOfChannels = len(mux.InputStreams) * channelCount
-sp1 = ioio.SamplePlot(numberOfChannels, samplingRate, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Overriding)
 sp2 = ioio.SamplePlot(numberOfChannels, samplingRate, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Continous)
 
 #build ioiopype
 sig1.connect(0, mux.InputStreams[0])
 sig2.connect(0, mux.InputStreams[1])
 sig3.connect(0, mux.InputStreams[2])
-mux.connect(0, sp1.InputStreams[0])
 mux.connect(0, sp2.InputStreams[0])
 
 sig1.start()
@@ -43,5 +41,4 @@ sig3.stop()
 sig1.disconnect(0, mux.InputStreams[0])
 sig2.disconnect(0, mux.InputStreams[1])
 sig3.disconnect(0, mux.InputStreams[2])
-mux.disconnect(0, sp1.InputStreams[0])
 mux.disconnect(0, sp2.InputStreams[0])

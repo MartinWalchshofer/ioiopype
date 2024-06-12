@@ -10,27 +10,28 @@ import ioiopype as ioio
 
 app = QApplication(sys.argv)
 
-use_device_simulator = True #Use device simulator (True) or real device (False)
-if use_device_simulator:
-    device = ioio.UnicornSimulator('UN-0000.00.00')
-else:
-    device = ioio.Unicorn('UN-2023.02.15') #Enter your device serial here
+samplingRate = 500
+numberOfChannels = 3
+sig1 = ioio.SignalGenerator(samplingRate, numberOfChannels, ioio.SignalGenerator.SignalMode.Sine, 1, 5, 0)
+sig2 = ioio.SignalGenerator(samplingRate, numberOfChannels, ioio.SignalGenerator.SignalMode.Triangle, 1, 10, 0)
+mux = ioio.Mux(2)
 
 #initialize processing nodes
-m = ioio.Mux(2)
-sp = ioio.SamplePlot(device.NumberOfAccChannels + device.NumberOfGyrChannels, device.SamplingRateInHz, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Continous)
+sp = ioio.SamplePlot(numberOfChannels * len(mux.InputStreams) , samplingRate, 5.2, 4, displayMode=ioio.SamplePlot.DisplayMode.Continous)
 
-#build ioiopype - connect signal 1 (ACC) and 2 (GYR) from unicorn to signal 0 and 1 of mux. Plot concatenated signal.
-device.connect(1, m.InputStreams[0])
-device.connect(2, m.InputStreams[1])
-m.connect(0, sp.InputStreams[0])
+sig1.connect(0, mux.InputStreams[0])
+sig2.connect(0, mux.InputStreams[1])
+mux.connect(0, sp.InputStreams[0])
+
+sig1.start()
+sig2.start()
 
 app.exec()
 
-#disconnect ioiopype
-device.disconnect(1, m.InputStreams[0])
-device.disconnect(2, m.InputStreams[1])
-m.disconnect(0, sp.InputStreams[0])
+sig1.stop()
+sig2.stop()
 
-#close device
-del device
+#disconnect ioiopype
+sig1.disconnect(0, mux.InputStreams[0])
+sig2.disconnect(0, mux.InputStreams[1])
+mux.disconnect(0, sp.InputStreams[0])

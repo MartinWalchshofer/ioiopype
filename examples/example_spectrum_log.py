@@ -1,5 +1,3 @@
-'''This example shows how to connect to a 'Unicorn - The Brain Interface' device, calculate and visualize a pwelch spectrum and log data '''
-
 import sys
 import os
 
@@ -11,35 +9,40 @@ import ioiopype as ioio
 
 app = QApplication(sys.argv)
 
-use_device_simulator = True #Use device simulator (True) or real device (False)
-if use_device_simulator:
-    device = ioio.UnicornSimulator('UN-0000.00.00')
-else:
-    device = ioio.Unicorn('UN-2023.02.15') #Enter your device serial here
+channelCount = 2
+samplingRate = 500
+sig1 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 10, 10, 0)
+sig2 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 20, 100, 0)
+sig3 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 30, 200, 0)
+mux = ioio.Mux(3)
 
 #initialize processing nodes
 spectrumBufferS = 4
-buf = ioio.Buffer(device.NumberOfEEGChannels, spectrumBufferS * device.SamplingRateInHz, spectrumBufferS * device.SamplingRateInHz - 25) # frame size and overlap
-pw = ioio.PWelch(device.SamplingRateInHz)
+numberOfChannels = len(mux.InputStreams) * channelCount
+buf = ioio.Buffer(numberOfChannels, spectrumBufferS * samplingRate, spectrumBufferS * samplingRate - 25) # frame size and overlap
+pw = ioio.PWelch(samplingRate)
 fp = ioio.FramePlot(samplingRate=spectrumBufferS)
-buf2 = ioio.Buffer(device.NumberOfEEGChannels, spectrumBufferS * device.SamplingRateInHz, spectrumBufferS * device.SamplingRateInHz - 25) # frame size and overlap
-pw2 = ioio.PWelch(device.SamplingRateInHz)
+buf2 = ioio.Buffer(numberOfChannels, spectrumBufferS * samplingRate, spectrumBufferS * samplingRate - 25) # frame size and overlap
+pw2 = ioio.PWelch(samplingRate)
 fp2 = ioio.FramePlot(samplingRate=spectrumBufferS)
-hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, device.SamplingRateInHz, 2, [6]) #2nd order 6Hz increase cutoff frequency to remove LF artifacts (no ssvep below 6hz)
-lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, device.SamplingRateInHz, 4, [50]) #4th order 50Hz adjust lowpass frequency to desired cutoff
-n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, device.SamplingRateInHz, 4, [48, 52]) #4th order 50Hz power line hum EU
-n60 = ioio.ButterworthFilter(ioio.FilterType.Notch, device.SamplingRateInHz, 4, [58, 62]) #4th order 60Hz power line hum US
-sp = ioio.SamplePlot(device.NumberOfEEGChannels, device.SamplingRateInHz, 6, 100) # 6s +-100uV
+hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, samplingRate, 2, [6]) #2nd order 6Hz increase cutoff frequency to remove LF artifacts (no ssvep below 6hz)
+lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, samplingRate, 4, [50]) #4th order 50Hz adjust lowpass frequency to desired cutoff
+n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, samplingRate, 4, [48, 52]) #4th order 50Hz power line hum EU
+n60 = ioio.ButterworthFilter(ioio.FilterType.Notch, samplingRate, 4, [58, 62]) #4th order 60Hz power line hum US
+sp = ioio.SamplePlot(numberOfChannels, samplingRate, 6, 100) # 6s +-100uV
 csvRaw = ioio.CSVLogger(1)
 csv = ioio.CSVLogger(1)
 
 #build ioiopype
-device.connect(0, buf.InputStreams[0])
+sig1.connect(0, mux.InputStreams[0])
+sig2.connect(0, mux.InputStreams[1])
+sig3.connect(0, mux.InputStreams[2])
+mux.connect(0, buf.InputStreams[0])
 buf.connect(0, pw.InputStreams[0])
 pw.connect(0, fp.InputStreams[0])
-device.connect(0, csvRaw.InputStreams[0])
+mux.connect(0, csvRaw.InputStreams[0])
 
-device.connect(0, n50.InputStreams[0])
+mux.connect(0, n50.InputStreams[0])
 n50.connect(0, n60.InputStreams[0])
 n60.connect(0, hp.InputStreams[0])
 hp.connect(0, lp.InputStreams[0])
@@ -49,21 +52,32 @@ lp.connect(0, buf2.InputStreams[0])
 buf2.connect(0, pw2.InputStreams[0])
 pw2.connect(0, fp2.InputStreams[0])
 
-csvRaw.open(dir + '/data_raw.csv', header='EEG1,EEG2,EEG3,EEG4,EEG5,EEG6,EEG7,EEG8')
-csv.open(dir + '/data_filt.csv', header='EEG1,EEG2,EEG3,EEG4,EEG5,EEG6,EEG7,EEG8')
+csvRaw.open(dir + '/data_raw.csv', header='CH1,CH2,CH3,CH4,CH5,CH6')
+csv.open(dir + '/data_filt.csv', header='CH1,CH2,CH3,CH4,CH5,CH6')
+
+sig1.start()
+sig2.start()
+sig3.start()
 
 app.exec()
+
+sig1.stop()
+sig2.stop()
+sig3.stop()
 
 csvRaw.close()
 csv.close()
 
 #disconnect ioiopype
-device.disconnect(0, buf.InputStreams[0])
+sig1.disconnect(0, mux.InputStreams[0])
+sig2.disconnect(0, mux.InputStreams[1])
+sig3.disconnect(0, mux.InputStreams[2])
+mux.disconnect(0, buf.InputStreams[0])
 buf.disconnect(0, pw.InputStreams[0])
 pw.disconnect(0, fp.InputStreams[0])
-device.disconnect(0, csvRaw.InputStreams[0])
+mux.disconnect(0, csvRaw.InputStreams[0])
 
-device.disconnect(0, n50.InputStreams[0])
+mux.disconnect(0, n50.InputStreams[0])
 n50.disconnect(0, n60.InputStreams[0])
 n60.disconnect(0, hp.InputStreams[0])
 hp.disconnect(0, lp.InputStreams[0])
@@ -72,6 +86,3 @@ lp.disconnect(0, csv.InputStreams[0])
 lp.disconnect(0, buf2.InputStreams[0])
 buf2.disconnect(0, pw2.InputStreams[0])
 pw2.disconnect(0, fp2.InputStreams[0])
-
-#close device
-del device

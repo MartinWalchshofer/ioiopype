@@ -6,30 +6,41 @@ sys.path.append(os.path.dirname(dir))
 
 import ioiopype as ioio
 
-use_device_simulator = True #Use device simulator (True) or real device (False)
-if use_device_simulator:
-    device = ioio.UnicornSimulator('UN-0000.00.00')
-else:
-    device = ioio.Unicorn('UN-2023.02.15') #Enter your device serial here
+samplingRate = 500
+numberOfChannels = 2
+sig1 = ioio.SignalGenerator(samplingRate, numberOfChannels, ioio.SignalGenerator.SignalMode.Sine, 5, 10, 0)
+sig2 = ioio.SignalGenerator(samplingRate, numberOfChannels, ioio.SignalGenerator.SignalMode.Triangle, 5, 10, 0)
+sig3 = ioio.SignalGenerator(samplingRate, numberOfChannels, ioio.SignalGenerator.SignalMode.Sawtooth, 5, 10, 0)
+mux = ioio.Mux(3)
 
 #create csv logger for every output stream the unicorn provides
-csv = ioio.CSVLogger(len(device.OutputStreams))
+csv = ioio.CSVLogger(len(mux.OutputStreams))
 
 #open file
-csv.open(dir + '/test.csv', header='EEG1,EEG2,EEG3,EEG4,EEG5,EEG6,EEG7,EEG8,ACCX,ACCY,ACCZ,GYRX,GYRY,GYRZ,CNT,BAT,VALID')
+csv.open(dir + '/test.csv', header='CH1,CH2,CH3,CH4,CH5,CH6')
 
-#connect every output stream of the unicorn to an input stream of the csv logger
-for i in range(0, len(device.OutputStreams)):
-    device.connect(i, csv.InputStreams[i])
+sig1.connect(0, mux.InputStreams[0])
+sig2.connect(0, mux.InputStreams[1])
+sig3.connect(0, mux.InputStreams[2])
+for i in range(0, len(mux.OutputStreams)):
+    mux.connect(i, csv.InputStreams[i])
+
+sig1.start()
+sig2.start()
+sig3.start()
 
 input('Press ENTER to terminate the application\n')
+
+sig1.stop()
+sig2.stop()
+sig3.stop()
 
 #close file
 csv.close()
 
 #disconnect streams
-for i in range(0, len(device.OutputStreams)):
-    device.disconnect(i, csv.InputStreams[i])
-
-#close device
-del device
+sig1.disconnect(0, mux.InputStreams[0])
+sig2.disconnect(0, mux.InputStreams[1])
+sig3.disconnect(0, mux.InputStreams[2])
+for i in range(0, len(mux.OutputStreams)):
+    mux.disconnect(i, csv.InputStreams[i])
