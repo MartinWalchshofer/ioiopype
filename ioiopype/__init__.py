@@ -36,12 +36,14 @@ from .common.o_nodes.csv_reader import CSVReader
 from .common.io_nodes.buffer import Buffer
 from .common.io_nodes.butterworth_filter import ButterworthFilter
 from .common.io_nodes.butterworth_filtfilt import ButterworthFiltFilt
+from .common.io_nodes.complementary_filter import ComplementaryFilter
 from .common.io_nodes.deserialize import Deserialize
 from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.operation import Operation
 #from .common.io_nodes.framer import Framer
 from .common.io_nodes.log import Log
 from .common.io_nodes.mux import Mux
+from .common.io_nodes.movement_detector import MovementDetrctor
 from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.pwelch import PWelch
 from .common.io_nodes.sqrt import Sqrt
