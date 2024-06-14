@@ -6,14 +6,16 @@ from ..utilities.butterworth import butterworth
 import numpy as np
 import scipy.signal as sp
 import json
+import math
 
 class ComplementaryFilter(IONode):
-    def __init__(self, alpha):
+    def __init__(self, samplingRate, alpha):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'acc', StreamInfo.Datatype.Sample)))
         self.add_i_stream(IStream(StreamInfo(1, 'gyr', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))
-        self.alpha
+        self.alpha = alpha
+        self.samplingRate = samplingRate
 
     def __del__(self):
         super().__del__()
@@ -27,6 +29,7 @@ class ComplementaryFilter(IONode):
             ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
+            "samplingRate": self.samplingRate,
             "alpha": self.alpha,
             "i_streams": istreams,
             "o_streams": ostreams
@@ -42,14 +45,9 @@ class ComplementaryFilter(IONode):
         return cls(**ds)
 
     def update(self):
-        data = []
-        for i in range(0,len(self.InputStreams)):
-            dataTmp = self.InputStreams[i].read()
-            if dataTmp.ndim == 1:
-                dataTmp = np.array([dataTmp])
-            if dataTmp.ndim > 2:
-                raise ValueError("Dimensions do not fit")
-            data.append(dataTmp)
+        acc = self.InputStreams[0].read()
+        gyr = self.InputStreams[1].read()
+
+        acc_roll = math.atan2(acc[1],acc[2])
+        acc_pitch = math.atan2(-acc[0],math.sqrt(acc[1]**2+acc[2]**2))
         
-        #TODO NOT FINISHED YET
-             
