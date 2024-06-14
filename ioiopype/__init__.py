@@ -17,7 +17,6 @@ from .__version__ import __version__
 
 # allow lazy loading
 #common nodes
-
 #inodes
 from .common.i_nodes.csv_logger import CSVLogger
 from .common.i_nodes.console_log import ConsoleLog
@@ -25,6 +24,8 @@ from .common.i_nodes.to_workspace import ToWorkspace
 from .common.i_nodes.udp_sender import UDPSender
 
 #onodes
+from .common.o_nodes.ble_heart_rate import BLEHeartRate
+from .common.o_nodes.ble_heart_rate_simulator import BLEHeartRateSimulator
 from .common.o_nodes.constant import Constant
 from .common.o_nodes.noise_generator import NoiseGenerator
 from .common.o_nodes.signal_generator import SignalGenerator
