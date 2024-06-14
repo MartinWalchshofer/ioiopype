@@ -74,7 +74,7 @@ class BLEHeartRateSimulator(ODevice, RealtimeClock):
         self.__bat = [0] #1 bat values
 
         self.__hrBase = 60
-        self.__hrFrequencyHz = 1
+        self.__hrFrequencyHz = 0.1
         self.__hrAmplitude = 5
 
         self.start()
@@ -91,7 +91,7 @@ class BLEHeartRateSimulator(ODevice, RealtimeClock):
 
     def __generate_data(self):
         self.__cnt += 1
-        self.__hr[0] = self.__hrBase + np.sin(2*np.pi*self.__hrFrequencyHz/ self.updateRateHz )*self.__hrAmplitude
+        self.__hr[0] = self.__hrBase + np.sin(2*np.pi*self.__cnt*self.__hrFrequencyHz/self.updateRateHz )*self.__hrAmplitude
         self.__rr
         self.__bat = self.__cnt % 100
 

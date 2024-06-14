@@ -46,7 +46,7 @@ else:
     device = ioio.BLEHeartRate(discovered_devices[selectedId])
 
 updateRateHz = 1
-sp = ioio.SamplePlot(1, updateRateHz, 30, 150)
+sp = ioio.SamplePlot(1, updateRateHz, 33.33, 150)
 
 device.connect(0, sp.InputStreams[0])
 

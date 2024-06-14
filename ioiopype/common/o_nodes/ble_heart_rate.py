@@ -7,38 +7,56 @@ from ...pattern.o_device import ODevice
 
 class BLEHeartRate(ODevice):
     __bleakScanner = None
+    __loop = None
+
+    @staticmethod
+    def __runAsync(function):
+        if BLEHeartRate.__loop is None:
+            BLEHeartRate.__loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(BLEHeartRate.__loop)
+        return BLEHeartRate.__loop.run_until_complete(function)
 
     @staticmethod
     def __deviceDiscoveredCallback(device: BLEDevice, advertisement_data: AdvertisementData):
         print("%s: %r", device.address, advertisement_data)
 
     @staticmethod
-    def __initialize():
+    async def __initialize():
        if BLEHeartRate.__bleakScanner is None:
-            scanner = BleakScanner(BLEHeartRate.__deviceDiscoveredCallback)
+            BLEHeartRate.__bleakScanner = BleakScanner(BLEHeartRate.__deviceDiscoveredCallback)
     
     @staticmethod
-    def __uninitialize():
+    async def __uninitialize():
        if BLEHeartRate.__bleakScanner is not None:
             BLEHeartRate.__bleakScanner = None
 
     @staticmethod
+    async def __startScanning():
+        if BLEHeartRate.__bleakScanner is None:
+            BLEHeartRate.__bleakScanner = BleakScanner(BLEHeartRate.__deviceDiscoveredCallback)
+        await BLEHeartRate.__bleakScanner.start()
+
+    @staticmethod
+    async def __stopScanning():
+        await BLEHeartRate.__bleakScanner.stop()
+
+    @staticmethod
     def start_scanning():
-        BLEHeartRate.__initialize()
-        BLEHeartRate.__bleakScanner.start()
+        BLEHeartRate.__runAsync(BLEHeartRate.__initialize())
+        BLEHeartRate.__runAsync(BLEHeartRate.__startScanning())
 
     @staticmethod
     def stop_scanning():
-        BLEHeartRate.__bleakScanner.stop()
-        BLEHeartRate.__uninitialize()
+        BLEHeartRate.__runAsync(BLEHeartRate.__stopScanning())
 
     @staticmethod
     def add_devices_discovered_eventhandler(handler):
-        BLEHeartRate.__initialize()
+        BLEHeartRate.__runAsync(BLEHeartRate.__initialize())
+        BLEHeartRate.__deviceDiscoveredEventHandler = handler
 
     @staticmethod
     def remove_devices_discovered_eventhandler():
-        pass
+        BLEHeartRate.__deviceDiscoveredEventHandler = None
     
     def __init__(self, name):
         super().__init__()
