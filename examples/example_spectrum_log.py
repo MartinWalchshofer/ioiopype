@@ -11,9 +11,9 @@ app = QApplication(sys.argv)
 
 channelCount = 2
 samplingRate = 500
-sig1 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 10, 10, 0)
-sig2 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 20, 100, 0)
-sig3 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 30, 200, 0)
+sig1 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 30, 10, 100)
+sig2 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 30, 100, 200)
+sig3 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 30, 200, 300)
 mux = ioio.Mux(3)
 
 #initialize processing nodes
@@ -25,11 +25,10 @@ fp = ioio.FramePlot(samplingRate=spectrumBufferS)
 buf2 = ioio.Buffer(numberOfChannels, spectrumBufferS * samplingRate, spectrumBufferS * samplingRate - 25) # frame size and overlap
 pw2 = ioio.PWelch(samplingRate)
 fp2 = ioio.FramePlot(samplingRate=spectrumBufferS)
-hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, samplingRate, 2, [6]) #2nd order 6Hz increase cutoff frequency to remove LF artifacts (no ssvep below 6hz)
-lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, samplingRate, 4, [50]) #4th order 50Hz adjust lowpass frequency to desired cutoff
-n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, samplingRate, 4, [48, 52]) #4th order 50Hz power line hum EU
-n60 = ioio.ButterworthFilter(ioio.FilterType.Notch, samplingRate, 4, [58, 62]) #4th order 60Hz power line hum US
-sp = ioio.SamplePlot(numberOfChannels, samplingRate, 6, 100) # 6s +-100uV
+hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, samplingRate, 2, [6])
+lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, samplingRate, 4, [150])
+n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, samplingRate, 4, [98, 102])
+sp = ioio.SamplePlot(numberOfChannels, samplingRate, 6, 100)
 csvRaw = ioio.CSVLogger(1)
 csv = ioio.CSVLogger(1)
 
@@ -43,8 +42,7 @@ pw.connect(0, fp.InputStreams[0])
 mux.connect(0, csvRaw.InputStreams[0])
 
 mux.connect(0, n50.InputStreams[0])
-n50.connect(0, n60.InputStreams[0])
-n60.connect(0, hp.InputStreams[0])
+n50.connect(0, hp.InputStreams[0])
 hp.connect(0, lp.InputStreams[0])
 lp.connect(0, sp.InputStreams[0])
 lp.connect(0, csv.InputStreams[0])
@@ -78,8 +76,7 @@ pw.disconnect(0, fp.InputStreams[0])
 mux.disconnect(0, csvRaw.InputStreams[0])
 
 mux.disconnect(0, n50.InputStreams[0])
-n50.disconnect(0, n60.InputStreams[0])
-n60.disconnect(0, hp.InputStreams[0])
+n50.disconnect(0, hp.InputStreams[0])
 hp.disconnect(0, lp.InputStreams[0])
 lp.disconnect(0, sp.InputStreams[0])
 lp.disconnect(0, csv.InputStreams[0])
