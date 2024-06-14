@@ -10,6 +10,7 @@
 - UDP Receiver - Receives data via UDP
 
 ## IONodes
+### General Purpose
 - Buffer - Buffers data with a defined window size and overlap
 - PWelch - Calculates a Pwelch spectrum from a frame
 - Downsample - Samples a data frame down by a given factor
@@ -24,6 +25,10 @@
 - Operation - Adds, Subtracts, Multiplies, Divides or applies a matrix multiplication
 - Serialize - Serialized data into json or xml strings
 - Deserialize - Deserializes XML or JSON serialized data
+
+### IMU
+- MovementDetector - Uses Accelerometer and Gyroscope inputs to detect movement
+- ComplementaryFilter - Applies a complementary filter to estimate postition in space (not finished yet)
 
 ## ONodes
 - Constant - forwards constant data with a defined sampling rate
