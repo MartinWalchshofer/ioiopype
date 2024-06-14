@@ -39,6 +39,9 @@
 - Frame - Allows to send a data frame to INodes
 - UDPSender - Sends data via UDP
 
+### Pulse Sensor
+- Pulse Sensor supporting default Bluetooth LE Heart Rate Service (not finished yet)
+
 ## Supported platforms
 
 | Windows    | Linux    | Mac  |
