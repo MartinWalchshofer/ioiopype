@@ -29,7 +29,7 @@
 
 ### IMU
 - MovementDetector - Uses Accelerometer and Gyroscope inputs to detect movement
-- ComplementaryFilter - Applies a complementary filter to estimate postition in space (not finished yet)
+- ComplementaryFilter - Applies a complementary filter to estimate orientation of a IMU sensor (not finished yet)
 
 ## ONodes
 ### General Purpose
