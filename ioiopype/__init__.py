@@ -40,7 +40,6 @@ from .common.io_nodes.complementary_filter import ComplementaryFilter
 from .common.io_nodes.deserialize import Deserialize
 from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.operation import Operation
-#from .common.io_nodes.framer import Framer
 from .common.io_nodes.log import Log
 from .common.io_nodes.mux import Mux
 from .common.io_nodes.movement_detector import MovementDetector

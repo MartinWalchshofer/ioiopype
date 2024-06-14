@@ -1,5 +1,3 @@
-#Copyright © 2024 Martin Walchshofer
-
 from .o_stream import OStream
 from .i_stream import IStream
 class ONode:

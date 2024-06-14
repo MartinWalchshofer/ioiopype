@@ -50,4 +50,6 @@ class ComplementaryFilter(IONode):
 
         acc_roll = math.atan2(acc[1],acc[2])
         acc_pitch = math.atan2(-acc[0],math.sqrt(acc[1]**2+acc[2]**2))
+        acc_yaw = 0
+
         

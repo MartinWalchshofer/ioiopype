@@ -1,5 +1,3 @@
-#Copyright © 2024 Martin Walchshofer
-
 import queue
 from .stream_info  import StreamInfo
 

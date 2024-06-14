@@ -1,5 +1,3 @@
-#Copyright © 2024 Martin Walchshofer
-
 from .i_stream import IStream
 from .stream_info  import StreamInfo
 

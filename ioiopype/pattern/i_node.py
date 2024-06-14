@@ -1,5 +1,3 @@
-#Copyright © 2024 Martin Walchshofer
-
 from .i_stream import IStream
 import threading
 from abc import ABC, abstractmethod

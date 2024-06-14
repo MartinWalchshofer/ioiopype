@@ -1,5 +1,3 @@
-#Copyright © 2024 Martin Walchshofer
-
 from .i_node import INode
 from .o_node import ONode
 

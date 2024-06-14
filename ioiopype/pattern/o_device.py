@@ -1,5 +1,3 @@
-#Copyright © 2024 Martin Walchshofer
-
 from .o_node import ONode
 from abc import abstractmethod
 
