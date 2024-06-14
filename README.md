@@ -2,6 +2,7 @@
  IOIOpype is processing framework for realtime applications written in python. Data is propergated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
 
 ## INodes
+### General Purpose
 - ConsoleLog - Writes received data to the console
 - ToWorkspace - Propagates data to the main thread via event
 - FramePlot - Plots a data frame
@@ -31,6 +32,7 @@
 - ComplementaryFilter - Applies a complementary filter to estimate postition in space (not finished yet)
 
 ## ONodes
+### General Purpose
 - Constant - forwards constant data with a defined sampling rate
 - NoiseGenerator - Generates gaussian noise as a timeseries signal.
 - SignalGenerator - Generates sample based timeseries signals. Sine, Square, Sawtooth and Triangle signals can be generated
