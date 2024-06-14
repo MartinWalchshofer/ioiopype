@@ -2,17 +2,17 @@ from ...pattern.io_node import IONode
 from ...pattern.o_stream import OStream
 from ...pattern.i_stream import IStream
 from ...pattern.stream_info import StreamInfo
-from ..utilities.butterworth import butterworth
 import numpy as np
-import scipy.signal as sp
 import json
 
-class MovementDetrctor(IONode):
-    def __init__(self):
+class MovementDetector(IONode):
+    def __init__(self, accRangeG, gyrRangeDegS):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'acc', StreamInfo.Datatype.Sample)))
         self.add_i_stream(IStream(StreamInfo(1, 'gyr', StreamInfo.Datatype.Sample)))
-        self.add_o_stream(OStream(StreamInfo(0, 'out', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(0, 'movement', StreamInfo.Datatype.Sample)))
+        self.accRangeG = accRangeG
+        self.gyrRangeDegS = gyrRangeDegS
 
     def __del__(self):
         super().__del__()
@@ -26,6 +26,8 @@ class MovementDetrctor(IONode):
             ostreams.append(self.OutputStreams[i].StreamInfo.__dict__())
         return {
             "name": self.__class__.__name__,
+            "accRangeG": self.accRangeG,
+            "gyrRangeDegS": self.gyrRangeDegS,
             "i_streams": istreams,
             "o_streams": ostreams
         }
@@ -40,15 +42,16 @@ class MovementDetrctor(IONode):
         return cls(**ds)
 
     def update(self):
-        data = []
-        for i in range(0,len(self.InputStreams)):
-            dataTmp = self.InputStreams[i].read()
-            if dataTmp.ndim == 1:
-                dataTmp = np.array([dataTmp])
-            if dataTmp.ndim > 2:
-                raise ValueError("Dimensions do not fit")
-            data.append(dataTmp)
+        acc = self.InputStreams[0].read()
+        gyr = self.InputStreams[1].read()
         
+        if acc.shape[1] != 3:
+            raise ValueError('Accelerometer must feature 3 dimensions')
+        
+        if gyr.shape[1] != 3:
+            raise ValueError('Gyroscope must feature 3 dimensions')
 
-        #TODO NOT FINISHED YET
-             
+        totalAcc = np.sqrt(np.sum(acc**2, axis=1))
+        totalGyr = np.sqrt(np.sum(gyr**2, axis=1))
+        movement = np.where((totalAcc <= 1-self.accRangeG) | (totalAcc >= 1+self.accRangeG) | (totalGyr >= self.gyrRangeDegS), 1, 0)      
+        self.OutputStreams[0].write(movement)             

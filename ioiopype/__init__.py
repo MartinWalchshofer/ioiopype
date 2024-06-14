@@ -43,7 +43,7 @@ from .common.io_nodes.operation import Operation
 #from .common.io_nodes.framer import Framer
 from .common.io_nodes.log import Log
 from .common.io_nodes.mux import Mux
-from .common.io_nodes.movement_detector import MovementDetrctor
+from .common.io_nodes.movement_detector import MovementDetector
 from .common.io_nodes.offset_correction import OffsetCorrection
 from .common.io_nodes.pwelch import PWelch
 from .common.io_nodes.sqrt import Sqrt
