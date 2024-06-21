@@ -8,10 +8,14 @@ from ...pattern.o_device import ODevice
 import time
 
 class BLEHeartRate(ODevice):
+    HR_UUID = '0000180d-0000-1000-8000-00805f9b34fb'
+
     __eventHandler = None
     __scanner = None
     __loop = None
     __thread = None
+    __devices = []
+    __deviceNames = []
 
     def __initializeLoop():
         if BLEHeartRate.__loop is None:
@@ -23,8 +27,13 @@ class BLEHeartRate(ODevice):
         BLEHeartRate.__loop.run_forever()
 
     @staticmethod
-    def __device_discovered_callback(device, advertisement_data):
-        print("%s: %r", device.address, advertisement_data)
+    def __device_discovered_callback(device : BLEDevice, advertisement_data : AdvertisementData): 
+        if BLEHeartRate.HR_UUID in advertisement_data.service_uuids:
+            if device not in BLEHeartRate.__devices:
+                BLEHeartRate.__devices.append(device)
+                BLEHeartRate.__deviceNames.append(device.name)
+                if BLEHeartRate.__eventHandler is not None:
+                    BLEHeartRate.__eventHandler(BLEHeartRate.__deviceNames)
 
     @staticmethod
     async def __start_scanning():
