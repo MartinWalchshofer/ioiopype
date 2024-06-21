@@ -4,12 +4,9 @@ import os
 dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(dir))
 
-from PySide6.QtWidgets import QApplication
 import ioiopype as ioio
 
-app = QApplication(sys.argv)
-
-use_device_simulator = True #Use device simulator (True) or real device (False)
+use_device_simulator = False #Use device simulator (True) or real device (False)
 
 #on devices discovered event / prints discovered devices to the console
 discovered_devices = []
@@ -50,7 +47,7 @@ sp = ioio.SamplePlot(1, updateRateHz, 33.33, 150)
 
 device.connect(0, sp.InputStreams[0])
 
-app.exec()
+input('Press ENTER to terminate the application')
 
 device.disconnect(0, sp.InputStreams[0])
 
