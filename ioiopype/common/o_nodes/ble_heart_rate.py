@@ -8,69 +8,56 @@ from ...pattern.o_device import ODevice
 import time
 
 class BLEHeartRate(ODevice):
-    __bleakScanner = None
+    __eventHandler = None
+    __scanner = None
     __loop = None
-    __deviceDiscoveredEventHandler = None
+    __thread = None
 
-    @staticmethod
-    def __initialize_loop():
+    def __initializeLoop():
         if BLEHeartRate.__loop is None:
-            def bleak_thread():
-                asyncio.set_event_loop(BLEHeartRate.__loop)
-                if not BLEHeartRate.__loop.is_running():
-                    BLEHeartRate.__loop.run_forever()
             BLEHeartRate.__loop = asyncio.new_event_loop()
-            t = threading.Thread(target=bleak_thread)
-            t.start()
+            BLEHeartRate.__thread = threading.Thread(target=BLEHeartRate.__runLoop, daemon=True)
+            BLEHeartRate.__thread.start()
+
+    def __runLoop():
+        BLEHeartRate.__loop.run_forever()
 
     @staticmethod
-    def __uninitialize_loop():
-        if BLEHeartRate.__loop is not None:
-            BLEHeartRate.__loop.call_soon_threadsafe(BLEHeartRate.__loop.stop)
-
-    @staticmethod
-    async def __initialize_bleak():
-        if BLEHeartRate.__bleakScanner is None:
-            BLEHeartRate.__bleakScanner = BleakScanner(BLEHeartRate.__deviceDiscoveredCallback, scanning_mode='active', cb=dict(use_bdaddr=False))
-    
-    @staticmethod
-    async def __uninitialize_bleak():
-        if BLEHeartRate.__bleakScanner is not None:
-            BLEHeartRate.__bleakScanner = None
-
-    @staticmethod
-    def __deviceDiscoveredCallback(device: BLEDevice, advertisement_data: AdvertisementData):
+    def __device_discovered_callback(device, advertisement_data):
         print("%s: %r", device.address, advertisement_data)
 
     @staticmethod
-    async def __startScanning():
-        await BLEHeartRate.__initialize_bleak()
-        await BLEHeartRate.__bleakScanner.start()
+    async def __start_scanning():
+        if  BLEHeartRate.__scanner is None:
+            BLEHeartRate.__scanner = BleakScanner(detection_callback=BLEHeartRate.__device_discovered_callback, cb=dict(use_bdaddr=False))
+        await BLEHeartRate.__scanner.start()
 
     @staticmethod
-    async def __stopScanning():
-        await BLEHeartRate.__bleakScanner.stop()
+    async def __stop_scanning():
+        if  BLEHeartRate.__scanner is not None:
+            await BLEHeartRate.__scanner.stop()
+        BLEHeartRate.__scanner = None
 
     @staticmethod
     def start_scanning():
-        BLEHeartRate.__initialize_loop()
-        BLEHeartRate.__loop.run_until_complete(BLEHeartRate.__initialize_bleak())
-        BLEHeartRate.__loop.run_until_complete(BLEHeartRate.__startScanning())
+        BLEHeartRate.__initializeLoop()
+        asyncio.run_coroutine_threadsafe(BLEHeartRate.__start_scanning(), BLEHeartRate.__loop)
 
     @staticmethod
     def stop_scanning():
-        BLEHeartRate.__loop.run_until_complete(BLEHeartRate.__stopScanning())
+        BLEHeartRate.__initializeLoop()
+        asyncio.run_coroutine_threadsafe(BLEHeartRate.__stop_scanning(), BLEHeartRate.__loop)
 
     @staticmethod
     def add_devices_discovered_eventhandler(handler):
-        BLEHeartRate.__initialize_loop()
-        BLEHeartRate.__loop.run_until_complete(BLEHeartRate.__initialize_bleak())
-        BLEHeartRate.__deviceDiscoveredEventHandler = handler
+        BLEHeartRate.__initializeLoop()
+        BLEHeartRate.__eventHandler = handler
 
     @staticmethod
     def remove_devices_discovered_eventhandler():
-        BLEHeartRate.__deviceDiscoveredEventHandler = None
-    
+        BLEHeartRate.__initializeLoop()
+        BLEHeartRate.__eventHandler = None
+
     def __init__(self, name):
         super().__init__()
         self.add_o_stream(OStream(StreamInfo(0, 'HR', StreamInfo.Datatype.Sample)))
