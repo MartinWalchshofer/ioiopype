@@ -8,7 +8,8 @@ from ...pattern.o_device import ODevice
 import time
 
 class BLEHeartRate(ODevice):
-    HR_UUID = '0000180d-0000-1000-8000-00805f9b34fb'
+    HR_SERVICE_UUID = '0000180d-0000-1000-8000-00805f9b34fb'
+    HR_NOTIFY_CHARACTERISTIC_UUID = '00002a37-0000-1000-8000-00805f9b34fb'
 
     __eventHandler = None
     __scanner = None
@@ -28,7 +29,7 @@ class BLEHeartRate(ODevice):
 
     @staticmethod
     def __device_discovered_callback(device : BLEDevice, advertisement_data : AdvertisementData): 
-        if BLEHeartRate.HR_UUID in advertisement_data.service_uuids:
+        if BLEHeartRate.HR_SERVICE_UUID in advertisement_data.service_uuids:
             if device not in BLEHeartRate.__devices:
                 BLEHeartRate.__devices.append(device)
                 BLEHeartRate.__deviceNames.append(device.name)
@@ -94,11 +95,36 @@ class BLEHeartRate(ODevice):
         if self.__device is None:
             raise ValueError('Could not find device with the defined device name')
         
-        print('YAY')
+        asyncio.run_coroutine_threadsafe(self.__open(), BLEHeartRate.__loop)
+
+    async def __open(self):
+        self.__client = BleakClient(self.__device)
+        await self.__client.connect()
+        hrCharacteristic = None
+        if self.__client.is_connected:
+            services = self.__client.services
+            for service in services:
+                characteristics = service.characteristics
+                for characteristic in characteristics:
+                    if characteristic.uuid == BLEHeartRate.HR_NOTIFY_CHARACTERISTIC_UUID:
+                        hrCharacteristic = characteristic
+                        break
+                if hrCharacteristic is not None: 
+                    break
+            if hrCharacteristic is None:
+                raise ValueError('Could not find hr notify characteristic')
         
+            await self.__client .start_notify(hrCharacteristic, self.__hrNotify)
+        else:
+            raise ValueError('Connection failed')
 
+    async def __close(self):
+        await self.__client.disconnect()
+        print('disconnected')
 
+    def __hrNotify(self, characteristic: BleakGATTCharacteristic, data: bytearray):
+        print("%s: %r", characteristic.description, data) #TODO NOT FINISHED YET
 
-        
     def __del__(self):
         super().__del__()
+        asyncio.run_coroutine_threadsafe(self.__close(), BLEHeartRate.__loop)
