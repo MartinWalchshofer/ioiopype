@@ -74,6 +74,9 @@ class BLEHeartRate(ODevice):
         self.add_o_stream(OStream(StreamInfo(0, 'HR', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(1, 'RR', StreamInfo.Datatype.Sample)))
 
+        self.__t = 0
+        self.__prevRR = 0
+
         if not BLEHeartRate.__devices:
             BLEHeartRate.start_scanning()
             start = time.time()
@@ -147,6 +150,7 @@ class BLEHeartRate(ODevice):
         # Get RR intervals
         dataSize = len(data) 
         rrValues = []
+        numberOfRRIntervalsReceived = 0
         if rrAvailable:
             if formatUint8:
                 offset = 2
@@ -165,6 +169,15 @@ class BLEHeartRate(ODevice):
             numberOfRRIntervalsReceived = 1
             rrValues.append(60000.0 / hr)
 
+        #TODO NOT FINISHED YET
+        rr1k = []
+        for rrValue in rrValues:
+            if self.__t == 0:
+                self.__prevRR = rrValue
+            
+            self.__t += rrValue
+            
+            
         #TODO UPSAMPLE TO 1KHz
         print(hr)
         print(rrValues)
