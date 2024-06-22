@@ -10,6 +10,7 @@ import time
 class BLEHeartRate(ODevice):
     HR_SERVICE_UUID = '0000180d-0000-1000-8000-00805f9b34fb'
     HR_NOTIFY_CHARACTERISTIC_UUID = '00002a37-0000-1000-8000-00805f9b34fb'
+    RR_CONVERSION_FACTOR = (1000.0/1024.0)
 
     __eventHandler = None
     __scanner = None
@@ -123,7 +124,50 @@ class BLEHeartRate(ODevice):
         print('disconnected')
 
     def __hrNotify(self, characteristic: BleakGATTCharacteristic, data: bytearray):
-        print("%s: %r", characteristic.description, data) #TODO NOT FINISHED YET
+        formatUint8 = True
+        rrAvailable = True
+        if (data[0] & 0x01) == 0:
+            formatUint8 = True
+        else:
+            formatUint8 = False
+
+        # Check the fifth bit to determine rrAvailable
+        if (data[0] & 0x10) == 0x10:
+            rrAvailable = True
+        else:
+            rrAvailable = False
+        
+        # Get heart rate
+        hr = 0.0
+        if formatUint8:
+            hr = data[1]
+        else:
+            hr = float((data[2] << 8) | data[1])
+        
+        # Get RR intervals
+        dataSize = len(data) 
+        rrValues = []
+        if rrAvailable:
+            if formatUint8:
+                offset = 2
+            else:
+                offset = 3
+
+            rrIntervalsBinaryLength = dataSize - offset
+            if rrIntervalsBinaryLength > 0:
+                rrIntervalsBinary = data[offset:offset + rrIntervalsBinaryLength]
+                numberOfRRIntervalsReceived = rrIntervalsBinaryLength // 2
+                
+                for i in range(0, rrIntervalsBinaryLength, 2):
+                    rr_value = float((rrIntervalsBinary[i + 1] << 8) | rrIntervalsBinary[i]) * BLEHeartRate.RR_CONVERSION_FACTOR
+                    rrValues.append(rr_value)
+        else:
+            numberOfRRIntervalsReceived = 1
+            rrValues.append(60000.0 / hr)
+
+        #TODO UPSAMPLE TO 1KHz
+        print(hr)
+        print(rrValues)
 
     def __del__(self):
         super().__del__()
