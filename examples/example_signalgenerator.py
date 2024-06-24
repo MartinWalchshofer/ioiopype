@@ -12,7 +12,7 @@ import ioiopype as ioio
 app = QApplication(sys.argv)
 
 #initialize processing nodes
-fs = 100
+fs = 1000
 numberOfChannels = 2
 amplitude = 50
 frequency = 0.5

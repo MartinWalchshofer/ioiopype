@@ -182,7 +182,7 @@ class BLEHeartRate(ODevice):
         else:
             rr1k = rr1ktmp[0]
         hr1k = 60000.0 / rr1k   
-           
+        
         self.write(0, hr1k) 
         self.write(1, rr1k) 
 

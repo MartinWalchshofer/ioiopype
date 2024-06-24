@@ -69,8 +69,9 @@ class BLEHeartRateSimulator(ODevice, RealtimeClock):
              raise ValueError("Could find device with the entered devicename '" + name + "'.")
         
         self.__cnt = 0
+        self.__t = 0
         self.__hr = [0] #1 hr value
-        self.__rr = [0] * 3 #3 rr values
+        self.__rr = [0] #1 rr values
         self.__bat = [0] #1 bat values
 
         self.__hrBase = 60
@@ -84,17 +85,27 @@ class BLEHeartRateSimulator(ODevice, RealtimeClock):
         super().__del__()
         super(ONode, self).__del__()
 
-    def __send_data(self):
-        self.write(0, np.array([self.__hr])) 
-        self.write(1, np.array([self.__rr])) 
-        self.write(2, np.array([self.__bat])) 
-
     def __generate_data(self):
         self.__cnt += 1
         self.__hr[0] = self.__hrBase + np.sin(2*np.pi*self.__cnt*self.__hrFrequencyHz/self.updateRateHz )*self.__hrAmplitude
-        self.__rr
+        self.__rr[0] = 60000.0 / self.__hr[0]
         self.__bat = self.__cnt % 100
+
+        #upsample to 1kHz
+        rr1ktmp = None
+        if self.__t > 0:
+            rr1ktmp = np.array([np.linspace(self.__prevRR, self.__rr[0], num=round(self.__rr[0]))]).transpose()
+        self.__t += self.__rr[0]
+        self.__prevRR = self.__rr[0]
+
+        if rr1ktmp is not None:
+            rr1k = rr1ktmp
+            hr1k = 60000.0 / rr1k   
+
+            #send data
+            self.write(0, hr1k)
+            self.write(1, rr1k)
+            self.write(2, np.array([self.__bat])) 
 
     def update(self):    
         self.__generate_data()
-        self.__send_data()

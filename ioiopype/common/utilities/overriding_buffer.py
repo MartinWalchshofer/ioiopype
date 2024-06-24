@@ -24,16 +24,25 @@ class OverridingBuffer:
                 raise ValueError("Dimensions do not match.")
             if data.shape[1] is not self.__frame.shape[1]:
                 raise ValueError("Number of channels do not match.")
-            num_samples, num_channels = data.shape
+            
+            samplesCnt = data.shape[0]
+            if self.__cnt + samplesCnt < self.__frame.shape[0]:
+                self.__frame[self.__cnt : self.__cnt + samplesCnt, :] = data
+            else:
+                self.__frame[self.__cnt:] = data[0:self.__frame.shape[0]-self.__cnt,:]
+                self.__frame[0:samplesCnt-(self.__frame.shape[0]-self.__cnt),:] = data[self.__frame.shape[0]-self.__cnt:]
+            self.__cnt = (self.__cnt + samplesCnt) % self.__frame.shape[0]
+            '''num_samples, num_channels = data.shape
             flattened_data = data.reshape(-1, num_channels)
             self.__frame[np.arange(self.__cnt, self.__cnt + num_samples) % self.__frame.shape[0], :] = flattened_data
-            self.__cnt = (self.__cnt + num_samples) % self.__frame.shape[0]
-            """for sample in range(0, data.shape[0]):
+            self.__cnt = (self.__cnt + num_samples) % self.__frame.shape[0]'''
+
+            '''for sample in range(0, data.shape[0]):
                 for channel in range(0, data.shape[1]):
                     self.__frame[self.__cnt, channel] = data[sample, channel]
                 self.__cnt = self.__cnt + 1
                 if self.__cnt >= self.__frame.shape[0]:
-                    self.__cnt = 0"""
+                    self.__cnt = 0'''
         else:
             raise TypeError("Type not supported.")
         
