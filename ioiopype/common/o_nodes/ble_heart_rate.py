@@ -5,6 +5,7 @@ from ...pattern.o_stream import OStream
 from ...pattern.o_node import ONode
 from ...pattern.stream_info import StreamInfo
 from ...pattern.o_device import ODevice
+import numpy as np
 import time
 
 class BLEHeartRate(ODevice):
@@ -169,18 +170,21 @@ class BLEHeartRate(ODevice):
             numberOfRRIntervalsReceived = 1
             rrValues.append(60000.0 / hr)
 
-        #TODO NOT FINISHED YET
-        rr1k = []
+        #upsample to 1kHz
+        rr1ktmp = []
         for rrValue in rrValues:
-            if self.__t == 0:
-                self.__prevRR = rrValue
-            
+            if self.__t > 0:
+                rr1ktmp.append(np.array([np.linspace(self.__prevRR, rrValue, num=round(rrValue))]).transpose())
             self.__t += rrValue
-            
-            
-        #TODO UPSAMPLE TO 1KHz
-        print(hr)
-        print(rrValues)
+            self.__prevRR = rrValue
+        if len(rr1ktmp) > 1:
+            rr1k = np.concatenate(rr1ktmp, axis=0)
+        else:
+            rr1k = rr1ktmp[0]
+        hr1k = 60000.0 / rr1k   
+           
+        self.write(0, hr1k) 
+        self.write(1, rr1k) 
 
     def __del__(self):
         super().__del__()
