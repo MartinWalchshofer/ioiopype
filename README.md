@@ -41,7 +41,7 @@
 - UDPSender - Sends data via UDP
 
 ### Pulse Sensor
-- BLEHeartRate - Pulse Sensor supporting default Bluetooth LE Heart Rate Service (not finished yet)
+- BLEHeartRate - Pulse Sensor supporting default Bluetooth LE Heart Rate Service
 - BLEHeartRateSimulator - Simulates a 'BLEHeartRate' device
 
 ## Supported platforms
