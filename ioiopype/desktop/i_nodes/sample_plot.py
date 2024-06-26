@@ -18,7 +18,7 @@ class SamplePlot(INode):
     class QTSamplePlot(QObject):
         updateSignal = Signal(OverridingBuffer)
 
-        def __init__(self, numberOfChannels, samplingRate, displayedTimeRangeSamples, amplitude):
+        def __init__(self, numberOfChannels, samplingRate, displayedTimeRangeSamples, amplitude, title):
             super(SamplePlot.QTSamplePlot, self).__init__()
 
             self.numberOfChannels = numberOfChannels
@@ -28,13 +28,17 @@ class SamplePlot(INode):
             self.x = np.divide(self.x,samplingRate)
 
             self.offsets = []
-            for i in range(0, self.numberOfChannels):
-                if i % 2 == 0:
-                    self.offsets.append(amplitude * (numberOfChannels/2) - amplitude/2 - i*amplitude)
-                else:
-                    self.offsets.append(amplitude * ((numberOfChannels/2)-0.5) - i*amplitude)
+            if len(amplitude) == 2:
+                for i in range(0, self.numberOfChannels):
+                    self.offsets.append(0)
+            else:
+                for i in range(0, self.numberOfChannels):
+                    if i % 2 == 0:
+                        self.offsets.append(amplitude * (numberOfChannels/2) - amplitude/2 - i*amplitude)
+                    else:
+                        self.offsets.append(amplitude * ((numberOfChannels/2)-0.5) - i*amplitude)
 
-            self.plotWidget = pg.plot(title="sample plot")
+            self.plotWidget = pg.plot(title=title)
             if numberOfChannels > 1:
                 self.plotWidget.getPlotItem().hideAxis('left')
             self.items = []
@@ -42,13 +46,16 @@ class SamplePlot(INode):
                 self.items.append(pg.PlotCurveItem())
                 self.plotWidget.addItem(self.items[i])
 
-            minMaxAmplitude = 0
-            if self.numberOfChannels % 2 == 0:
-                minMaxAmplitude = (self.numberOfChannels/2) * amplitude 
-                self.plotWidget.setYRange(-1 * minMaxAmplitude,minMaxAmplitude, 0)
+            if len(amplitude) == 2:
+                self.plotWidget.setYRange(amplitude[0],amplitude[1], 0)
             else:
-                minMaxAmplitude = (amplitude/2)+((self.numberOfChannels/2)-0.5)*amplitude
-                self.plotWidget.setYRange(-1 * minMaxAmplitude, minMaxAmplitude, 0)
+                minMaxAmplitude = 0
+                if self.numberOfChannels % 2 == 0:
+                    minMaxAmplitude = (self.numberOfChannels/2) * amplitude 
+                    self.plotWidget.setYRange(-1 * minMaxAmplitude,minMaxAmplitude, 0)
+                else:
+                    minMaxAmplitude = (amplitude/2)+((self.numberOfChannels/2)-0.5)*amplitude
+                    self.plotWidget.setYRange(-1 * minMaxAmplitude, minMaxAmplitude, 0)
         
             self.updateSignal.connect(self.update_plot)
         
@@ -58,7 +65,7 @@ class SamplePlot(INode):
             for i in range(0, self.numberOfChannels):
                 self.items[i].setData(x=self.x, y= data[:,i] + self.offsets[i])
 
-    def __init__(self, numberOfChannels, samplingRate, displayedTimeRangeS, amplitude, displayMode=DisplayMode.Overriding):
+    def __init__(self, numberOfChannels, samplingRate, displayedTimeRangeS, amplitude, displayMode=DisplayMode.Overriding, title='sample plot'):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Sample)))
         
@@ -71,7 +78,7 @@ class SamplePlot(INode):
         self.__timestamp = 0
         self.__dT = 0
         self.dTS = 1/self.UpdateRateHz
-        self.qto = self.QTSamplePlot(numberOfChannels, samplingRate, displayedTimeRangeSamples, amplitude)
+        self.qto = self.QTSamplePlot(numberOfChannels, samplingRate, displayedTimeRangeSamples, amplitude, title)
         
     def __del__(self):
         super().__del__()
@@ -80,9 +87,7 @@ class SamplePlot(INode):
         data = None        
         if self.InputStreams[0].DataCount > 0:
             data = self.InputStreams[0].read()
-        if data is not None:
-            for row in data:
-                self.buffer.setData(data)
+        self.buffer.setData(data)
         timestamp = time.time()
         self.__dT += timestamp - self.__timestamp
         self.__timestamp = timestamp

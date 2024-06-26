@@ -1,5 +1,5 @@
 # IOIOpype
- IOIOpype is processing framework for realtime applications written in python. Data is propergated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
+ IOIOpype is general purpose signal processing framework for realtime applications written in python. Data is proagated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
 
 ## INodes
 ### General Purpose
@@ -21,7 +21,7 @@
 - ToSample - Slices and forwards a data frame into samples
 - Log - Applies a logarithm to the input signal (ln, log10, 10*log10)
 - Square - Squares the input signal
-- Sqrt - Calsulates the square root of the input signal
+- Sqrt - Calculates the square root of the input signal
 - Mux - Concatenates multiple signals into one
 - Operation - Adds, Subtracts, Multiplies, Divides or applies a matrix multiplication
 - Serialize - Serialized data into json or xml strings

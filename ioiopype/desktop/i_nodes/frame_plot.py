@@ -59,8 +59,7 @@ class FramePlot(INode):
         data = None
         if self.InputStreams[0].DataCount > 0:
             data = self.InputStreams[0].read()
-        if data is not None:
-            
+        if data is not None:   
             self.y =  data
         timestamp = time.time()
         self.__dT += timestamp - self.__timestamp

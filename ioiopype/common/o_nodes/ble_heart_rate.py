@@ -74,6 +74,8 @@ class BLEHeartRate(ODevice):
         super().__init__()
         self.add_o_stream(OStream(StreamInfo(0, 'HR', StreamInfo.Datatype.Sample)))
         self.add_o_stream(OStream(StreamInfo(1, 'RR', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(2, 'HR1K', StreamInfo.Datatype.Sample)))
+        self.add_o_stream(OStream(StreamInfo(3, 'RR1K', StreamInfo.Datatype.Sample)))
 
         self.__t = 0
         self.__prevRR = 0
@@ -174,7 +176,7 @@ class BLEHeartRate(ODevice):
         rr1ktmp = []
         for rrValue in rrValues:
             if self.__t > 0:
-                rr1ktmp.append(np.array([np.linspace(self.__prevRR, rrValue, num=round(rrValue))]).transpose())
+                rr1ktmp.append(np.array([np.linspace(self.__prevRR, rrValue, num=round(rrValue))+1]).transpose()[1:,:])
             self.__t += rrValue
             self.__prevRR = rrValue
         if len(rr1ktmp) > 1:
@@ -183,8 +185,12 @@ class BLEHeartRate(ODevice):
             rr1k = rr1ktmp[0]
         hr1k = 60000.0 / rr1k   
         
-        self.write(0, hr1k) 
-        self.write(1, rr1k) 
+        #send data
+        self.write(0, hr) 
+        for rrValue in rrValues:
+            self.write(1, rrValue) 
+        self.write(2, hr1k) 
+        self.write(3, rr1k)
 
     def __del__(self):
         super().__del__()

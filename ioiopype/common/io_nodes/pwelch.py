@@ -10,8 +10,8 @@ class PWelch(IONode):
     def __init__(self, samplingRate):
         super().__init__()
         self.add_i_stream(IStream(StreamInfo(0, 'in', StreamInfo.Datatype.Frame)))
-        self.add_o_stream(OStream(StreamInfo(0, 'spectrum', StreamInfo.Datatype.Frame)))
-        self.add_o_stream(OStream(StreamInfo(1, 'frequency', StreamInfo.Datatype.Frame)))
+        self.add_o_stream(OStream(StreamInfo(0, 'frequency', StreamInfo.Datatype.Frame)))
+        self.add_o_stream(OStream(StreamInfo(1, 'spectrum', StreamInfo.Datatype.Frame)))
         self.samplingRate = samplingRate
         self.spectrum = None
         
@@ -54,5 +54,5 @@ class PWelch(IONode):
                 self.spectrum = np.zeros((rows// 2 + 1, columns))
             frequencies, self.spectrum = sp.welch(data, fs=self.samplingRate, window='hann' ,nperseg=rows, average='median', scaling='spectrum', axis=0)
             self.spectrum = np.sqrt(self.spectrum*2)
-            self.write(0, self.spectrum)   
-            self.write(1, frequencies)      
+            self.write(0, np.array([frequencies]).transpose())
+            self.write(1, self.spectrum)   
