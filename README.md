@@ -7,6 +7,7 @@
 - ToWorkspace - Propagates data to the main thread via event
 - FramePlot - Plots a data frame
 - SamplePlot - Plots time series data
+- SpectrumPlot - Plots pwelch spectrum
 - CSV Logger - Logs data to csv files
 - UDP Receiver - Receives data via UDP
 
