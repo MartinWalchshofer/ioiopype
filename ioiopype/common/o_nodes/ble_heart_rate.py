@@ -175,10 +175,12 @@ class BLEHeartRate(ODevice):
         #upsample to 1kHz
         rr1ktmp = []
         for rrValue in rrValues:
-            if self.__t > 0:
+            if self.__t <= 0 and self.__prevRR <= 0:
+                rr1ktmp.append(np.array([[rrValue]]))
+            else:
                 rr1ktmp.append(np.array([np.linspace(self.__prevRR, rrValue, num=round(rrValue))+1]).transpose()[1:,:])
             self.__t += rrValue
-            self.__prevRR = rrValue
+            self.__prevRR = rrValue    
         if len(rr1ktmp) > 1:
             rr1k = np.concatenate(rr1ktmp, axis=0)
         else:
