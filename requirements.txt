@@ -1,9 +1,10 @@
+bleak==0.22.2
 matplotlib==3.8.2
-numpy==1.26.4
+numpy==2.0.0
 pyqtgraph==0.13.3
 PySide6==6.6.2
-PySide6==6.7.1
+PySide6==6.7.2
 PySide6_Addons==6.6.2
 PySide6_Essentials==6.6.2
-scipy==1.13.1
+scipy==1.14.0
 setuptools==69.1.0

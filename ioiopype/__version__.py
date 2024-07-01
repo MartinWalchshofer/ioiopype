@@ -8,5 +8,5 @@ Version tracker.
 :copyright: (c) 2024 by Martin Walchshofer
 """
 
-VERSION = (0, 0, 8)
+VERSION = (0, 0, 9)
 __version__ = ".".join(map(str, VERSION))
