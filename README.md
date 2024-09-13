@@ -27,6 +27,8 @@
 - Operation - Adds, Subtracts, Multiplies, Divides or applies a matrix multiplication
 - Serialize - Serialized data into json or xml strings
 - Deserialize - Deserializes XML or JSON serialized data
+- Transpose - Transposes an input matrix
+- GetRange - Gets a range of a matrix
 
 ### IMU
 - MovementDetector - Uses Accelerometer and Gyroscope inputs to detect movement

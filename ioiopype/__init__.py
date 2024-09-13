@@ -40,6 +40,7 @@ from .common.io_nodes.butterworth_filtfilt import ButterworthFiltFilt
 from .common.io_nodes.complementary_filter import ComplementaryFilter
 from .common.io_nodes.deserialize import Deserialize
 from .common.io_nodes.downsample import Downsample
+from .common.io_nodes.get_range import GetRange
 from .common.io_nodes.operation import Operation
 from .common.io_nodes.log import Log
 from .common.io_nodes.mux import Mux
@@ -50,6 +51,7 @@ from .common.io_nodes.sqrt import Sqrt
 from .common.io_nodes.square import Square
 from .common.io_nodes.serialize import Serialize
 from .common.io_nodes.to_sample import ToSample
+from .common.io_nodes.transpose import Transpose
 
 #pattern
 from .pattern.i_node import INode
