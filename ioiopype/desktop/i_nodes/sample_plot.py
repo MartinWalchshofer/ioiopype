@@ -28,9 +28,16 @@ class SamplePlot(INode):
             self.x = np.divide(self.x,samplingRate)
 
             self.offsets = []
-            if len(amplitude) == 2:
+            amplitudeLen = 0
+            try:
+                amplitudeLen = len(amplitude)
+            except:
+                amplitudeLen = 1
+            if amplitudeLen == 2:
                 for i in range(0, self.numberOfChannels):
                     self.offsets.append(0)
+            elif amplitudeLen > 2:
+                raise ValueError('Amplitude range must be an array with length 2 or a single value.')
             else:
                 for i in range(0, self.numberOfChannels):
                     if i % 2 == 0:
@@ -46,8 +53,10 @@ class SamplePlot(INode):
                 self.items.append(pg.PlotCurveItem())
                 self.plotWidget.addItem(self.items[i])
 
-            if len(amplitude) == 2:
+            if amplitudeLen == 2:
                 self.plotWidget.setYRange(amplitude[0],amplitude[1], 0)
+            elif amplitudeLen > 2:
+                raise ValueError('Amplitude range must be an array with length 2 or a single value.')
             else:
                 minMaxAmplitude = 0
                 if self.numberOfChannels % 2 == 0:

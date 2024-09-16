@@ -9,7 +9,7 @@ import ioiopype as ioio
 
 app = QApplication(sys.argv)
 
-use_device_simulator = False #Use device simulator (True) or real device (False)
+use_device_simulator = True #Use device simulator (True) or real device (False)
 
 #on devices discovered event / prints discovered devices to the console
 discovered_devices = []
