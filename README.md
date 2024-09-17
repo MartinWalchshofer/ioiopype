@@ -30,6 +30,10 @@
 - Transpose - Transposes an input matrix
 - GetRange - Gets a range of a matrix
 
+### Heart Rate Variability
+- LFHF - Calculates LF and HF power as well as ratios from a HRV spectrum
+- Poincare - Arranges a given time window of RR data for a poincare plot
+
 ### IMU
 - MovementDetector - Uses Accelerometer and Gyroscope inputs to detect movement
 - ComplementaryFilter - Applies a complementary filter to estimate orientation of a IMU sensor (not finished yet)

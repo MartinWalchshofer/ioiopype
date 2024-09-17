@@ -42,10 +42,12 @@ from .common.io_nodes.deserialize import Deserialize
 from .common.io_nodes.downsample import Downsample
 from .common.io_nodes.get_range import GetRange
 from .common.io_nodes.operation import Operation
+from .common.io_nodes.lfhf import LFHF
 from .common.io_nodes.log import Log
 from .common.io_nodes.mux import Mux
 from .common.io_nodes.movement_detector import MovementDetector
 from .common.io_nodes.offset_correction import OffsetCorrection
+from .common.io_nodes.poincare import Poincare
 from .common.io_nodes.pwelch import PWelch
 from .common.io_nodes.sqrt import Sqrt
 from .common.io_nodes.square import Square
