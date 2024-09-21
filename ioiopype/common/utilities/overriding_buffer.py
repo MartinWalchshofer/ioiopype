@@ -8,10 +8,12 @@ class OverridingBuffer:
 
     __frame = None
     __cnt = 0
+    __firstrun = True
     def __init__(self, samples_count, channel_count, outputMode = OutputMode.Aligned):
         self.__frame = np.zeros((int(samples_count), int(channel_count)))
         self.outputMode = outputMode
         self.__cnt = 0
+        self.__firstrun = True
 
     def setData(self, data):
         if isinstance(data, list):
@@ -26,8 +28,9 @@ class OverridingBuffer:
                 raise ValueError("Number of channels do not match.")
             
             #fill buffer with initial value
-            if  self.__cnt == 0:
+            if  self.__firstrun == True:
                 self.__frame[:] = data[0]
+                self.__firstrun = False
 
             samplesCnt = data.shape[0]
             if self.__cnt + samplesCnt < self.__frame.shape[0]:

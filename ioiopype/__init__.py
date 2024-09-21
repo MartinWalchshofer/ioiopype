@@ -27,6 +27,7 @@ from .common.i_nodes.udp_sender import UDPSender
 from .common.o_nodes.ble_heart_rate import BLEHeartRate
 from .common.o_nodes.ble_heart_rate_simulator import BLEHeartRateSimulator
 from .common.o_nodes.constant import Constant
+from .common.o_nodes.counter import Counter
 from .common.o_nodes.noise_generator import NoiseGenerator
 from .common.o_nodes.signal_generator import SignalGenerator
 from .common.o_nodes.frame import Frame

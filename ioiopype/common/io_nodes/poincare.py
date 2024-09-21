@@ -50,5 +50,7 @@ class Poincare(IONode):
         if self.__cnt < self.windowSize and self.__cnt > 0:
             self.write(0, self.__buf[0:self.__cnt, :])
         if self.__cnt >= self.windowSize and self.__cnt > 0:
-            self.write(0, self.__buf)
+            p1 = self.__buf[0:icur, :]
+            p2 = self.__buf[icur+1:, :]
+            self.write(0, np.concatenate((p1, p2), axis=0))        
         self.__cnt += 1

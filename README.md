@@ -41,6 +41,7 @@
 ## ONodes
 ### General Purpose
 - Constant - forwards constant data with a defined sampling rate
+- Counter - A counter iterating with every sample
 - NoiseGenerator - Generates gaussian noise as a timeseries signal.
 - SignalGenerator - Generates sample based timeseries signals. Sine, Square, Sawtooth and Triangle signals can be generated
 - Frame - Allows to send a data frame to INodes
