@@ -1,3 +1,5 @@
+'''This example shows how to serialize data, send it via udp, receive it and deserialize it again.'''
+
 import sys
 import os
 

@@ -1,3 +1,5 @@
+'''This example shows how to establish a data acquisition.'''
+
 import sys
 import os
 

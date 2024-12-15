@@ -1,3 +1,5 @@
+'''This example shows how to apply a matrix multiplication to timeseries data.'''
+
 import sys
 import os
 

@@ -1,3 +1,5 @@
+'''This example shows how to use BLE heart rate devices. It visualizes heart rate as well as the HRV spectrum.'''
+
 import sys
 import os
 

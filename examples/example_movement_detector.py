@@ -1,3 +1,5 @@
+'''This example simulates an 3 axis accelerometer and calculates wether the sensor is in motion or not.'''
+
 import sys
 import os
 

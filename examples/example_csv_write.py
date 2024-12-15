@@ -1,3 +1,5 @@
+'''This example shows how to log data into .csv files.'''
+
 import sys
 import os
 

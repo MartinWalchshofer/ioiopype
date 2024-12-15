@@ -1,3 +1,5 @@
+'''This example shows how to read and visualize date read from .csv files.'''
+
 import sys
 import os
 

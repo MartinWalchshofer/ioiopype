@@ -1,3 +1,5 @@
+'''This example shows how to apply element wise operations to time series signals.'''
+
 import sys
 import os
 

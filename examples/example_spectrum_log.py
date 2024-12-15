@@ -1,3 +1,5 @@
+'''This example shows how how to plot a frequency spectrum from time series signals. It also shows how to remove certain frequencies from the spectrum.'''
+
 import sys
 import os
 
@@ -19,12 +21,15 @@ mux = ioio.Mux(3)
 #initialize processing nodes
 spectrumBufferS = 4
 numberOfChannels = len(mux.InputStreams) * channelCount
-buf = ioio.Buffer(numberOfChannels, spectrumBufferS * samplingRate, spectrumBufferS * samplingRate - 25) # frame size and overlap
+bufferSize = spectrumBufferS * samplingRate
+bufferOverlap = spectrumBufferS * samplingRate - 50
+pwelchUpdate = 1/((bufferSize-bufferOverlap)/samplingRate)
+buf = ioio.Buffer(numberOfChannels, bufferSize, bufferOverlap) # frame size and overlap
 pw = ioio.PWelch(samplingRate)
-fp = ioio.FramePlot(samplingRate=spectrumBufferS)
-buf2 = ioio.Buffer(numberOfChannels, spectrumBufferS * samplingRate, spectrumBufferS * samplingRate - 25) # frame size and overlap
+sp = ioio.SpectrumPlot()
+buf2 = ioio.Buffer(numberOfChannels, bufferSize, bufferOverlap) # frame size and overlap
 pw2 = ioio.PWelch(samplingRate)
-fp2 = ioio.FramePlot(samplingRate=spectrumBufferS)
+sp2 = ioio.SpectrumPlot()
 hp = ioio.ButterworthFilter(ioio.FilterType.Highpass, samplingRate, 2, [6])
 lp = ioio.ButterworthFilter(ioio.FilterType.Lowpass, samplingRate, 4, [150])
 n50 = ioio.ButterworthFilter(ioio.FilterType.Notch, samplingRate, 4, [98, 102])
@@ -39,7 +44,8 @@ sig2.connect(0, mux.InputStreams[1])
 sig3.connect(0, mux.InputStreams[2])
 mux.connect(0, buf.InputStreams[0])
 buf.connect(0, pw.InputStreams[0])
-pw.connect(0, fp.InputStreams[0])
+pw.connect(0, sp.InputStreams[0])
+pw.connect(1, sp.InputStreams[1])
 mux.connect(0, csvRaw.InputStreams[0])
 mux.connect(0, spraw.InputStreams[0])
 mux.connect(0, n50.InputStreams[0])
@@ -49,7 +55,8 @@ lp.connect(0, spfilt.InputStreams[0])
 lp.connect(0, csv.InputStreams[0])
 lp.connect(0, buf2.InputStreams[0])
 buf2.connect(0, pw2.InputStreams[0])
-pw2.connect(0, fp2.InputStreams[0])
+pw2.connect(0, sp2.InputStreams[0])
+pw2.connect(1, sp2.InputStreams[1])
 
 csvRaw.open(dir + '/data_raw.csv', header='CH1,CH2,CH3,CH4,CH5,CH6')
 csv.open(dir + '/data_filt.csv', header='CH1,CH2,CH3,CH4,CH5,CH6')
@@ -73,9 +80,10 @@ sig2.disconnect(0, mux.InputStreams[1])
 sig3.disconnect(0, mux.InputStreams[2])
 mux.disconnect(0, buf.InputStreams[0])
 buf.disconnect(0, pw.InputStreams[0])
-pw.disconnect(0, fp.InputStreams[0])
+pw.disconnect(0, sp.InputStreams[0])
+pw.disconnect(1, sp.InputStreams[1])
 mux.disconnect(0, csvRaw.InputStreams[0])
-mux.connect(0, spraw.InputStreams[0])
+mux.disconnect(0, spraw.InputStreams[0])
 mux.disconnect(0, n50.InputStreams[0])
 n50.disconnect(0, hp.InputStreams[0])
 hp.disconnect(0, lp.InputStreams[0])
@@ -83,4 +91,5 @@ lp.disconnect(0, spfilt.InputStreams[0])
 lp.disconnect(0, csv.InputStreams[0])
 lp.disconnect(0, buf2.InputStreams[0])
 buf2.disconnect(0, pw2.InputStreams[0])
-pw2.disconnect(0, fp2.InputStreams[0])
+pw2.disconnect(0, sp2.InputStreams[0])
+pw2.disconnect(1, sp2.InputStreams[1])

@@ -1,4 +1,5 @@
 '''This example shows how to concatenate two signals into one using the 'Mux' node'''
+
 import sys
 import os
 
