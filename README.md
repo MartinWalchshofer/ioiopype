@@ -3,13 +3,13 @@
 
 ## INodes
 ### General Purpose
-- ConsoleLog - Writes received data to the console
-- ToWorkspace - Propagates data to the main thread via event
-- FramePlot - Plots a data frame
-- SamplePlot - Plots time series data
-- SpectrumPlot - Plots pwelch spectrum
-- CSV Logger - Logs data to csv files
-- UDP Receiver - Receives data via UDP
+- [ConsoleLog](/ioiopype/common/i_nodes/console_log.py) - Writes received data to the console
+- [ToWorkspace](/ioiopype/common/i_nodes/to_workspace.py) - Propagates data to the main thread via event
+- [FramePlot](/ioiopype/desktop/i_nodes/frame_plot.py) - Plots a data frame
+- [SamplePlot](/ioiopype/desktop/i_nodes/sample_plot.py) - Plots time series data
+- [SpectrumPlot](/ioiopype/desktop/i_nodes/spectrum_plot.py) - Plots pwelch spectrum
+- [CSV Logger](/ioiopype/common/i_nodes/csv_logger.py) - Logs data to csv files
+- [UDP Sender](/ioiopype/common/i_nodes/udp_sender.py) - Sends data via UDP
 
 ## IONodes
 ### General Purpose
@@ -59,6 +59,22 @@
 ## Install ioiopype from PyPi
 
 ```pip install ioiopype```
+
+## Examples
+
+- [BLE HRV Example](/examples/example_ble_heart_rate_variability.py)
+- [CSV Read](/examples/example_csv_read.py)
+- [CSV Write](/examples/example_csv_write.py)
+- [Data Acquisition](/examples/example_daq.py)
+- [Elementwise Operation](/examples/example_elementwise_operation.py)
+- [JSON UDP](/examples/example_json_udp.py)
+- [Matrix Multiply](/examples/example_matrix_multiply.py)
+- [Movement Detector](/examples/example_movement_detector.py)
+- [Multiplex](/examples/example_multiplex.py)
+- [Signal Genrerator](/examples/example_signalgenerator.py)
+- [Spectrum Log](/examples/example_spectrum_log.py)
+- [Timeseries Visualization](/examples/example_timeseries_visualization.py)
+
 
 ## Acquisition and data visualization example
 
