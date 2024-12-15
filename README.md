@@ -78,43 +78,43 @@ mux.disconnect(0, sp2.InputStreams[0])
 
 ## IONodes
 ### General Purpose
-- Buffer - Buffers data with a defined window size and overlap
-- PWelch - Calculates a Pwelch spectrum from a frame
-- Downsample - Samples a data frame down by a given factor
-- OffsetCorrection - Removes the offset from a data frame
-- ButterworthFilter - Applies a butterworth filter to a sample based signal
-- ButterworthFiltFilt - Applies a butterworth filter to a frame as filtfilt
-- ToSample - Slices and forwards a data frame into samples
-- Log - Applies a logarithm to the input signal (ln, log10, 10*log10)
-- Square - Squares the input signal
-- Sqrt - Calculates the square root of the input signal
-- Mux - Concatenates multiple signals into one
-- Operation - Adds, Subtracts, Multiplies, Divides or applies a matrix multiplication
-- Serialize - Serialized data into json or xml strings
-- Deserialize - Deserializes XML or JSON serialized data
-- Transpose - Transposes an input matrix
-- GetRange - Gets a range of a matrix
+- [Buffer](/ioiopype/common/io_nodes/buffer.py) - Buffers data with a defined window size and overlap
+- [PWelch](/ioiopype/common/io_nodes/pwelch.py) - Calculates a Pwelch spectrum from a frame
+- [Downsample](/ioiopype/common/io_nodes/downsample.py) - Samples a data frame down by a given factor
+- [OffsetCorrection](/ioiopype/common/io_nodes/offset_correction.py) - Removes the offset from a data frame
+- [ButterworthFilter](/ioiopype/common/io_nodes/butterworth_filter.py) - Applies a butterworth filter to a sample based signal
+- [ButterworthFiltFilt](/ioiopype/common/io_nodes/butterworth_filtfilt.py) - Applies a butterworth filter to a frame as filtfilt
+- [ToSample](/ioiopype/common/io_nodes/to_sample.py) - Slices and forwards a data frame into samples
+- [Log](/ioiopype/common/io_nodes/log.py) - Applies a logarithm to the input signal (ln, log10, 10*log10)
+- [Square](/ioiopype/common/io_nodes/square.py) - Squares the input signal
+- [Sqrt](/ioiopype//common//io_nodes//sqrt.py) - Calculates the square root of the input signal
+- [Mux](/ioiopype/common/io_nodes/mux.py) - Concatenates multiple signals into one
+- [Operation](/ioiopype/common/io_nodes/operation.py) - Adds, Subtracts, Multiplies, Divides or applies a matrix multiplication
+- [Serialize](/ioiopype/common/io_nodes/serialize.py) - Serialized data into json or xml strings
+- [Deserialize](/ioiopype/common/io_nodes/deserialize.py) - Deserializes XML or JSON serialized data
+- [Transpose](/ioiopype/common/io_nodes/transpose.py) - Transposes an input matrix
+- [GetRange](/ioiopype/common/io_nodes/get_range.py) - Gets a range of a matrix
 
 ### Heart Rate Variability
-- LFHF - Calculates LF and HF power as well as ratios from a HRV spectrum
-- Poincare - Arranges a given time window of RR data for a poincare plot
+- [LFHF](/ioiopype/common/io_nodes/lfhf.py) - Calculates LF and HF power as well as ratios from a HRV spectrum
+- [Poincare](/ioiopype/common/io_nodes/poincare.py) - Arranges a given time window of RR data for a poincare plot
 
 ### IMU
-- MovementDetector - Uses Accelerometer and Gyroscope inputs to detect movement
-- ComplementaryFilter - Applies a complementary filter to estimate orientation of a IMU sensor (not finished yet)
+- [MovementDetector](/ioiopype/common/io_nodes/movement_detector.py) - Uses Accelerometer and Gyroscope inputs to detect movement
+- [ComplementaryFilter](/ioiopype/common/io_nodes/complementary_filter.py) - Applies a complementary filter to estimate orientation of a IMU sensor (not finished yet)
 
 ## ONodes
 ### General Purpose
-- Constant - forwards constant data with a defined sampling rate
-- Counter - A counter iterating with every sample
-- NoiseGenerator - Generates gaussian noise as a timeseries signal.
-- SignalGenerator - Generates sample based timeseries signals. Sine, Square, Sawtooth and Triangle signals can be generated
-- Frame - Allows to send a data frame to INodes
-- UDPSender - Sends data via UDP
+- [Constant](/ioiopype/common/o_nodes/constant.py) - forwards constant data with a defined sampling rate
+- [Counter](/ioiopype/common/o_nodes/counter.py) - A counter iterating with every sample
+- [NoiseGenerator](/ioiopype/common/o_nodes/noise_generator.py) - Generates gaussian noise as a timeseries signal.
+- [SignalGenerator](/ioiopype/common/o_nodes/signal_generator.py) - Generates sample based timeseries signals. Sine, Square, Sawtooth and Triangle signals can be generated
+- [Frame](/ioiopype/common/o_nodes/frame.py) - Allows to send a data frame to INodes
+- [UDP Receiver](/ioiopype/common/o_nodes/udp_receiver.py) - Receivs and forwards data via UDP
 
 ### Pulse Sensor
-- BLEHeartRate - Pulse Sensor supporting default Bluetooth LE Heart Rate Service
-- BLEHeartRateSimulator - Simulates a 'BLEHeartRate' device
+- [BLEHeartRate](/ioiopype/common/o_nodes/ble_heart_rate.py) - Pulse Sensor supporting default Bluetooth LE Heart Rate Service
+- [BLEHeartRateSimulator](/ioiopype/common/o_nodes/ble_heart_rate_simulator.py) - Simulates a 'BLEHeartRate' device
 
 ## Supported platforms
 
