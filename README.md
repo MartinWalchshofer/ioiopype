@@ -1,6 +1,56 @@
 # IOIOpype
  IOIOpype is general purpose signal processing framework for realtime applications written in python. Data is proagated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
 
+## Acquisition and data visualization example
+
+```python
+import sys
+import os
+
+dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(dir))
+
+from PySide6.QtWidgets import QApplication
+import ioiopype as ioio
+
+app = QApplication(sys.argv)
+
+samplingRate = 500
+channelCount = 2
+sig1 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 0.5, 2, 0)
+sig2 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Triangle, 0.5, 2, 0)
+sig3 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sawtooth, 0.5, 2, 0)
+mux = ioio.Mux(3)
+
+#initialize processing nodes
+numberOfChannels = len(mux.InputStreams) * channelCount
+sp2 = ioio.SamplePlot(numberOfChannels, samplingRate, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Continous)
+
+#build ioiopype
+sig1.connect(0, mux.InputStreams[0])
+sig2.connect(0, mux.InputStreams[1])
+sig3.connect(0, mux.InputStreams[2])
+mux.connect(0, sp2.InputStreams[0])
+
+sig1.start()
+sig2.start()
+sig3.start()
+
+app.exec()
+
+sig1.stop()
+sig2.stop()
+sig3.stop()
+
+#disconnect ioiopype
+sig1.disconnect(0, mux.InputStreams[0])
+sig2.disconnect(0, mux.InputStreams[1])
+sig3.disconnect(0, mux.InputStreams[2])
+mux.disconnect(0, sp2.InputStreams[0])
+```
+
+![Data Acquisition Example](img/example1.png)
+
 ## INodes
 ### General Purpose
 - [ConsoleLog](/ioiopype/common/i_nodes/console_log.py) - Writes received data to the console
@@ -74,57 +124,6 @@
 - [Signal Genrerator](/examples/example_signalgenerator.py)
 - [Spectrum Log](/examples/example_spectrum_log.py)
 - [Timeseries Visualization](/examples/example_timeseries_visualization.py)
-
-
-## Acquisition and data visualization example
-
-```python
-import sys
-import os
-
-dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(dir))
-
-from PySide6.QtWidgets import QApplication
-import ioiopype as ioio
-
-app = QApplication(sys.argv)
-
-samplingRate = 500
-channelCount = 2
-sig1 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sine, 0.5, 2, 0)
-sig2 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Triangle, 0.5, 2, 0)
-sig3 = ioio.SignalGenerator(samplingRate, channelCount, ioio.SignalGenerator.SignalMode.Sawtooth, 0.5, 2, 0)
-mux = ioio.Mux(3)
-
-#initialize processing nodes
-numberOfChannels = len(mux.InputStreams) * channelCount
-sp2 = ioio.SamplePlot(numberOfChannels, samplingRate, 5.2, 1.5, displayMode=ioio.SamplePlot.DisplayMode.Continous)
-
-#build ioiopype
-sig1.connect(0, mux.InputStreams[0])
-sig2.connect(0, mux.InputStreams[1])
-sig3.connect(0, mux.InputStreams[2])
-mux.connect(0, sp2.InputStreams[0])
-
-sig1.start()
-sig2.start()
-sig3.start()
-
-app.exec()
-
-sig1.stop()
-sig2.stop()
-sig3.stop()
-
-#disconnect ioiopype
-sig1.disconnect(0, mux.InputStreams[0])
-sig2.disconnect(0, mux.InputStreams[1])
-sig3.disconnect(0, mux.InputStreams[2])
-mux.disconnect(0, sp2.InputStreams[0])
-```
-
-![Data Acquisition Example](img/example1.png)
 
 ## Contact
 Contact: ```mwalchsoferyt at gmail dot com```
