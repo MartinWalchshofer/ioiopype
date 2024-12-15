@@ -1,6 +1,21 @@
 # IOIOpype
  IOIOpype is general purpose signal processing framework for realtime applications written in python. Data is proagated between Nodes that can be connected via Streams. Nodes can be input nodes 'INode', output nodes 'ONode' or input and output nodes 'IONode'. Algorithms and signal processing pipelines can be prototyped easily by combining multiple nodes.
 
+## Examples
+
+- [BLE HRV Example](/examples/example_ble_heart_rate_variability.py)
+- [CSV Read](/examples/example_csv_read.py)
+- [CSV Write](/examples/example_csv_write.py)
+- [Data Acquisition](/examples/example_daq.py)
+- [Elementwise Operation](/examples/example_elementwise_operation.py)
+- [JSON UDP](/examples/example_json_udp.py)
+- [Matrix Multiply](/examples/example_matrix_multiply.py)
+- [Movement Detector](/examples/example_movement_detector.py)
+- [Multiplex](/examples/example_multiplex.py)
+- [Signal Genrerator](/examples/example_signalgenerator.py)
+- [Spectrum Log](/examples/example_spectrum_log.py)
+- [Timeseries Visualization](/examples/example_timeseries_visualization.py)
+
 ## Acquisition and data visualization example
 
 ```python
@@ -109,21 +124,6 @@ mux.disconnect(0, sp2.InputStreams[0])
 ## Install ioiopype from PyPi
 
 ```pip install ioiopype```
-
-## Examples
-
-- [BLE HRV Example](/examples/example_ble_heart_rate_variability.py)
-- [CSV Read](/examples/example_csv_read.py)
-- [CSV Write](/examples/example_csv_write.py)
-- [Data Acquisition](/examples/example_daq.py)
-- [Elementwise Operation](/examples/example_elementwise_operation.py)
-- [JSON UDP](/examples/example_json_udp.py)
-- [Matrix Multiply](/examples/example_matrix_multiply.py)
-- [Movement Detector](/examples/example_movement_detector.py)
-- [Multiplex](/examples/example_multiplex.py)
-- [Signal Genrerator](/examples/example_signalgenerator.py)
-- [Spectrum Log](/examples/example_spectrum_log.py)
-- [Timeseries Visualization](/examples/example_timeseries_visualization.py)
 
 ## Contact
 Contact: ```mwalchsoferyt at gmail dot com```
